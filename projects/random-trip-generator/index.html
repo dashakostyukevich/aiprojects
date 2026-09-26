@@ -6,61 +6,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Where Should I Go? — press one button and get a random destination with a budget level."
+      content="Where Should I Go? — pick a budget and a trip type, get a random destination."
     />
     <title>Where Should I Go?</title>
   </head>
   <body>
     <main class="app">
-      <header class="masthead">
-        <h1>Where should I go?</h1>
-        <p class="tagline">Press the button. Get a place. Stop scrolling travel blogs.</p>
-      </header>
+      <h1 class="wordmark">Where should I go?</h1>
 
-      <div class="controls">
-        <button id="roll" class="roll" type="button">Surprise me</button>
+      <ol class="steps" aria-label="Progress">
+        <li class="step" data-step="1"><span class="step-dot"></span><span class="step-name">Budget</span></li>
+        <li class="step" data-step="2"><span class="step-dot"></span><span class="step-name">Trip type</span></li>
+        <li class="step" data-step="3"><span class="step-dot"></span><span class="step-name">Result</span></li>
+      </ol>
 
-        <fieldset class="filters">
-          <legend>Budget</legend>
-          <label><input type="radio" name="budget" value="all" checked /> Any</label>
-          <label><input type="radio" name="budget" value="1" /> €</label>
-          <label><input type="radio" name="budget" value="2" /> €€</label>
-          <label><input type="radio" name="budget" value="3" /> €€€</label>
-        </fieldset>
-
-        <fieldset class="filters filters-types">
-          <legend>Trip type</legend>
-          <div id="type-chips" class="chips"></div>
-        </fieldset>
-
-        <p id="match-count" class="match-count" role="status"></p>
-      </div>
-
-      <section
-        id="card"
-        class="card"
-        aria-live="polite"
-        aria-atomic="true"
-        hidden
-      >
-        <p class="card-country"></p>
-        <h2 class="card-city"></h2>
-        <p class="card-types"></p>
-        <p class="card-budget"><span class="pips" aria-hidden="true"></span><span class="budget-label"></span></p>
-        <p class="card-why"></p>
-        <button id="save" class="save" type="button">Save this</button>
+      <!-- ── 1. budget ────────────────────────────────────────────────── -->
+      <section class="screen" data-screen="1" aria-labelledby="s1-title">
+        <h2 id="s1-title" class="screen-title" tabindex="-1">What's your budget?</h2>
+        <p class="screen-hint">Roughly, for the whole trip. Flights usually dominate.</p>
+        <div id="budget-options" class="options" role="radiogroup" aria-labelledby="s1-title"></div>
+        <div class="screen-nav">
+          <button class="primary" type="button" data-next>Continue</button>
+        </div>
       </section>
 
-      <p id="empty-hint" class="empty-hint">
-        Nothing shown yet. That button is the whole app.
-      </p>
-
-      <section class="saved" hidden>
-        <div class="saved-head">
-          <h2>Saved <span id="saved-count" class="saved-count"></span></h2>
-          <button id="clear" class="link" type="button">Clear all</button>
+      <!-- ── 2. trip type ─────────────────────────────────────────────── -->
+      <section class="screen" data-screen="2" aria-labelledby="s2-title" hidden>
+        <h2 id="s2-title" class="screen-title" tabindex="-1">What kind of trip?</h2>
+        <p class="screen-hint">Pick as many as you like — we'll find a place that is any of them.</p>
+        <div id="type-chips" class="chips chips-lg"></div>
+        <p id="type-note" class="type-note"></p>
+        <div class="screen-nav">
+          <button class="ghost" type="button" data-back>Back</button>
+          <button class="primary" type="button" data-next>Continue</button>
         </div>
-        <ul id="saved-list" class="saved-list"></ul>
+      </section>
+
+      <!-- ── 3. result ────────────────────────────────────────────────── -->
+      <section class="screen" data-screen="3" aria-labelledby="s3-title" hidden>
+        <h2 id="s3-title" class="visually-hidden" tabindex="-1">Your destination</h2>
+
+        <div class="result-summary">
+          <span id="summary-budget" class="pill"></span>
+          <span id="summary-types" class="pill"></span>
+          <button class="link" type="button" data-back>Change</button>
+        </div>
+
+        <p id="match-count" class="match-count" role="status"></p>
+
+        <article
+          id="card"
+          class="card"
+          aria-live="polite"
+          aria-atomic="true"
+          hidden
+        >
+          <p class="card-country"></p>
+          <h3 class="card-city"></h3>
+          <p class="card-types"></p>
+          <p class="card-budget"><span class="pips" aria-hidden="true"></span><span class="budget-label"></span></p>
+          <p class="card-why"></p>
+          <div class="card-actions">
+            <button id="save" class="save" type="button" aria-pressed="false">Save this</button>
+            <button id="roll" class="roll" type="button">Surprise me again</button>
+          </div>
+        </article>
+
+        <p id="empty-hint" class="empty-hint" hidden>
+          No destinations match that combination. <button class="link" type="button" data-back>Try different filters</button>
+        </p>
+
+        <section class="saved" hidden aria-labelledby="saved-title">
+          <div class="saved-head">
+            <h3 id="saved-title">Saved <span id="saved-count" class="saved-count"></span></h3>
+            <button id="clear" class="link" type="button">Clear all</button>
+          </div>
+          <ul id="saved-list" class="saved-list"></ul>
+        </section>
       </section>
     </main>
 

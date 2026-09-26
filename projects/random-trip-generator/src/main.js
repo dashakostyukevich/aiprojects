@@ -2,30 +2,41 @@ import './style.css';
 import { DESTINATIONS, TRIP_TYPES, BUDGET_LABELS, BUDGET_MEANING } from './data.js';
 
 const STORAGE_KEY = 'where-should-i-go:saved';
+const LAST_SCREEN = 3;
 
-const rollBtn = document.querySelector('#roll');
+const TYPE_LABELS = Object.fromEntries(TRIP_TYPES.map((t) => [t.key, t.label]));
+
+const screens = [...document.querySelectorAll('.screen')];
+const stepItems = [...document.querySelectorAll('.step')];
+const budgetOptions = document.querySelector('#budget-options');
+const typeChips = document.querySelector('#type-chips');
+const typeNote = document.querySelector('#type-note');
+const nextBtns = document.querySelectorAll('[data-next]');
+const backBtns = document.querySelectorAll('[data-back]');
+const summaryBudget = document.querySelector('#summary-budget');
+const summaryTypes = document.querySelector('#summary-types');
+const matchCount = document.querySelector('#match-count');
 const card = document.querySelector('#card');
-const emptyHint = document.querySelector('#empty-hint');
-const saveBtn = document.querySelector('#save');
 const cardCity = card.querySelector('.card-city');
 const cardCountry = card.querySelector('.card-country');
 const cardWhy = card.querySelector('.card-why');
 const cardTypes = card.querySelector('.card-types');
 const pips = card.querySelector('.pips');
 const budgetLabel = card.querySelector('.budget-label');
-const typeChips = document.querySelector('#type-chips');
-const matchCount = document.querySelector('#match-count');
+const emptyHint = document.querySelector('#empty-hint');
+const rollBtn = document.querySelector('#roll');
+const saveBtn = document.querySelector('#save');
 const savedSection = document.querySelector('.saved');
 const savedList = document.querySelector('#saved-list');
 const savedCount = document.querySelector('#saved-count');
 const clearBtn = document.querySelector('#clear');
-const budgetFilters = document.querySelectorAll('input[name="budget"]');
-
-const TYPE_LABELS = Object.fromEntries(TRIP_TYPES.map((t) => [t.key, t.label]));
 
 let current = null;
 let saved = loadSaved();
 let activeTypes = new Set();
+let step = 1;
+
+/* ── saved list ─────────────────────────────────────────────────────────── */
 
 function loadSaved() {
   try {
@@ -52,9 +63,14 @@ function find(id) {
   return DESTINATIONS.find((d) => d.id === id);
 }
 
-function activeBudget() {
-  const checked = document.querySelector('input[name="budget"]:checked');
-  return checked?.value ?? 'all';
+function isSaved(id) {
+  return saved.includes(id);
+}
+
+/* ── filtering ──────────────────────────────────────────────────────────── */
+
+function chosenBudget() {
+  return document.querySelector('input[name="budget"]:checked')?.value ?? 'all';
 }
 
 /**
@@ -65,7 +81,7 @@ function activeBudget() {
  * is only both. Both filters must pass.
  */
 function pool() {
-  const budget = activeBudget();
+  const budget = chosenBudget();
   return DESTINATIONS.filter((d) => {
     if (budget !== 'all' && d.budget !== Number(budget)) return false;
     if (activeTypes.size && !d.types.some((t) => activeTypes.has(t))) return false;
@@ -79,6 +95,181 @@ function pick(from) {
   const others = from.filter((d) => d.id !== current?.id);
   const choices = others.length ? others : from;
   return choices[Math.floor(Math.random() * choices.length)];
+}
+
+/* ── screens ────────────────────────────────────────────────────────────── */
+
+function goTo(target) {
+  step = target;
+  screens.forEach((s) => {
+    s.hidden = Number(s.dataset.screen) !== step;
+  });
+  stepItems.forEach((li) => {
+    const n = Number(li.dataset.step);
+    li.classList.toggle('is-current', n === step);
+    li.classList.toggle('is-done', n < step);
+  });
+
+  if (step === 2) renderTypeNote();
+  if (step === LAST_SCREEN) {
+    renderSummary();
+    reconcile();
+  }
+
+  // Move focus to the new screen's heading so keyboard and screen-reader users
+  // land in the right place instead of at the top of the document.
+  screens.find((s) => Number(s.dataset.screen) === step)?.querySelector('h2')?.focus();
+}
+
+function next() {
+  goTo(Math.min(step + 1, LAST_SCREEN));
+}
+
+function back() {
+  goTo(Math.max(step - 1, 1));
+}
+
+/* ── screen 1: budget ───────────────────────────────────────────────────── */
+
+function buildBudgetOptions() {
+  const tiers = [1, 2, 3].map((tier) => ({
+    value: String(tier),
+    label: BUDGET_LABELS[tier],
+    meaning: BUDGET_MEANING[tier],
+  }));
+  const options = [{ value: 'all', label: 'Any', meaning: "No limit — surprise me on budget too." }, ...tiers];
+
+  budgetOptions.replaceChildren(
+    ...options.map((opt, i) => {
+      const label = document.createElement('label');
+      label.className = 'option';
+      label.dataset.budget = opt.value;
+
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = 'budget';
+      input.value = opt.value;
+      input.checked = i === 0;
+
+      const text = document.createElement('span');
+      text.className = 'option-text';
+
+      const title = document.createElement('span');
+      title.className = 'option-label';
+      title.textContent = opt.label;
+
+      const meaning = document.createElement('span');
+      meaning.className = 'option-meaning';
+      meaning.textContent = opt.meaning;
+
+      text.append(title, meaning);
+      label.append(input, text);
+      return label;
+    }),
+  );
+}
+
+/* ── screen 2: trip type ────────────────────────────────────────────────── */
+
+function typeChip({ key, label, count, isRadio }) {
+  const wrap = document.createElement('label');
+  wrap.className = 'chip';
+  if (key) wrap.dataset.type = key;
+
+  const input = document.createElement('input');
+  input.type = isRadio ? 'radio' : 'checkbox';
+  input.name = isRadio ? 'type-any' : 'type';
+  if (key) input.value = key;
+  input.checked = Boolean(isRadio); // "no preference" starts selected
+
+  const text = document.createElement('span');
+  text.textContent = label;
+
+  wrap.append(input, text);
+
+  if (count !== undefined) {
+    const n = document.createElement('span');
+    n.className = 'chip-count';
+    n.textContent = count;
+    wrap.append(n);
+  }
+
+  return { wrap, input };
+}
+
+function buildTypeChips() {
+  // "No preference" is mutually exclusive with the real types.
+  const any = typeChip({ label: 'No preference', isRadio: true });
+  any.input.addEventListener('change', () => {
+    if (!any.input.checked) return;
+    any.wrap.classList.add('is-on');
+    activeTypes.clear();
+    typeChips.querySelectorAll('input[name="type"]').forEach((i) => {
+      i.checked = false;
+      i.closest('.chip').classList.remove('is-on');
+    });
+    renderTypeNote();
+  });
+
+  const typed = TRIP_TYPES.map((type) => {
+    const { wrap, input } = typeChip({
+      key: type.key,
+      label: type.label,
+      count: DESTINATIONS.filter((d) => d.types.includes(type.key)).length,
+    });
+    input.addEventListener('change', () => {
+      wrap.classList.toggle('is-on', input.checked);
+      if (input.checked) {
+        activeTypes.add(type.key);
+        any.input.checked = false;
+        any.wrap.classList.remove('is-on');
+      } else {
+        activeTypes.delete(type.key);
+        // Unchecking the last type falls back to "no preference".
+        if (activeTypes.size === 0) {
+          any.input.checked = true;
+          any.wrap.classList.add('is-on');
+        }
+      }
+      renderTypeNote();
+    });
+    return wrap;
+  });
+
+  typeChips.replaceChildren(any.wrap, ...typed);
+  any.wrap.classList.add('is-on');
+}
+
+function renderTypeNote() {
+  const n = pool().length;
+  typeNote.textContent =
+    n === 0
+      ? 'Nothing matches that with your budget — try another type.'
+      : `${n} ${n === 1 ? 'place' : 'places'} match your budget.`;
+  typeNote.classList.toggle('is-warn', n === 0);
+}
+
+/* ── screen 3: result ───────────────────────────────────────────────────── */
+
+function renderSummary() {
+  const budget = chosenBudget();
+  summaryBudget.textContent =
+    budget === 'all' ? 'Any budget' : `Budget ${BUDGET_LABELS[budget]}`;
+  summaryTypes.textContent = activeTypes.size
+    ? [...activeTypes].map((t) => TYPE_LABELS[t] ?? t).join(' or ')
+    : 'Any trip type';
+}
+
+function renderMatchCount() {
+  const n = pool().length;
+  matchCount.textContent =
+    n === DESTINATIONS.length
+      ? `All ${n} places match`
+      : n === 0
+        ? 'No places match'
+        : `${n} of ${DESTINATIONS.length} places match`;
+  matchCount.classList.toggle('is-empty', n === 0);
+  matchCount.hidden = n === DESTINATIONS.length;
 }
 
 function show(destination) {
@@ -106,8 +297,7 @@ function showEmptyState() {
   current = null;
   card.hidden = true;
   emptyHint.hidden = false;
-  emptyHint.textContent = 'No destinations match those filters. Try removing one.';
-  saveBtn.setAttribute('aria-pressed', 'false');
+  saveBtn.disabled = true;
 }
 
 function roll() {
@@ -116,35 +306,25 @@ function roll() {
     showEmptyState();
     return;
   }
+  saveBtn.disabled = false;
   show(destination);
 }
 
-function renderMatchCount() {
-  const n = pool().length;
-  matchCount.textContent =
-    n === DESTINATIONS.length
-      ? `All ${n} places match`
-      : n === 0
-        ? 'No places match'
-        : `${n} of ${DESTINATIONS.length} places match`;
-  matchCount.classList.toggle('is-empty', n === 0);
-}
-
-/** Keep the visible card only if it still satisfies the filters. */
+/**
+ * Show a card that actually matches the filters.
+ *
+ * An empty result clears `current`, so returning to a non-empty pool has to roll
+ * afresh — otherwise the "no matches" message sticks around even though there are
+ * places to show. If the current card still fits, it is left alone, so stepping
+ * back and forth does not throw away the result you already have.
+ */
 function reconcile() {
   renderMatchCount();
-  // An empty result clears `current`, so relaxing a filter has to roll a fresh
-  // card here — otherwise the "no matches" message sticks around even though
-  // the pool is no longer empty.
   if (!current) {
     if (pool().length > 0) roll();
     return;
   }
   if (!pool().some((d) => d.id === current.id)) roll();
-}
-
-function isSaved(id) {
-  return saved.includes(id);
 }
 
 function syncSaveBtn() {
@@ -178,13 +358,13 @@ function renderSaved() {
       label.className = 'saved-label';
       label.textContent = `${d.city}, ${d.country}`;
 
-      const tag = document.createElement('span');
-      tag.className = 'saved-budget';
-      tag.textContent = BUDGET_LABELS[d.budget];
-
       const types = document.createElement('span');
       types.className = 'saved-types';
       types.textContent = d.types.map((t) => TYPE_LABELS[t] ?? t).join(' · ');
+
+      const tag = document.createElement('span');
+      tag.className = 'saved-budget';
+      tag.textContent = BUDGET_LABELS[d.budget];
 
       const remove = document.createElement('button');
       remove.className = 'link';
@@ -204,38 +384,10 @@ function renderSaved() {
   );
 }
 
-/** Build the type filter chips from TRIP_TYPES so the UI follows the data. */
-function buildTypeChips() {
-  typeChips.replaceChildren(
-    ...TRIP_TYPES.map((type) => {
-      const label = document.createElement('label');
-      label.className = 'chip';
-      label.dataset.type = type.key;
+/* ── wiring ─────────────────────────────────────────────────────────────── */
 
-      const input = document.createElement('input');
-      input.type = 'checkbox';
-      input.value = type.key;
-
-      input.addEventListener('change', () => {
-        if (input.checked) activeTypes.add(type.key);
-        else activeTypes.delete(type.key);
-        label.classList.toggle('is-on', input.checked);
-        reconcile();
-      });
-
-      const text = document.createElement('span');
-      text.textContent = type.label;
-
-      const count = document.createElement('span');
-      count.className = 'chip-count';
-      count.textContent = DESTINATIONS.filter((d) => d.types.includes(type.key)).length;
-
-      label.append(input, text, count);
-      return label;
-    }),
-  );
-}
-
+nextBtns.forEach((b) => b.addEventListener('click', next));
+backBtns.forEach((b) => b.addEventListener('click', back));
 rollBtn.addEventListener('click', roll);
 saveBtn.addEventListener('click', toggleSave);
 clearBtn.addEventListener('click', () => {
@@ -244,8 +396,10 @@ clearBtn.addEventListener('click', () => {
   renderSaved();
   syncSaveBtn();
 });
-budgetFilters.forEach((input) => input.addEventListener('change', reconcile));
 
+budgetOptions.addEventListener('change', renderTypeNote);
+
+buildBudgetOptions();
 buildTypeChips();
-renderMatchCount();
 renderSaved();
+goTo(1);
