@@ -13,4 +13,5 @@ Icon?
 .gitattributes
 
 # Tracked on purpose: AGENTS.md, OpenCode Here.command, and this file.
-# Each project under projects/ has its own git repo and its own .gitignore.
+# Everything under projects/ is tracked by this repo too — it is the only repo in the workspace.
+# Each project keeps its own .gitignore for node_modules, dist, and similar.

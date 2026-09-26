@@ -11,7 +11,8 @@ aiprojects/
     <project-slug>/          <- one folder per project, all siblings
 ```
 
-The root holds nothing else. No project files, no `package.json`, no repo of its own.
+The root holds nothing else. No project files, no `package.json`. It *is* the single git repo for
+the whole workspace.
 
 ## First action of every session: route to the right project
 
@@ -42,8 +43,32 @@ The root holds nothing else. No project files, no `package.json`, no repo of its
   rather than hand-writing config.
 - No shared `package.json`, lockfile, or `node_modules` at the root or in `projects/`. Each project
   installs its own dependencies.
-- Neither the workspace root nor `projects/` is a git repo (verified). Initialize git inside each
-  new project folder and commit early.
+- Don't run `git init` inside a project folder. The root repo already tracks everything; see
+  **Git: one repo for the whole workspace** below.
+
+## Git: one repo for the whole workspace
+
+`~/aiprojects` is the only git repo here. Every project under `projects/` is tracked by it as plain
+subdirectory files. This is deliberate — Dasha asked for one global repo instead of per-project
+ones.
+
+- **Never** `git init` inside `projects/<slug>/`. A nested repo makes the project invisible: git
+  treats that folder as an untracked gitlink, so `git status` shows a single opaque `projects/`
+  entry and `git add` only records the nested repo pointer, never the files.
+- Commit from the root, and name the project in the message so it stays readable from the root
+  log: `git add projects/<slug>` then `git commit -m "one-button-site: add heading"`.
+- A project's own `.gitignore` (`node_modules`, `dist`, `*.local`) still does its job, because
+  gitignore rules are per-directory no matter which repo is running. Keep those files.
+- To absorb a project that already has its own repo:
+
+  ```sh
+  rm -rf projects/<slug>/.git
+  git add projects/<slug>
+  git commit -m "<slug>: import into workspace repo"
+  ```
+
+  That drops the project's own history — its commits are not copied over. Fine for a fresh
+  scaffold, worth flagging to Dasha if the history matters.
 
 ## Where project-specific knowledge goes
 
