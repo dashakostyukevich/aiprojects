@@ -1,0 +1,73 @@
+/* Global styles. Everything here applies to the whole page, not to one component.
+   Component-specific styles live in the component's own .css file. */
+
+:root {
+  --text: #1c1b1f;
+  --text-dim: #6b6375;
+  --bg: #fbfaf8;
+  --card: #ffffff;
+  --border: #e6e2dc;
+  --accent: #2f7d63;
+  --accent-soft: #e6f2ed;
+  --track: #eceae5;
+  --border-strong: #d5d0c8;
+  --radius: 1rem;
+  --shadow: 0 1px 2px rgba(28, 27, 31, 0.04);
+
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  font: 16px/1.5 var(--sans);
+  color-scheme: light dark;
+  color: var(--text);
+  background: var(--bg);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text: #e9e7e3;
+    --text-dim: #9a9490;
+    --bg: #16171a;
+    --card: #1e2024;
+    --border: #2e3035;
+    --accent: #6ec2a1;
+    --accent-soft: #1e332c;
+    --track: #2a2d32;
+    --border-strong: #3a3e45;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0 0 0.5rem;
+  line-height: 1.2;
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+/* Visually hidden, still read aloud by screen readers. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

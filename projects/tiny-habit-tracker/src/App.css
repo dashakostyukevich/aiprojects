@@ -1,0 +1,840 @@
+/* Layout and card styles for the whole screen.
+   Mobile-first: one column by default, wider layout only on bigger screens. */
+
+.app {
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+/* --- Header ------------------------------------------------------------ */
+
+.header {
+  margin-bottom: 2.5rem;
+}
+
+.header-title {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.header-subtitle {
+  margin: 0.35rem 0 0;
+  color: var(--text-dim);
+}
+
+/* --- Week strip -------------------------------------------------------- */
+
+.week {
+  padding: 1.25rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin-bottom: 2.5rem;
+}
+
+.week-title,
+.habits-title {
+  margin: 0 0 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* 7 equal columns, always in one row. */
+.week-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.day-label,
+.day-date {
+  font-size: 0.7rem;
+  color: var(--text-dim);
+}
+
+.day-dot {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 0.8rem;
+  border-radius: 50%;
+  background-color: var(--track);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.day--done .day-dot {
+  background-color: var(--accent);
+  color: var(--bg);
+}
+
+.day--today .day-label {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.day--today .day-dot {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* --- View toggle ------------------------------------------------------- */
+
+/* Two buttons, one active. aria-pressed does the styling hook, so the
+   active button is picked by attribute rather than a second class. */
+.view-toggle {
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  margin-bottom: 2rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: var(--shadow);
+}
+
+.view-toggle-button {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: transparent;
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.view-toggle-button:hover {
+  color: var(--text);
+}
+
+.view-toggle-button[aria-pressed='true'] {
+  color: var(--bg);
+  background: var(--accent);
+}
+
+/* --- History view: one row per habit, 31 day circles ------------------- */
+
+/* The history view needs far more width than the card view, so this layout
+   breaks out of the 34rem reading column the rest of the app uses. */
+.app--history {
+  max-width: 64rem;
+}
+
+.history-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+/* 31 circles plus gaps is wider than a phone screen, so the rows scroll
+   sideways inside the card rather than squashing the circles down to
+   nothing. The habit name is sticky, so it stays readable while the days
+   scroll past it instead of disappearing off the left edge. */
+.history-scroll {
+  overflow-x: auto;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Flex, not grid: a sticky element is confined to its containing block, and
+   for a grid *item* that block is just its own grid column. The label could
+   then never slide along the row. As a flex item its containing block is
+   the whole row, so `left: 0` has room to work with. */
+.habit-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+
+  /* As wide as the 31 circles actually need, so the sticky label has the
+     full run to travel across. Without this the row is only as wide as the
+     screen and sticky hits the end of its containing block immediately. */
+  width: max-content;
+  min-width: 100%;
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Fixed width, and it does not shrink, so the day columns keep a stable
+   starting point. The solid background hides circles sliding underneath. */
+.habit-row-label {
+  position: sticky;
+  left: 0;
+  flex: 0 0 9.5rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 0.15rem 0.5rem;
+  min-width: 0;
+  padding-right: 0.5rem;
+  background-color: var(--card);
+}
+
+.habit-row-emoji {
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.habit-row-name {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.habit-row-count {
+  grid-column: 2;
+  margin: 0;
+  font-size: 0.7rem;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.habit-row-days {
+  display: flex;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* No shrink: the days are the thing being scrolled to, so they keep their
+     natural width instead of being squeezed into the leftover space. */
+  flex-shrink: 0;
+
+  /* Trailing lane for the sticky ⋯ trigger. The trigger is pinned to the
+     right edge of the scroll area, so without this the row's last day ends
+     underneath it. Padding on the *days* rather than on `.history-scroll`
+     matters: the row is `width: max-content`, so the container's own padding
+     is ignored by the row's width and cannot reserve anything. */
+  padding-right: 2.5rem;
+}
+
+.row-day {
+  flex-shrink: 0;
+}
+
+.row-dot {
+  display: block;
+  width: 1.05rem;
+  height: 1.05rem;
+  padding: 0;
+  background-color: var(--track);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.row-dot:hover {
+  transform: scale(1.25);
+  border-color: var(--accent);
+}
+
+.row-dot--done {
+  background-color: var(--accent);
+  border-color: var(--accent);
+}
+
+.row-dot:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Today is outlined, not filled: fill already means "done". */
+.row-dot--today {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* --- Habit list -------------------------------------------------------- */
+
+.habits-title {
+  margin-bottom: 0.75rem;
+}
+
+.habits-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.habit {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.habit:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+/* A completed habit is dimmed, so the unfinished ones stand out. */
+.habit--done .habit-emoji {
+  opacity: 0.45;
+}
+
+.habit--done .habit-name {
+  color: var(--text-dim);
+}
+
+.habit-emoji {
+  font-size: 1.6rem;
+  line-height: 1;
+  transition: opacity 0.15s ease;
+}
+
+.habit-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.habit-name {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+/* The schedule and the progress towards it, e.g. "3× a week · 2 of 3 this
+   week". Sits above the streak line and is slightly brighter than it, because
+   it is the number you can still act on today.
+
+   Flex with wrapping, not plain text: the two halves have to be separate boxes
+   so a narrow card can break between them. With inline text the browser is
+   happy to break inside "1 of 3 this week" or to leave the separator alone on
+   its own line, and both look like a mistake. */
+.habit-goal {
+  display: flex;
+  flex-wrap: wrap;
+  /* A gap, not a margin on the second half: flex gap only applies between items
+     on the *same* line, so a wrapped second line still starts flush left. A
+     margin-left would indent it, which reads as a stray hierarchy. */
+  column-gap: 0.3rem;
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+/* Each half wraps as a unit, so the break lands between the halves and never
+   inside a phrase. */
+.habit-goal-part {
+  white-space: nowrap;
+}
+
+/* The week's target is met. Green is reserved for this one thing, so it reads
+   as a result rather than as another colour. */
+.habit-goal-met {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.habit-streak {
+  margin: 0.15rem 0 0;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.habit-button {
+  flex-shrink: 0;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  font-size: 0.9rem;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-soft);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.habit-button:hover {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* --- Add habit --------------------------------------------------------- */
+
+.add-button {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--accent);
+  background: transparent;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.add-button:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+/* Shown instead of the list when every habit has been deleted. */
+.empty-note {
+  padding: 1.5rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  text-align: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+/* --- Habit overflow menu ------------------------------------------------ */
+
+/* The wrapper is the positioning context for the popup, and `display: inline
+   flex` keeps the trigger out of the label's grid flow. */
+.habit-menu {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+}
+
+.habit-menu-trigger {
+  display: grid;
+  place-items: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.4rem;
+  font: inherit;
+  font-size: 1.1rem;
+  line-height: 1;
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.habit-menu-trigger:hover,
+.habit-menu-trigger--open {
+  color: var(--text);
+  background: var(--accent-soft);
+  border-color: var(--border);
+}
+
+.habit-menu-trigger:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Rendered into a portal on document.body and positioned with `fixed`, so no
+   clipping ancestor can cut it off — see the note at the top of HabitMenu.
+   The top/left are written by the component after it measures itself. */
+.habit-menu-popup {
+  position: fixed;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  min-width: 9rem;
+  padding: 0.25rem;
+  background: var(--card);
+  border: 1px solid var(--border-strong);
+  border-radius: 0.6rem;
+  box-shadow: 0 4px 12px rgba(28, 27, 31, 0.12);
+}
+
+@media (prefers-color-scheme: dark) {
+  .habit-menu-popup {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.habit-menu-item {
+  padding: 0.45rem 0.6rem;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--text);
+  text-align: left;
+  white-space: nowrap;
+  background: transparent;
+  border: 0;
+  border-radius: 0.4rem;
+  cursor: pointer;
+}
+
+.habit-menu-item:hover {
+  background: var(--accent-soft);
+}
+
+.habit-menu-item:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.habit-menu-item--danger {
+  color: #b3261e;
+}
+
+.habit-menu-item--danger:hover {
+  background: #fdecea;
+}
+
+/* The confirming state: the item fills in, so the control that is about to
+   destroy the habit is the one that looks dangerous. */
+.habit-menu-item--confirming,
+.habit-menu-item--confirming:hover {
+  color: #ffffff;
+  background: #b3261e;
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  .habit-menu-item--danger {
+    color: #ffb4ab;
+  }
+
+  .habit-menu-item--danger:hover {
+    background: #3b1512;
+  }
+
+  .habit-menu-item--confirming,
+  .habit-menu-item--confirming:hover {
+    color: #3b1512;
+    background: #ffb4ab;
+  }
+}
+
+/* The 31-day variant: the trigger sits after the dots, pinned to the right
+   edge of the scrolling area. Sticky rather than just last, because the days
+   are far wider than a phone — without this the ⋯ would be off-screen until
+   you scrolled every day into view, which defeats having it at the end.
+   The opaque background stops circles sliding underneath it. */
+.habit-menu--compact {
+  position: sticky;
+  /* 1rem, not 0: `right: 0` pins the trigger flush against the scrollport
+     edge, swallowing the row's own right padding, so the right side sat flush
+     while the emoji on the left was inset and the row looked lopsided. The
+     inset has to be the sticky offset — a `margin-right` here does nothing,
+     because sticky clamps the border box to the scrollport rather than the
+     margin box. Measured: 0px of inset at `right: 0`, 16px at 1rem. */
+  right: 1rem;
+  padding-left: 0.5rem;
+  background-color: var(--card);
+}
+
+.habit-menu--compact .habit-menu-trigger {
+  min-width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.95rem;
+}
+
+/* No z-index lift is needed for the popup any more: it lives in a portal on
+   document.body, so the sticky label's stacking context cannot trap it. */
+
+/* --- Add / rename form -------------------------------------------------- */
+
+.habit-form {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background: var(--card);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* Inside the habit list the form is a list item, so it must not also carry the
+   list's bottom margin. */
+.habits-list .habit-form {
+  margin-bottom: 0;
+}
+
+.habit-form-label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.habit-form-input {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 0.75rem;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 0.6rem;
+}
+
+.habit-form-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+  border-color: var(--accent);
+}
+
+.emoji-picker {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 0.25rem;
+  margin-bottom: 0.9rem;
+}
+
+.emoji-option {
+  padding: 0.3rem 0;
+  font-size: 1.1rem;
+  line-height: 1.2;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.emoji-option:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.emoji-option[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+
+/* --- Schedule picker ----------------------------------------------------- */
+
+.schedule-picker {
+  margin-bottom: 0.9rem;
+}
+
+/* The three kinds wrap onto two lines on a narrow phone rather than shrinking
+   until the labels are unreadable. */
+.schedule-kinds {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.6rem;
+}
+
+/* The wrapper is the positioning context for the hidden radio, so the clipped
+   input is anchored to its own label. Without it the absolutely positioned
+   input resolves against a further ancestor (or the initial containing block),
+   which puts the focus target somewhere unrelated to what was clicked. */
+.schedule-kind {
+  position: relative;
+  display: inline-flex;
+}
+
+/* A real radio, so the group announces itself as mutually exclusive and the
+   arrow keys move between the choices. Hidden by clipping rather than
+   `display: none`, which would drop it out of the tab order and leave the
+   label as the only way in. */
+.schedule-kind-input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.schedule-kind-label {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.schedule-kind-label:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+/* Two selectors, not a class: the checked state is the truth, and a component
+   that forgot to add a class would otherwise look unselected. */
+.schedule-kind-input:checked + .schedule-kind-label {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+/* The focus ring goes on the label, because the input itself is clipped away
+   and would show no ring at all. */
+.schedule-kind-input:focus-visible + .schedule-kind-label {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.schedule-option {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.schedule-chip {
+  /* 2.5rem is the smallest target that still works with a fingertip, which is
+     why the weekday chips do not shrink further on a phone. */
+  min-width: 2.5rem;
+  padding: 0.4rem 0.55rem;
+  font: inherit;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.schedule-chip:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+
+.schedule-chip[aria-pressed='true'] {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.schedule-chip:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* The schedule written back as a sentence, so the choice never has to be read
+   off which chips happen to be lit. */
+.schedule-summary {
+  margin: 0;
+  font-size: 0.75rem;
+  color: var(--text-dim);
+}
+
+.habit-form-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.habit-form-submit,
+.habit-form-cancel {
+  padding: 0.55rem 1.1rem;
+  font: inherit;
+  font-weight: 600;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+}
+
+.habit-form-submit {
+  color: var(--bg);
+  background: var(--accent);
+  border: 1px solid var(--accent);
+}
+
+.habit-form-submit:disabled {
+  /* Dimmed rather than hidden, so the button does not move when the name
+     box is still empty. */
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.habit-form-cancel {
+  color: var(--text-dim);
+  background: transparent;
+  border: 1px solid var(--border-strong);
+}
+
+.habit-form-cancel:hover {
+  color: var(--text);
+  border-color: var(--text-dim);
+}
+
+/* --- Wider screens ----------------------------------------------------- */
+
+@media (min-width: 40rem) {
+  .app {
+    padding-top: 4rem;
+  }
+
+  .header-title {
+    font-size: 2.5rem;
+  }
+
+  .day-dot {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+}
+
+/* On a phone the name column would eat most of the width, so it shrinks to
+   fit the text and the circles get slightly smaller to show more days. */
+@media (max-width: 30rem) {
+  /* Still enough for a typical habit name without truncating. The overflow
+     menu sits on its own line, so it does not compete for this width. */
+  .habit-row-label {
+    flex-basis: 9.5rem;
+  }
+
+  .habit-row {
+    gap: 0.5rem;
+  }
+
+  .row-dot {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  .habit-row-days {
+    gap: 0.2rem;
+  }
+}
