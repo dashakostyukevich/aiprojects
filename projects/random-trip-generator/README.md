@@ -24,11 +24,18 @@ forward re-rolls only if the current card no longer fits, so stepping back to ch
 something does not throw away a result you were happy with. Selections on both filter
 screens are remembered as you move between them.
 
+Back behaviour is deliberately not uniform. **Back on screen 2** steps to screen 1.
+**Back on screen 3** — the "Change" link, and the "Try different filters" link in the
+empty state — jumps straight to screen 1, skipping the type screen. From the result,
+"back" means "ask me the questions again", and the budget is the first of those. It is
+a jump rather than a reset: whatever is already selected stays selected and ticked, so
+you can change one thing and carry on.
+
 | Screen | Contents |
 | --- | --- |
 | 1. Budget | Four radio options, each with a plain-language explanation of the tier |
 | 2. Trip type | Type chips, plus "No preference" which clears the rest |
-| 3. Result | Filter summary pills, match count, the card, re-roll, saved list, and a "Change" link back to screen 2 |
+| 3. Result | Filter summary pills, match count, the card, re-roll, saved list, and a "Change" link back to screen 1 |
 
 Focus moves to the new screen's heading on every step change, so keyboard and
 screen-reader users land in the right place instead of at the top of the document.
@@ -42,8 +49,8 @@ screen-reader users land in the right place instead of at the top of the documen
 
 The two combine with AND: `Beach` + `€` gives cheap beach towns. A combination with
 no matches (for example `Adventure` + `€`, which is empty) is flagged in amber on
-screen 2, and screen 3 shows a "no destinations match" message with a link back
-rather than silently rolling from everywhere.
+screen 2, and screen 3 shows a "no destinations match" message with a link back to
+screen 1 rather than silently rolling from everywhere.
 
 The seven types are `beach`, `city`, `culture`, `nature`, `adventure`, `food`,
 `nightlife`.

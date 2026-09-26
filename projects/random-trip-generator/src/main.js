@@ -126,7 +126,10 @@ function next() {
 }
 
 function back() {
-  goTo(Math.max(step - 1, 1));
+  // From the result, "back" means "start the questions over" rather than
+  // "one screen back" — both filters are re-asked from the top. Selections are
+  // kept, so it is a jump, not a reset.
+  goTo(step === LAST_SCREEN ? 1 : Math.max(step - 1, 1));
 }
 
 /* ── screen 1: budget ───────────────────────────────────────────────────── */
