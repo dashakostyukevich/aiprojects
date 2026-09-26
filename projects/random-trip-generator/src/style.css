@@ -1,0 +1,317 @@
+/* Palette: one accent hue per budget tier, used for pips, card edge, and tags. */
+:root {
+  --bg: #fbfaf7;
+  --surface: #ffffff;
+  --ink: #16150f;
+  --ink-soft: #6b675c;
+  --line: #e4e0d6;
+
+  --tier-1: #2f8f5b;
+  --tier-2: #2f6f8f;
+  --tier-3: #8f5b2f;
+
+  --tier: var(--tier-2);
+
+  --radius: 14px;
+  --shadow: 0 1px 2px rgb(22 21 15 / 6%), 0 12px 28px -18px rgb(22 21 15 / 35%);
+
+  --sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  color-scheme: light dark;
+  font: 17px/1.55 var(--sans);
+  color: var(--ink);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14130f;
+    --surface: #1e1c17;
+    --ink: #f4f1e8;
+    --ink-soft: #a8a294;
+    --line: #35322a;
+
+    --tier-1: #62c795;
+    --tier-2: #7cb8dd;
+    --tier-3: #dda96e;
+
+    --shadow: 0 1px 2px rgb(0 0 0 / 40%), 0 12px 28px -18px rgb(0 0 0 / 80%);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 2rem 1.25rem 4rem;
+  background: var(--bg);
+}
+
+.app {
+  width: min(34rem, 100%);
+}
+
+/* ── masthead ─────────────────────────────────────────────────────────── */
+
+.masthead {
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(1.9rem, 6vw, 2.6rem);
+  letter-spacing: -0.02em;
+}
+
+.tagline {
+  margin: 0.4rem 0 0;
+  color: var(--ink-soft);
+}
+
+/* ── controls ────────────────────────────────────────────────────────── */
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.roll {
+  width: min(20rem, 100%);
+  padding: 1.05rem 1.5rem;
+  font: inherit;
+  font-weight: 650;
+  font-size: 1.15rem;
+  /* Paired with --ink below so the button inverts with the theme: dark pill
+     with light text in light mode, light pill with dark text in dark mode. */
+  color: var(--bg);
+  background: var(--ink);
+  border: 0;
+  border-radius: 999px;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: transform 0.12s ease, filter 0.12s ease;
+}
+
+.roll:hover {
+  filter: brightness(1.15);
+}
+
+.roll:active {
+  transform: scale(0.97);
+}
+
+.filters {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.filters legend {
+  float: left; /* keeps the legend inline without stealing a flex row */
+  margin-right: 0.2rem;
+  padding: 0;
+}
+
+.filters label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+}
+
+.filters input {
+  accent-color: var(--tier-2);
+  margin: 0;
+}
+
+/* ── destination card ────────────────────────────────────────────────── */
+
+.card {
+  margin-top: 1.75rem;
+  padding: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--tier);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  animation: rise 0.28s ease both;
+}
+
+.card[data-budget='1'] {
+  --tier: var(--tier-1);
+}
+.card[data-budget='2'] {
+  --tier: var(--tier-2);
+}
+.card[data-budget='3'] {
+  --tier: var(--tier-3);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    animation: none;
+  }
+  .roll {
+    transition: none;
+  }
+}
+
+.card-country {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--tier);
+}
+
+.card-city {
+  margin: 0.15rem 0 0.6rem;
+  font-size: clamp(1.7rem, 5.5vw, 2.2rem);
+  letter-spacing: -0.02em;
+}
+
+.card-budget {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 0.75rem;
+}
+
+.pips {
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  color: var(--tier);
+}
+
+.budget-label {
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.card-why {
+  margin: 0 0 1.25rem;
+}
+
+.save {
+  padding: 0.6rem 1.2rem;
+  font: inherit;
+  font-weight: 600;
+  color: var(--tier);
+  background: transparent;
+  border: 1px solid currentcolor;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.save:hover {
+  background: color-mix(in srgb, var(--tier) 12%, transparent);
+}
+
+.save.is-saved {
+  color: var(--surface);
+  background: var(--tier);
+}
+
+.empty-hint {
+  margin: 2rem 0 0;
+  text-align: center;
+  color: var(--ink-soft);
+}
+
+/* ── saved list ──────────────────────────────────────────────────────── */
+
+.saved {
+  margin-top: 2.25rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+}
+
+.saved-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.saved-head h2 {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+}
+
+.saved-count {
+  color: var(--ink-soft);
+  font-weight: 500;
+}
+
+.link {
+  padding: 0;
+  font: inherit;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  background: none;
+  border: 0;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link:hover {
+  color: var(--ink);
+}
+
+.saved-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.saved-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.saved-item:last-child {
+  border-bottom: 0;
+}
+
+.saved-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.saved-budget {
+  font-size: 0.85rem;
+  color: var(--tier-1);
+}
+
+.saved-item[data-budget='2'] .saved-budget {
+  color: var(--tier-2);
+}
+.saved-item[data-budget='3'] .saved-budget {
+  color: var(--tier-3);
+}

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Where Should I Go? — press one button and get a random destination with a budget level."
+    />
+    <title>Where Should I Go?</title>
+  </head>
+  <body>
+    <main class="app">
+      <header class="masthead">
+        <h1>Where should I go?</h1>
+        <p class="tagline">Press the button. Get a place. Stop scrolling travel blogs.</p>
+      </header>
+
+      <div class="controls">
+        <button id="roll" class="roll" type="button">Surprise me</button>
+
+        <fieldset class="filters">
+          <legend>Budget</legend>
+          <label><input type="radio" name="budget" value="all" checked /> Any</label>
+          <label><input type="radio" name="budget" value="1" /> €</label>
+          <label><input type="radio" name="budget" value="2" /> €€</label>
+          <label><input type="radio" name="budget" value="3" /> €€€</label>
+        </fieldset>
+      </div>
+
+      <section
+        id="card"
+        class="card"
+        aria-live="polite"
+        aria-atomic="true"
+        hidden
+      >
+        <p class="card-country"></p>
+        <h2 class="card-city"></h2>
+        <p class="card-budget"><span class="pips" aria-hidden="true"></span><span class="budget-label"></span></p>
+        <p class="card-why"></p>
+        <button id="save" class="save" type="button">Save this</button>
+      </section>
+
+      <p id="empty-hint" class="empty-hint">
+        Nothing shown yet. That button is the whole app.
+      </p>
+
+      <section class="saved" hidden>
+        <div class="saved-head">
+          <h2>Saved <span id="saved-count" class="saved-count"></span></h2>
+          <button id="clear" class="link" type="button">Clear all</button>
+        </div>
+        <ul id="saved-list" class="saved-list"></ul>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
