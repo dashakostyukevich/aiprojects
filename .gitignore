@@ -1,0 +1,16 @@
+# macOS filesystem junk
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+
+# Git bookkeeping not tracked in this container repo.
+# Note: ignoring .gitattributes means the `* text=auto` normalization rule stays
+# local to this machine. Fine for a personal container, wrong for a shared clone.
+.gitattributes
+
+# Tracked on purpose: AGENTS.md, OpenCode Here.command, and this file.
+# Each project under projects/ has its own git repo and its own .gitignore.
