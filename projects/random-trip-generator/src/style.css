@@ -136,6 +136,78 @@ h1 {
   margin: 0;
 }
 
+/* ── type chips ───────────────────────────────────────────────────────── */
+
+.filters-types {
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 28rem;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.chip:hover {
+  color: var(--ink);
+  border-color: var(--ink-soft);
+}
+
+.chip.is-on {
+  color: var(--surface);
+  background: var(--ink);
+  border-color: var(--ink);
+}
+
+/* The checkbox is the real control for keyboard and screen readers; the chip
+   is its visual stand-in, so the box itself is hidden but stays focusable. */
+.chip input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.chip:has(input:focus-visible) {
+  outline: 2px solid var(--tier-2);
+  outline-offset: 2px;
+}
+
+.chip-count {
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
+}
+
+.match-count {
+  margin: 0;
+  min-height: 1.2em;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+}
+
+.match-count.is-empty {
+  color: var(--tier-3);
+}
+
 /* ── destination card ────────────────────────────────────────────────── */
 
 .card {
@@ -188,6 +260,23 @@ h1 {
   margin: 0.15rem 0 0.6rem;
   font-size: clamp(1.7rem, 5.5vw, 2.2rem);
   letter-spacing: -0.02em;
+}
+
+.card-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0 0 0.85rem;
+}
+
+.tag {
+  padding: 0.15rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--tier);
+  background: color-mix(in srgb, var(--tier) 12%, transparent);
+  border-radius: 999px;
 }
 
 .card-budget {
@@ -302,6 +391,24 @@ h1 {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.saved-types {
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+@media (max-width: 30rem) {
+  .saved-item {
+    flex-wrap: wrap;
+    gap: 0.15rem 0.6rem;
+  }
+  .saved-types {
+    order: 3;
+    flex-basis: 100%;
+    text-align: left;
+  }
 }
 
 .saved-budget {

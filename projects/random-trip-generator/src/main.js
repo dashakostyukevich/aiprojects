@@ -1,5 +1,5 @@
 import './style.css';
-import { DESTINATIONS, BUDGET_LABELS, BUDGET_MEANING } from './data.js';
+import { DESTINATIONS, TRIP_TYPES, BUDGET_LABELS, BUDGET_MEANING } from './data.js';
 
 const STORAGE_KEY = 'where-should-i-go:saved';
 
@@ -10,16 +10,22 @@ const saveBtn = document.querySelector('#save');
 const cardCity = card.querySelector('.card-city');
 const cardCountry = card.querySelector('.card-country');
 const cardWhy = card.querySelector('.card-why');
+const cardTypes = card.querySelector('.card-types');
 const pips = card.querySelector('.pips');
 const budgetLabel = card.querySelector('.budget-label');
+const typeChips = document.querySelector('#type-chips');
+const matchCount = document.querySelector('#match-count');
 const savedSection = document.querySelector('.saved');
 const savedList = document.querySelector('#saved-list');
 const savedCount = document.querySelector('#saved-count');
 const clearBtn = document.querySelector('#clear');
-const filters = document.querySelectorAll('input[name="budget"]');
+const budgetFilters = document.querySelectorAll('input[name="budget"]');
+
+const TYPE_LABELS = Object.fromEntries(TRIP_TYPES.map((t) => [t.key, t.label]));
 
 let current = null;
 let saved = loadSaved();
+let activeTypes = new Set();
 
 function loadSaved() {
   try {
@@ -51,20 +57,28 @@ function activeBudget() {
   return checked?.value ?? 'all';
 }
 
+/**
+ * Destinations matching the current filters.
+ *
+ * Budget narrows (single choice). Types widen — picking Beach *and* Food means
+ * "beach or food", not "beach and food", because almost nobody wants a place that
+ * is only both. Both filters must pass.
+ */
 function pool() {
   const budget = activeBudget();
-  return budget === 'all'
-    ? DESTINATIONS
-    : DESTINATIONS.filter((d) => d.budget === Number(budget));
+  return DESTINATIONS.filter((d) => {
+    if (budget !== 'all' && d.budget !== Number(budget)) return false;
+    if (activeTypes.size && !d.types.some((t) => activeTypes.has(t))) return false;
+    return true;
+  });
 }
 
-function pick() {
-  const options = pool();
-  if (options.length === 0) return null;
+function pick(from) {
+  if (from.length === 0) return null;
   // Avoid handing back the same place twice in a row when there is a choice.
-  const others = options.filter((d) => d.id !== current?.id);
-  const from = others.length ? others : options;
-  return from[Math.floor(Math.random() * from.length)];
+  const others = from.filter((d) => d.id !== current?.id);
+  const choices = others.length ? others : from;
+  return choices[Math.floor(Math.random() * choices.length)];
 }
 
 function show(destination) {
@@ -72,6 +86,14 @@ function show(destination) {
   cardCountry.textContent = destination.country;
   cardCity.textContent = destination.city;
   cardWhy.textContent = destination.why;
+  cardTypes.replaceChildren(
+    ...destination.types.map((key) => {
+      const tag = document.createElement('span');
+      tag.className = 'tag';
+      tag.textContent = TYPE_LABELS[key] ?? key;
+      return tag;
+    }),
+  );
   budgetLabel.textContent = `${BUDGET_LABELS[destination.budget]} · ${BUDGET_MEANING[destination.budget]}`;
   pips.textContent = '●'.repeat(destination.budget) + '○'.repeat(3 - destination.budget);
   card.dataset.budget = String(destination.budget);
@@ -80,16 +102,45 @@ function show(destination) {
   syncSaveBtn();
 }
 
+function showEmptyState() {
+  current = null;
+  card.hidden = true;
+  emptyHint.hidden = false;
+  emptyHint.textContent = 'No destinations match those filters. Try removing one.';
+  saveBtn.setAttribute('aria-pressed', 'false');
+}
+
 function roll() {
-  const destination = pick();
+  const destination = pick(pool());
   if (!destination) {
-    card.hidden = true;
-    emptyHint.hidden = false;
-    emptyHint.textContent = 'No destinations match that budget filter.';
-    current = null;
+    showEmptyState();
     return;
   }
   show(destination);
+}
+
+function renderMatchCount() {
+  const n = pool().length;
+  matchCount.textContent =
+    n === DESTINATIONS.length
+      ? `All ${n} places match`
+      : n === 0
+        ? 'No places match'
+        : `${n} of ${DESTINATIONS.length} places match`;
+  matchCount.classList.toggle('is-empty', n === 0);
+}
+
+/** Keep the visible card only if it still satisfies the filters. */
+function reconcile() {
+  renderMatchCount();
+  // An empty result clears `current`, so relaxing a filter has to roll a fresh
+  // card here — otherwise the "no matches" message sticks around even though
+  // the pool is no longer empty.
+  if (!current) {
+    if (pool().length > 0) roll();
+    return;
+  }
+  if (!pool().some((d) => d.id === current.id)) roll();
 }
 
 function isSaved(id) {
@@ -131,6 +182,10 @@ function renderSaved() {
       tag.className = 'saved-budget';
       tag.textContent = BUDGET_LABELS[d.budget];
 
+      const types = document.createElement('span');
+      types.className = 'saved-types';
+      types.textContent = d.types.map((t) => TYPE_LABELS[t] ?? t).join(' · ');
+
       const remove = document.createElement('button');
       remove.className = 'link';
       remove.type = 'button';
@@ -143,8 +198,40 @@ function renderSaved() {
         syncSaveBtn();
       });
 
-      li.append(label, tag, remove);
+      li.append(label, types, tag, remove);
       return li;
+    }),
+  );
+}
+
+/** Build the type filter chips from TRIP_TYPES so the UI follows the data. */
+function buildTypeChips() {
+  typeChips.replaceChildren(
+    ...TRIP_TYPES.map((type) => {
+      const label = document.createElement('label');
+      label.className = 'chip';
+      label.dataset.type = type.key;
+
+      const input = document.createElement('input');
+      input.type = 'checkbox';
+      input.value = type.key;
+
+      input.addEventListener('change', () => {
+        if (input.checked) activeTypes.add(type.key);
+        else activeTypes.delete(type.key);
+        label.classList.toggle('is-on', input.checked);
+        reconcile();
+      });
+
+      const text = document.createElement('span');
+      text.textContent = type.label;
+
+      const count = document.createElement('span');
+      count.className = 'chip-count';
+      count.textContent = DESTINATIONS.filter((d) => d.types.includes(type.key)).length;
+
+      label.append(input, text, count);
+      return label;
     }),
   );
 }
@@ -157,10 +244,8 @@ clearBtn.addEventListener('click', () => {
   renderSaved();
   syncSaveBtn();
 });
-filters.forEach((input) =>
-  input.addEventListener('change', () => {
-    if (current && !pool().some((d) => d.id === current.id)) roll();
-  }),
-);
+budgetFilters.forEach((input) => input.addEventListener('change', reconcile));
 
+buildTypeChips();
+renderMatchCount();
 renderSaved();

@@ -27,6 +27,13 @@
           <label><input type="radio" name="budget" value="2" /> €€</label>
           <label><input type="radio" name="budget" value="3" /> €€€</label>
         </fieldset>
+
+        <fieldset class="filters filters-types">
+          <legend>Trip type</legend>
+          <div id="type-chips" class="chips"></div>
+        </fieldset>
+
+        <p id="match-count" class="match-count" role="status"></p>
       </div>
 
       <section
@@ -38,6 +45,7 @@
       >
         <p class="card-country"></p>
         <h2 class="card-city"></h2>
+        <p class="card-types"></p>
         <p class="card-budget"><span class="pips" aria-hidden="true"></span><span class="budget-label"></span></p>
         <p class="card-why"></p>
         <button id="save" class="save" type="button">Save this</button>
