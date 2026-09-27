@@ -15,7 +15,7 @@ const fills = {
 function StatCard({ card }) {
   return (
     <>
-      <p className="font-serif text-4xl leading-none">{card.figure}</p>
+      <p className="font-display text-4xl leading-none">{card.figure}</p>
       <p className="label-meta mt-2 opacity-70">{card.label}</p>
     </>
   )

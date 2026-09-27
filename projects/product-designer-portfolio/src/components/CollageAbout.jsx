@@ -1,25 +1,33 @@
 import { collage, profile } from '../data.js'
 import CollageCard from './CollageCard.jsx'
 import Reveal from './Reveal.jsx'
+import SplitReveal from './SplitReveal.jsx'
 
 // §6 About page pattern. Desktop lays cards onto an invisible 12-col grid with
 // percentage boxes; the headline keeps the middle clear for legibility. Mobile
 // drops to a 2-column masonry in array order.
 function Headline() {
   return (
-    <h2 className="font-serif text-display leading-[1.05] text-balance">
+    <SplitReveal
+      as="h2"
+      className="font-display text-display leading-[1.05] tracking-[-0.03em] text-balance"
+    >
       {profile.headline.map((part, i) =>
         part.highlight ? (
-          <span key={i} className="highlight font-serif italic">
+          // The accent highlight is the emphasis here. Space Grotesk has no
+          // italic cut, so `italic` would synthesise a slanted oblique.
+          // `data-split` masks each word, keeping the highlight on both.
+          <span key={i} data-split className="highlight font-display">
             {part.text}
           </span>
         ) : (
-          <span key={i} className={part.italic ? 'italic' : undefined}>
+          // `italic` in the data maps to weight, same as the hero headline.
+          <span key={i} data-split className={part.italic ? 'font-medium' : undefined}>
             {part.text}
           </span>
         ),
       )}
-    </h2>
+    </SplitReveal>
   )
 }
 

@@ -12,9 +12,9 @@ import Reveal from '../Reveal.jsx'
  * - Colours: the reference's #262626 / #f2efec / #dd2f1b / #e6aed3 are now
  *   `ink`, `bg`, the §3 accent highlight, and `sky`. The shapes themselves were
  *   recoloured in public/hero/ to match, so the SVGs ship with the site.
- * - Type: Anton becomes the project's display serif, Inter is already the
- *   project sans. The emphasised word uses the §3 highlight pattern rather than
- *   red text, since the accent fails contrast as a text colour.
+ * - Type: Anton becomes Space Grotesk, the project display face; Geist is the
+ *   project text face. The emphasised word uses the §3 highlight pattern rather
+ *   than red text, since the accent fails contrast as a text colour.
  * - Container: the project runs everything on `container-page` (1200px), not
  *   1450px.
  * - Copy and the link target come from `data.js`.
@@ -37,12 +37,15 @@ export function HeroSection() {
               it sets that on the heading too. It is 100% here because Anton's
               tight metrics allow 96% while the project's display serif has
               taller ascenders and the two lines collide. */}
-          <h2 className="m-0 font-serif text-ink font-semibold text-[110px] max-[991px]:text-[64px] max-[767px]:text-[52px] max-[479px]:text-[13vw] leading-[100%] tracking-[-0.06em]">
+          <h2 className="m-0 font-display text-ink font-semibold text-[110px] max-[991px]:text-[64px] max-[767px]:text-[52px] max-[479px]:text-[13vw] leading-[100%] tracking-[-0.06em]">
             <span className="block">{display.headline.line1}</span>
             <span className="block">
               {display.headline.line2.map((part, i) =>
                 part.accent ? (
-                  <span key={i} className="highlight font-serif italic">
+                  // No `italic` here: Space Grotesk ships no italic cut, so the
+                  // browser would synthesise a slanted oblique. The accent
+                  // highlight already carries the emphasis.
+                  <span key={i} className="highlight font-display">
                     {part.text}
                   </span>
                 ) : (

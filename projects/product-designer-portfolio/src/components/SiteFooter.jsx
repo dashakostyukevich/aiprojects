@@ -1,4 +1,5 @@
 import { profile } from '../data.js'
+import SplitReveal from './SplitReveal.jsx'
 
 export default function SiteFooter() {
   return (
@@ -8,13 +9,20 @@ export default function SiteFooter() {
     >
       <div className="container-page py-20 sm:py-28">
         <p className="label-meta text-bg/60">Contact</p>
-        <h2 className="mt-6 max-w-3xl font-serif text-display leading-[1.05] text-balance">
+        <SplitReveal
+          as="h2"
+          className="mt-6 max-w-3xl font-display text-display leading-[1.05] tracking-[-0.03em] text-balance"
+        >
           Let&rsquo;s make something{' '}
-          <span className="highlight font-serif italic text-accent-ink">
+          {/* The accent highlight carries the emphasis; Space Grotesk has no
+              italic cut, so an `italic` here would be a synthesised oblique.
+              `data-split` masks each word separately while keeping the
+              highlight background on both. */}
+          <span data-split className="highlight font-display text-accent-ink">
             clear and calm
           </span>
           .
-        </h2>
+        </SplitReveal>
 
         <div className="mt-10 flex flex-wrap items-center gap-4">
           <a

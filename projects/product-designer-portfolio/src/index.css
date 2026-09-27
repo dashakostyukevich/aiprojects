@@ -17,9 +17,11 @@
   --color-navy: #1a1f2e;
   --color-sky: #bfe3f0;
 
-  /* §3 Type. Fraunces stands in for the serif, Inter for the sans. */
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-serif: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+  /* §3 Type. Space Grotesk is the display face, Geist the text face. The site
+     previously paired Fraunces (serif) with Inter; both are gone, so there is no
+     `font-serif` token and nothing should reference one. */
+  --font-sans: 'Geist', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Space Grotesk', 'Geist', system-ui, sans-serif;
 
   /* §3 Type scale. clamp() carries the desktop/mobile pair from the table. */
   --text-display: clamp(2rem, 1.1rem + 3.6vw, 4rem);
@@ -45,6 +47,33 @@ html {
 body {
   @apply bg-bg font-sans text-ink antialiased;
 }
+
+/* §8 SplitReveal. The hidden start state for each word lives here rather than in
+   a React inline style: React owns the style attribute, so a re-render would
+   overwrite whatever the animation loop wrote and snap the words back to hidden.
+   The rAF loop in SplitReveal.jsx is the only writer of these two properties. */
+.split-word {
+  display: inline-block;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* Reduced motion, and the no-JS fallback in index.html, must never leave text
+   stuck at opacity 0. The component also skips its listener entirely in this
+   mode, but this rule is the backstop if the script never runs. */
+@media (prefers-reduced-motion: reduce) {
+  .split-word {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
+
+/* §3 Display face. Tailwind generates the `font-display` class from the
+   --font-display theme token, so components just use `font-display`.
+   Space Grotesk runs wide with a large x-height, so the big display sizes
+   (text-display-xl, the 110px hero) also carry an explicit negative tracking
+   class, as the statement band already did. */
 
 /* §5 Nav — flat utility variant, all uppercase text-nav with tracking. */
 @utility nav-link {

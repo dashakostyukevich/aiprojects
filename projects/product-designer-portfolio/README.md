@@ -25,9 +25,23 @@ The rules that shape the code most:
   and sky are illustration accents and stay inside artwork. UI chrome never uses them.
 - **§2 Accent contrast.** `#D4FF3D` is only ever paired with `color-accent-ink` (`#0A0A0A`), never
   light text.
-- **§3 Serif + sans pairing.** Fraunces for editorial headlines (roman and italic), Inter for
-  everything functional. Both load from Google Fonts via a `<link>` in `index.html`.
-- **§3 Highlight pattern.** The italic phrase in a `text-display` headline gets an accent
+- **§3 Display + text pairing.** Space Grotesk for headings and display type, Geist for everything
+  functional. Both load from Google Fonts via a `<link>` in `index.html`, and both are variable
+  fonts, so one file each covers the 400–700 range the site uses. Tokens: `--font-display` and
+  `--font-sans`. There is no `--font-serif`; `design.md` §3 asked for a serif + sans pairing and
+  that was a deliberate departure, recorded below.
+- **No italics in display type.** Space Grotesk ships **no italic cut** — the Google Fonts API
+  silently returns normal-only for an `ital` request, and the browser would otherwise synthesise a
+  slanted oblique that looks broken next to upright text. So emphasis inside a display heading is
+  carried by the accent highlight (where the design already had one) or by weight `500` against a
+  `400` body, which the variable font supports natively. The `em` / `italic` flags in `data.js`
+  are unchanged; only the rendering changed, so restoring real italics is a one-line change in
+  `HeroHeadline.jsx` and `CollageAbout.jsx`. Geist *does* have a real italic, so the testimonial
+  blockquotes on the home page keep theirs.
+- **§8 Scroll-scrubbed word reveal.** Display headings reveal word by word, driven by scroll
+  position rather than a one-shot trigger. `src/components/SplitReveal.jsx` is the component; see
+  its own comment block and the "Word-by-word reveal" section below.
+- **§3 Highlight pattern.** The emphasised phrase in a `text-display` headline gets an accent
   marker-pen background. The hero headline is data-driven, not hardcoded, so the highlighted
   phrase is a flag in `profile.headline`.
 - **§3 `text-display-xl` bleeds.** The statement band under the hero is deliberately cropped at
@@ -52,8 +66,15 @@ The rules that shape the code most:
 The first-screen spec asked for things `design.md` does not describe, or describes differently.
 These are deliberate, and `design.md` has not been edited to match:
 
-- **The gradient frame** is outside the palette (§2 is one accent plus neutrals for UI chrome).
-  Opt-in via `hero.frame`.
+- **No serif.** §3 specifies a warm serif for editorial headlines, used in both roman and italic.
+  The site now pairs Space Grotesk with Geist and has dropped the serif entirely, which also means
+  §3's serif+italic headline pattern cannot be honoured as written (see the no-italics note above).
+  §3 named Fraunces and Inter only as examples, so the substitution is within the spirit of the
+  section, but the italic treatment is a real loss and `design.md` should be updated if this is
+  meant to be permanent.
+- **The first screen is full-bleed.** A showcase frame (gradient + white canvas) was built first
+  and later removed, so the hero and projects grid now run the full width of the page on the plain
+  design system background. No shadow, no rounded canvas, no off-palette gradient.
 - **The nav is not sticky.** §4 says fixed top; the first-screen spec says it scrolls with the
   page. It is also the §5 pill variant rather than the flat uppercase one, and has no wordmark.
 - **Project card labels are plain text**, not the §5 uppercase `text-meta` treatment, and cards
@@ -63,28 +84,94 @@ If any of these should be reverted, `design.md` is the place to record it.
 
 ### The first screen (hero)
 
-The first screen is built to a separate, more literal spec than the rest of the site: a **showcase
-frame** with the nav, the headline, and the projects grid, floating as one white canvas.
+The first screen is full-bleed: the nav row, a hero that fills the viewport height below it, and the
+projects grid all run the full width of the page, edge to edge, on the plain design system
+background. There is no canvas wrapper.
 
-- **Frame.** A full-viewport soft gradient with a white canvas on top: 1140px max width, 28px
-  radius, `0 24px 60px rgb(0 0 0 / 0.08)` shadow, 64px top/bottom margin, `max(20px, 5vw)` sides.
-  Configured by the `hero` export in `src/data.js`. The gradient is **deliberately not in the design
-  system palette** — §2 is one accent plus neutrals for UI chrome. Set `hero.frame: false` to drop
-  the frame and let the first screen sit directly on the design system background.
+- **Layout.** `NavRow` is a 72px row with page padding (`px-4 sm:px-14 lg:px-16`). The hero is a
+  flex container of `min-h-[calc(100dvh-4.5rem)]` that centres its content, so the first screen is
+  exactly one viewport tall. The grid section carries the same horizontal padding, with the grid
+  itself capped at `max-w-[1200px]` so cards stay readable on very wide displays.
 - **Nav.** The §5 pill/outline variant: a bare asterisk mark on the left (no wordmark, the link's
   accessible name carries it) and three outlined pills on the right, 12px gap, 1px ink border,
   999px radius, 8px/20px padding. Scrolls with the page, not sticky. The links themselves come
   from the `nav` export.
-- **Headline.** One paragraph read as an inline flow, `clamp(1.5rem, 3.3vw, 3rem)`, line-height
-  1.35, centred at a 780px measure. `profile.headline` is an array of parts, where a part is
-  `{ text, em? }` or `{ chip, ...props }`, so italic spans and chips interleave in the sentence.
-  The three chip types are `icon`, `photo`, and `block` (see `HeadlineChip.jsx`); they sit in word
-  slots, centre on the cap-height, and wrap with the line. Chips are decorative and hidden from
-  assistive tech. The three-line count is emergent, not hardcoded.
-- **Projects grid.** Two columns on desktop, one on mobile, 44px column gap, 48px row gap, canvas
-  padding. Cards are flat with a 22px radius and no border or shadow: `kind: 'brand'` is a solid
-  fill with a centred white lockup, `kind: 'photo'` is a full-bleed `object-cover` image. The label
-  is plain 16px sans text 16px beneath the card, not a bordered box.
+- **Headline.** One paragraph read as an inline flow, `clamp(1.75rem, 4.4vw, 4rem)` (63px at
+  1440), line-height 1.15, tracking `-0.035em`, `text-transform: uppercase`, centred at a 1000px
+  measure. `profile.headline` is an array of parts, where a part is `{ text, em? }` or
+  `{ chip, ...props }`, so emphasised spans and chips interleave in the sentence. The three chip
+  types are `icon`, `photo`, and `block` (see `HeadlineChip.jsx`); they sit in word slots, centre on
+  the cap-height, and wrap with the line. Chips are decorative and hidden from assistive tech. The
+  line count is emergent, not hardcoded — uppercase wraps it to four lines at desktop width.
+
+  Two details that only exist because of the caps:
+  - `uppercase` is a class on the `h1`, not baked into the strings in `data.js`. The About section
+    renders the same `profile.headline` array and keeps its sentence case.
+  - Caps are much wider and taller than lowercase in Space Grotesk, so the measure grew from 780px
+    to 1000px and the size went up; the old pairing only worked because the text was mostly
+    x-height glyphs. Leading dropped from 1.35 to 1.15 to keep the block from sprawling.
+  - `em` maps to weight **600**, not 500. Caps carry less stroke contrast than lowercase, so a
+    400/500 pair is nearly invisible at this size.
+- **Projects grid.** An intentionally uneven 12-column composition, not a uniform 2×2. Each project
+  in `data.js` carries three placement keys, and `WorkGrid.jsx` maps them to classes:
+
+  | key | values | effect |
+  | --- | --- | --- |
+  | `size` | `wide` (7 cols), `narrow` (5 cols) | 7+5 and 5+7 fill both rows exactly, so nothing leaves a gap |
+  | `ratio` | `wide` (16/10), `landscape` (4/3), `square`, `portrait` (3/4) | the crop, and the main reason the grid does not read as a table of squares |
+  | `drop` | `sm`/`md`/`lg`/`xl` (10/16/24/32 units top margin) | staggers a card against its neighbour |
+
+  Current arrangement: Atlas `wide`/`landscape`/no drop, Fieldnote `narrow`/`square`/`lg`,
+  Kern `narrow`/`square`/no drop, Pulse `wide`/`wide`/`md`. So each row has one card hanging lower
+  than the other, and the two rows stagger in opposite directions.
+
+  `drop` and `size` only apply from `lg` up. Below that the grid is a single full-width column in
+  array order, which is the only sane reading order on a phone, and the varied `ratio`s still carry
+  through. Column gap is 40–64px, row gap 64–96px, growing with the viewport so the grid breathes.
+
+  Cards are flat with a 22px radius and no border or shadow: `kind: 'brand'` is a solid fill with a
+  centred white lockup, `kind: 'photo'` is a full-bleed `object-cover` image. The label is plain
+  16px sans text 16px beneath the card, not a bordered box.
+
+### Word-by-word reveal
+
+`src/components/SplitReveal.jsx` wraps display headings and reveals them a word at a time, scrubbed
+by scroll position rather than fired once as a trigger. It is used on the hero headline, the
+services `h2` and its three `h3`s, the About headline, and the footer `h2`.
+
+- **How it scrubs.** A single `progress` value (0 → 1) is derived from where the block sits in the
+  viewport, between 92% and 34% of viewport height, and mapped across the words. Scrolling moves the
+  reveal, so the reader controls the pace. Each word's slice overlaps its neighbour's by `spread`
+  words, which is what makes it read as a wave rather than a typewriter.
+- **Two entry paths.** A block that is already at least partly on screen at mount plays a 1100ms
+  ease-out intro ramp from 0 — this is the hero. A block below the fold waits for scroll. Note the
+  test is `> 0`, not `>= 1`: the hero is usually not fully clear of the viewport bottom when it
+  mounts, so a `>= 1` test would park it at ~0.87 with nothing left to trigger it.
+- **One-way.** Once a word is revealed it stays revealed, so scrolling back up never re-hides text
+  the reader has already read.
+- **Two safety nets.** A fast scroll (keyboard jump, hash link, flung trackpad) can sail past the
+  trigger band, and a heading near the document end can never scroll far enough to reach it. Both
+  cases resolve to fully revealed rather than stuck hidden — the second via an `atBottom` check in
+  `measure()`.
+- **No React re-render per frame.** `progress` is a ref, and the rAF loop writes inline styles
+  directly. Those styles must not come from JSX: React owns the `style` attribute, so a re-render
+  would overwrite them and snap the words back to hidden. The hidden start state lives in
+  `.split-word` in `index.css` instead.
+- **Markup.** Each word is a mask (`overflow-hidden`) wrapping a `.split-word` span that does the
+  moving. Whitespace between words is emitted as plain text, so text selection and copy-paste
+  still yield `"I design calm, useful interfaces"`. An element marked `data-split` is a styled run
+  of text: each of its words gets its own mask, while the wrapper's classes go on a single
+  `inline-block` around the whole run. That is what keeps a background highlight one continuous
+  block — putting the class on each word instead splits it into separate boxes, and the wrapper
+  must be `inline-block` or the gaps between its children show through. A trailing space inside
+  such a run is re-emitted after the wrapper, since `inline-block` would otherwise collapse it and
+  run the last word into the next.
+- **Reduced motion.** With `prefers-reduced-motion: reduce` everything is revealed immediately and
+  no listener is attached. The `<noscript>` block in `index.html` does the same, since the words
+  start hidden.
+
+The statement band is deliberately **not** wrapped: its `whitespace-nowrap` and negative
+`translate-x` fight the per-word masks.
 
 ### The display section
 
@@ -98,10 +185,11 @@ all follow the reference spec exactly. What changed, to fit this project:
 - **Colours.** The reference's `#262626`, `#f2efec`, `#dd2f1b`, and `#e6aed3` became `ink`, `bg`,
   the §3 accent highlight, and `sky`. The emphasised word uses the highlight pattern rather than
   red text, because the accent fails contrast as a text colour (§9).
-- **Type.** Anton became the project's display serif. Its line-height is 100% rather than the
-  reference's 96%: 96% works only with Anton's tight metrics, and the two lines collide with the
-  project serif. The display size sits on the heading, not the child spans, so the percentage
-  line-height resolves against the right font size.
+- **Type.** Anton became Space Grotesk, the project display face. Its line-height is 100% rather
+  than the reference's 96%: 96% works only with Anton's tight metrics, and the two lines collide
+  with Space Grotesk's taller ascenders. The display size sits on the heading, not the child spans,
+  so the percentage line-height resolves against the right font size. The reference's italic
+  emphasised word became the accent highlight alone, because Space Grotesk has no italic cut.
 - **Container.** `container-page` (1200px) rather than 1450px, to match every other section.
 - **Semantics.** An `h2`, not the reference's `h1`, since the first screen owns the page's only
   `h1`.
@@ -163,12 +251,12 @@ and `rotate` in degrees. No two adjacent cards should share a type. The wrapper 
 
 | Route          | Page                                               |
 | -------------- | -------------------------------------------------- |
-| `/`            | First screen (frame, nav, headline, projects), statement band, display section, services, About collage, contact |
+| `/`            | First screen (nav, hero, projects), statement band, display section, services, About collage, contact |
 | `/work/:slug`  | Case study for that project                        |
 | anything else  | 404 page                                           |
 
-The nav is rendered by each page rather than a global header, so the home page can put it inside
-the frame. Case studies and the 404 page carry the same row above a hairline.
+The nav is rendered by each page rather than a global header, so the home page can place it at the
+top of its first screen. Case studies and the 404 page carry the same row above a hairline.
 
 An unknown `/work/:slug` redirects to `/#work` rather than showing a dead end. The
 `netlify.toml` SPA redirect is what makes these deep links work on refresh in production.

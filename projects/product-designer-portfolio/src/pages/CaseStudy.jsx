@@ -63,7 +63,9 @@ export default function CaseStudy() {
           </Link>
 
           <div className="mt-8 flex flex-wrap items-baseline gap-x-5 gap-y-2">
-            <h1 className="font-serif text-display leading-[1.05]">{project.title}</h1>
+            <h1 className="font-display text-display leading-[1.05] tracking-[-0.03em]">
+              {project.title}
+            </h1>
             <span className="label-meta">{project.year}</span>
           </div>
 
@@ -106,7 +108,7 @@ export default function CaseStudy() {
           {project.sections.map((section, i) => (
             <section key={section.heading} className="border-t border-hairline py-12 sm:py-16">
               <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)] lg:gap-20">
-                <h2 className="text-h2 font-semibold tracking-tight">
+                <h2 className="font-display text-h2 font-semibold tracking-[-0.02em]">
                   <span className="label-meta mr-4 text-terracotta">0{i + 1}</span>
                   {section.heading}
                 </h2>
@@ -119,7 +121,10 @@ export default function CaseStudy() {
 
           {project.pullquote && (
             <figure className="border-t border-hairline py-12 sm:py-16">
-              <blockquote className="max-w-3xl font-serif text-h1 leading-tight italic text-balance">
+              {/* No `italic`: Space Grotesk has no italic cut, so the browser
+                  would synthesise a slanted oblique. The display face at h1
+                  gives the quote its weight. */}
+              <blockquote className="max-w-3xl font-display text-h1 leading-tight tracking-[-0.02em] text-balance">
                 {project.pullquote}
               </blockquote>
               <figcaption className="label-meta mt-5">{project.pullquoteBy}</figcaption>
@@ -131,7 +136,7 @@ export default function CaseStudy() {
       {/* More work */}
       <section className="container-page border-t border-hairline py-16 sm:py-24">
         <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
-          <h2 className="text-h2 font-semibold tracking-tight">More work</h2>
+          <h2 className="font-display text-h2 font-semibold tracking-[-0.02em]">More work</h2>
           <div className="flex gap-6">
             {prev && (
               <Link to={`/work/${prev.slug}`} className="nav-link text-ink-muted hover:text-ink">

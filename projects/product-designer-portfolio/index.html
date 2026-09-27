@@ -6,8 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Space Grotesk for headings and display type, Geist for body and UI.
+         Both are variable fonts, so the weights below cover the whole range the
+         site uses (400-700) in a single file each. -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=Geist:wght@400..700&display=swap"
       rel="stylesheet"
     />
     <meta
@@ -30,6 +33,14 @@
         .reveal {
           opacity: 1 !important;
           transform: none !important;
+        }
+
+        /* SplitReveal words start hidden and are revealed by JS. Without JS
+           they would stay invisible, so force them visible. */
+        .split-word {
+          opacity: 1 !important;
+          transform: none !important;
+          filter: none !important;
         }
       </style>
     </noscript>

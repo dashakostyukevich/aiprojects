@@ -1,0 +1,156 @@
+- generic [ref=f6e3]:
+  - main [ref=f6e5]:
+    - generic [ref=f6e6]:
+      - link "Alex Morgan, home" [ref=f6e7] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=f6e12]:
+        - link "Projects" [ref=f6e13] [cursor=pointer]:
+          - /url: /#work
+        - link "About" [ref=f6e14] [cursor=pointer]:
+          - /url: /#about
+        - link "Contact" [ref=f6e15] [cursor=pointer]:
+          - /url: /#contact
+    - generic [ref=f6e17]:
+      - paragraph [ref=f6e18]: Product Designer / Berlin, Germany
+      - heading "I design calm, useful interfaces for complex products that people actually enjoy using." [level=1] [ref=f6e19]:
+        - generic [ref=f6e20]: I
+        - generic [ref=f6e22]: design
+        - generic [ref=f6e24]: calm,
+        - generic [ref=f6e26]: useful
+        - generic [ref=f6e28]: interfaces
+        - generic [ref=f6e36]: for
+        - generic [ref=f6e42]: complex
+        - generic [ref=f6e44]: products
+        - generic [ref=f6e49]: that
+        - generic [ref=f6e51]: people
+        - generic [ref=f6e53]: actually
+        - generic [ref=f6e55]: enjoy
+        - generic [ref=f6e57]: using.
+      - paragraph [ref=f6e59]: Open to new projects — 2026
+    - generic [ref=f6e62]:
+      - article [ref=f6e65]:
+        - link "Atlas" [ref=f6e66] [cursor=pointer]:
+          - /url: /work/atlas-analytics
+        - paragraph [ref=f6e69]: Atlas Analytics
+      - article [ref=f6e72]:
+        - link [ref=f6e73] [cursor=pointer]:
+          - /url: /work/fieldnote-mobile
+        - paragraph [ref=f6e75]: Fieldnote Mobile
+      - article [ref=f6e78]:
+        - link "Kern" [ref=f6e79] [cursor=pointer]:
+          - /url: /work/kern-type-system
+        - paragraph [ref=f6e82]: Kern Type System
+      - article [ref=f6e85]:
+        - link "Pulse" [ref=f6e86] [cursor=pointer]:
+          - /url: /work/pulse-onboarding
+        - paragraph [ref=f6e89]: Pulse Onboarding
+    - paragraph [ref=f6e91]:
+      - generic [ref=f6e92]: Structure first,
+      - generic [ref=f6e93]: personality on top.
+    - generic [ref=f6e95]:
+      - generic [ref=f6e96]:
+        - heading "transform. connect. create." [level=2] [ref=f6e97]:
+          - generic [ref=f6e98]: transform.
+          - generic [ref=f6e99]: connect. create.
+        - paragraph [ref=f6e102]: "Product designer working end to end: research and framing, interface design, and the design systems that get it shipped."
+      - generic [ref=f6e103]:
+        - paragraph [ref=f6e106]: The design system work paid for itself in the first quarter.Jonas Weber
+        - paragraph [ref=f6e111]:
+          - text: Read the full process
+          - link "see the case study" [ref=f6e114] [cursor=pointer]:
+            - /url: /work/atlas-analytics
+    - generic [ref=f6e116]:
+      - heading "What I do" [level=2] [ref=f6e117]
+      - generic [ref=f6e118]:
+        - generic [ref=f6e119]:
+          - paragraph [ref=f6e120]: "01"
+          - heading "Product design" [level=3] [ref=f6e121]
+          - paragraph [ref=f6e122]: End-to-end design for web and mobile features, from problem framing to polished UI.
+        - generic [ref=f6e123]:
+          - paragraph [ref=f6e124]: "02"
+          - heading "Design systems" [level=3] [ref=f6e125]
+          - paragraph [ref=f6e126]: Component libraries, tokens and documentation that keep design and engineering in sync.
+        - generic [ref=f6e127]:
+          - paragraph [ref=f6e128]: "03"
+          - heading "Research & strategy" [level=3] [ref=f6e129]
+          - paragraph [ref=f6e130]: User interviews, usability testing and product direction grounded in evidence.
+    - generic [ref=f6e134]:
+      - generic [ref=f6e136]:
+        - paragraph [ref=f6e137]: About
+        - heading "I design calm, useful interfaces for complex products that people actually enjoy using." [level=2] [ref=f6e138]
+      - generic [ref=f6e139]:
+        - paragraph [ref=f6e140]: 40k
+        - paragraph [ref=f6e141]: teams use Atlas daily
+      - generic [ref=f6e142]:
+        - paragraph [ref=f6e149]: "Doodle: filter to insight"
+        - paragraph [ref=f6e150]: Pen on paper, day 3
+      - generic [ref=f6e151]:
+        - paragraph [ref=f6e155]: Shipped it
+        - paragraph [ref=f6e156]: 8 months, 4 squads
+      - generic [ref=f6e157]:
+        - paragraph [ref=f6e159]: Workshop wall
+        - paragraph [ref=f6e160]: Journey map, week 2
+      - generic [ref=f6e161]:
+        - paragraph [ref=f6e162]: “Does this survive a bad signal?”
+        - paragraph [ref=f6e163]: Field researcher
+      - generic [ref=f6e164]:
+        - paragraph [ref=f6e165]: x3
+        - paragraph [ref=f6e166]: weekly active use
+      - generic [ref=f6e167]:
+        - paragraph [ref=f6e171]: Open source
+        - paragraph [ref=f6e172]: 3.4k weekly downloads
+      - generic [ref=f6e173]:
+        - paragraph [ref=f6e175]: Type specimen
+        - paragraph [ref=f6e176]: Kern, 14 sizes
+      - generic [ref=f6e177]:
+        - paragraph [ref=f6e184]: "Doodle: three states"
+        - paragraph [ref=f6e185]: Saved / uploading / synced
+      - generic [ref=f6e186]:
+        - paragraph [ref=f6e187]: “I stopped bringing the paper notebook.”
+        - paragraph [ref=f6e188]: Beta tester
+    - generic [ref=f6e189]:
+      - generic [ref=f6e190]:
+        - generic [ref=f6e191]:
+          - paragraph [ref=f6e192]: Placeholder bio. I am a product designer with X years of experience turning messy, ambiguous problems into software people actually enjoy using.
+          - paragraph [ref=f6e193]: "I work end to end: research and framing, flows and wireframes, high-fidelity UI, then shipping alongside engineers and measuring what happens after launch."
+        - generic [ref=f6e194]:
+          - heading "Words from" [level=3] [ref=f6e195]
+          - generic [ref=f6e196]:
+            - figure "Priya Raman / VP Product, Northwind Labs" [ref=f6e197]:
+              - blockquote [ref=f6e198]: Alex turns vague problems into shipped product. Rare combination of craft and follow-through.
+            - figure "Jonas Weber / Engineering Lead, Fieldnote" [ref=f6e200]:
+              - blockquote [ref=f6e201]: The design system work paid for itself in the first quarter.
+      - generic [ref=f6e203]:
+        - heading "Experience" [level=3] [ref=f6e204]
+        - generic [ref=f6e205]:
+          - generic [ref=f6e206]:
+            - generic [ref=f6e207]: 2022 — Present
+            - generic [ref=f6e208]: Senior Product Designer, Northwind Labs
+            - generic [ref=f6e209]: Led design for the analytics platform used by 40k teams. Built the first shared design system.
+          - generic [ref=f6e210]:
+            - generic [ref=f6e211]: 2019 — 2022
+            - generic [ref=f6e212]: Product Designer, Fieldnote
+            - generic [ref=f6e213]: Designed mobile onboarding and the offline sync engine experience. Cut first-week churn by a third.
+          - generic [ref=f6e214]:
+            - generic [ref=f6e215]: 2017 — 2019
+            - generic [ref=f6e216]: UI Designer, Studio Kern
+            - generic [ref=f6e217]: Client work across fintech and healthcare. Learned to love constraints and typography.
+  - contentinfo [ref=f6e218]:
+    - generic [ref=f6e219]:
+      - paragraph [ref=f6e220]: Contact
+      - heading "Let’s make something clear and calm." [level=2] [ref=f6e221]
+      - generic [ref=f6e222]:
+        - link "hello@example.com" [ref=f6e223] [cursor=pointer]:
+          - /url: mailto:hello@example.com
+        - link "Back to work" [ref=f6e224] [cursor=pointer]:
+          - /url: "#work"
+      - generic [ref=f6e225]:
+        - link "Email" [ref=f6e226] [cursor=pointer]:
+          - /url: mailto:hello@example.com
+        - link "Dribbble" [ref=f6e227] [cursor=pointer]:
+          - /url: https://dribbble.com
+        - link "LinkedIn" [ref=f6e228] [cursor=pointer]:
+          - /url: https://linkedin.com
+        - link "GitHub" [ref=f6e229] [cursor=pointer]:
+          - /url: https://github.com
+      - paragraph [ref=f6e230]: © 2026 Alex Morgan / Product Designer

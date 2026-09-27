@@ -37,21 +37,6 @@ export const profile = {
   ],
 }
 
-// Optional showcase frame for the first screen: a soft pastel gradient behind a
-// white rounded canvas. The gradient is deliberately NOT in the design system
-// palette (§2), so it is opt-in. Set `frame: false` to drop the frame and let
-// the first screen sit directly on the design system background.
-export const hero = {
-  frame: true,
-  gradient: ['#cfe6f7', '#ffffff', '#eef3fa'],
-  canvas: {
-    maxWidth: 1140,
-    radius: 28,
-    marginY: 64,
-    marginX: '5vw',
-  },
-}
-
 // Nav is the §5 pill/outline variant: three outlined pills on the right, a bare
 // icon mark on the left with no wordmark. Not sticky, per the first-screen spec.
 export const nav = [
@@ -108,6 +93,12 @@ export const projects = [
       'Redesigned the reporting experience for a data platform: faster filters, clearer empty states, and a chart builder non-analysts could use.',
     outcome: 'Time to first insight cut from 6 min to 90 s',
     tags: ['Product design', 'Design system', 'Data viz'],
+    // First-screen grid placement. `size` is the column span (wide + narrow pair
+    // up to a full 12-col row), `ratio` is the crop, and `drop` pushes the card
+    // down a step so rows do not all start on the same line. See workGrid.js.
+    size: 'wide',
+    ratio: 'landscape',
+    drop: null,
     kind: 'brand',
     fill: 'terracotta',
     lockup: 'Atlas',
@@ -173,6 +164,9 @@ export const projects = [
       'Offline-first field research app. Designed the sync model UI, gesture-based capture, and a map that works with no signal.',
     outcome: '4.8★ across 2k reviews, 3x weekly active use',
     tags: ['Mobile', 'iOS / Android', 'Research'],
+    size: 'narrow',
+    ratio: 'square',
+    drop: 'lg',
     kind: 'photo',
     fill: 'sky',
     lockup: null,
@@ -229,6 +223,9 @@ export const projects = [
       'An open-source variable font and pairing guide for product teams, including a token pipeline for Figma and CSS.',
     outcome: '3.4k weekly downloads',
     tags: ['Typography', 'Open source', 'Tooling'],
+    size: 'narrow',
+    ratio: 'square',
+    drop: null,
     kind: 'brand',
     fill: 'navy',
     lockup: 'Kern',
@@ -277,6 +274,9 @@ export const projects = [
       'Reworked signup into a progressive flow that asks for nothing until it is needed, with sample data instead of empty dashboards.',
     outcome: 'Activation +27%',
     tags: ['Growth', 'UX writing', 'Prototyping'],
+    size: 'wide',
+    ratio: 'wide',
+    drop: 'md',
     kind: 'brand',
     fill: 'accent',
     lockup: 'Pulse',

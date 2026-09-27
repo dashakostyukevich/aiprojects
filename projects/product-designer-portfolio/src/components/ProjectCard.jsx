@@ -40,7 +40,7 @@ export default function ProjectCard({ project, ratio = 'aspect-square' }) {  con
           >
             {/* White logo lockup, centred with generous internal padding.
                 Placeholder for the real client mark. */}
-            <span className="font-serif text-3xl tracking-tight text-white select-none sm:text-4xl">
+            <span className="font-display text-3xl tracking-tight text-white select-none sm:text-4xl">
               {project.lockup ?? project.title}
             </span>
           </div>
