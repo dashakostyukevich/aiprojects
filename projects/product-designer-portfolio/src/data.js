@@ -4,12 +4,19 @@
 export const profile = {
   name: 'Alex Morgan',
   role: 'Product Designer',
-  // Hero display headline. The phrase marked `highlight: true` is the one the
-  // §3 highlight pattern applies to: italic + accent marker stroke behind it.
+  // Hero headline, first screen. One paragraph read as an inline flow, with
+  // `em` for italic spans and `chip` for the inline elements. Chips sit in a
+  // word slot, so the line count is emergent: three lines at the spec's ~780px
+  // measure. A part is either { text, em? } or { chip, ...props }.
   headline: [
-    { text: 'I design calm, useful interfaces for ' },
-    { text: 'complex products', italic: true, highlight: true },
-    { text: '.' },
+    { text: 'I design calm, ' },
+    { text: 'useful interfaces ', em: true },
+    { chip: 'icon' },
+    { text: ' for ' },
+    { chip: 'photo', src: null, alt: 'Field research, week two' },
+    { text: 'complex products', em: true },
+    { chip: 'block', colors: ['accent', 'sky'] },
+    { text: ' that people actually enjoy using.' },
   ],
   // §3 text-display-xl statement. Each line stays on one row and bleeds off an
   // edge, so the second half reads as an intentional crop rather than a wrap.
@@ -29,6 +36,29 @@ export const profile = {
     { label: 'GitHub', href: 'https://github.com' },
   ],
 }
+
+// Optional showcase frame for the first screen: a soft pastel gradient behind a
+// white rounded canvas. The gradient is deliberately NOT in the design system
+// palette (§2), so it is opt-in. Set `frame: false` to drop the frame and let
+// the first screen sit directly on the design system background.
+export const hero = {
+  frame: true,
+  gradient: ['#cfe6f7', '#ffffff', '#eef3fa'],
+  canvas: {
+    maxWidth: 1140,
+    radius: 28,
+    marginY: 64,
+    marginX: '5vw',
+  },
+}
+
+// Nav is the §5 pill/outline variant: three outlined pills on the right, a bare
+// icon mark on the left with no wordmark. Not sticky, per the first-screen spec.
+export const nav = [
+  ['Projects', '/#work'],
+  ['About', '/#about'],
+  ['Contact', '/#contact'],
+]
 
 export const services = [
   {
@@ -78,7 +108,10 @@ export const projects = [
       'Redesigned the reporting experience for a data platform: faster filters, clearer empty states, and a chart builder non-analysts could use.',
     outcome: 'Time to first insight cut from 6 min to 90 s',
     tags: ['Product design', 'Design system', 'Data viz'],
-    fill: 'accent',
+    kind: 'brand',
+    fill: 'terracotta',
+    lockup: 'Atlas',
+    image: null,
     cover: null,
     meta: {
       role: 'Lead product designer',
@@ -140,7 +173,10 @@ export const projects = [
       'Offline-first field research app. Designed the sync model UI, gesture-based capture, and a map that works with no signal.',
     outcome: '4.8★ across 2k reviews, 3x weekly active use',
     tags: ['Mobile', 'iOS / Android', 'Research'],
-    fill: 'sand',
+    kind: 'photo',
+    fill: 'sky',
+    lockup: null,
+    image: null,
     cover: null,
     meta: {
       role: 'Product designer',
@@ -193,7 +229,10 @@ export const projects = [
       'An open-source variable font and pairing guide for product teams, including a token pipeline for Figma and CSS.',
     outcome: '3.4k weekly downloads',
     tags: ['Typography', 'Open source', 'Tooling'],
-    fill: 'sky',
+    kind: 'brand',
+    fill: 'navy',
+    lockup: 'Kern',
+    image: null,
     cover: null,
     meta: {
       role: 'Creator',
@@ -238,7 +277,10 @@ export const projects = [
       'Reworked signup into a progressive flow that asks for nothing until it is needed, with sample data instead of empty dashboards.',
     outcome: 'Activation +27%',
     tags: ['Growth', 'UX writing', 'Prototyping'],
-    fill: 'terracotta',
+    kind: 'brand',
+    fill: 'accent',
+    lockup: 'Pulse',
+    image: null,
     cover: null,
     meta: {
       role: 'Product designer',

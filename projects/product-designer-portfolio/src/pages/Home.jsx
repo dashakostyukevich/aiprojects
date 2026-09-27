@@ -1,7 +1,10 @@
 import { experience, profile, projects, services, testimonials } from '../data.js'
 import CollageAbout from '../components/CollageAbout.jsx'
+import HeroHeadline from '../components/HeroHeadline.jsx'
+import NavRow from '../components/NavRow.jsx'
 import ProjectCard from '../components/ProjectCard.jsx'
 import Reveal from '../components/Reveal.jsx'
+import ShowcaseFrame from '../components/ShowcaseFrame.jsx'
 
 // §5 Data/meta rows: plain rows, thin hairline divider, text-meta columns.
 function ExperienceRows() {
@@ -23,42 +26,44 @@ function ExperienceRows() {
   )
 }
 
+function FirstScreen() {
+  return (
+    <ShowcaseFrame>
+      {/* Nav row: 72-80px tall, canvas padding, scrolls with the page. Padding
+          tightens on a phone so the three pills plus the mark still fit. */}
+      <NavRow className="h-18 px-4 sm:px-14 lg:px-16" />
+
+      <div className="px-4 pb-10 sm:px-14 sm:pb-14 lg:px-16">
+        <div className="pt-14 pb-20 sm:pt-20">
+          <Reveal>
+            <p className="label-meta mb-8 text-center">
+              {profile.role} / {profile.location}
+            </p>
+            <HeroHeadline />
+            <p className="mt-10 text-center text-body text-ink-muted">
+              {profile.availability}
+            </p>
+          </Reveal>
+        </div>
+
+        <section id="work" className="scroll-mt-8">
+          <div className="grid grid-cols-1 gap-x-11 gap-y-12 md:grid-cols-2">
+            {projects.map((p, i) => (
+              <Reveal key={p.slug} delay={i * 70}>
+                <ProjectCard project={p} />
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      </div>
+    </ShowcaseFrame>
+  )
+}
+
 export default function Home() {
   return (
     <main>
-      {/* Hero: full-bleed, serif display with the highlight phrase. */}
-      <section className="container-page pt-16 pb-20 sm:pt-24 sm:pb-28 lg:pt-32 lg:pb-36">
-        <Reveal>
-          <p className="label-meta">
-            {profile.role} / {profile.location}
-          </p>
-        </Reveal>
-
-        <Reveal delay={80}>
-          <h1 className="mt-6 max-w-4xl font-serif text-display leading-[1.04] text-balance">
-            {profile.headline.map((part, i) =>
-              part.highlight ? (
-                <span key={i} className="highlight font-serif italic">
-                  {part.text}
-                </span>
-              ) : (
-                <span key={i} className={part.italic ? 'italic' : undefined}>
-                  {part.text}
-                </span>
-              ),
-            )}
-          </h1>
-        </Reveal>
-
-        <Reveal delay={160}>
-          <div className="mt-10 flex flex-wrap items-center gap-6">
-            <a href="#work" className="btn-accent">
-              See selected work
-            </a>
-            <span className="label-meta">{profile.availability}</span>
-          </div>
-        </Reveal>
-      </section>
+      <FirstScreen />
 
       {/* Statement: text-display-xl, one line per row, second line bleeding a
           few percent off the right edge. Sized in vw so both lines stay close
@@ -74,22 +79,6 @@ export default function Home() {
             </span>
           ))}
         </p>
-      </section>
-
-      {/* Work */}
-      <section id="work" className="container-page scroll-mt-24 py-16 sm:py-24 lg:py-32">
-        <div className="mb-12 flex flex-wrap items-end justify-between gap-4 border-b border-hairline pb-6">
-          <h2 className="text-h2 font-semibold tracking-tight">Selected work</h2>
-          <p className="label-meta">{projects.length} projects</p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
-          {projects.map((p, i) => (
-            <Reveal key={p.slug} delay={i * 70}>
-              <ProjectCard project={p} />
-            </Reveal>
-          ))}
-        </div>
       </section>
 
       {/* Services */}

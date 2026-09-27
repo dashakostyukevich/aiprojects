@@ -1,5 +1,7 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { getAdjacentProjects, getProject, projects } from '../data.js'
+import { colorClass } from '../lib/color.js'
+import NavRow from '../components/NavRow.jsx'
 import Reveal from '../components/Reveal.jsx'
 import useDocumentTitle from '../hooks/useDocumentTitle.js'
 
@@ -9,15 +11,6 @@ const metaLabels = {
   team: 'Team',
   platform: 'Platform',
   status: 'Status',
-}
-
-const fills = {
-  accent: 'bg-accent',
-  sand: 'bg-sand',
-  sky: 'bg-sky',
-  terracotta: 'bg-terracotta',
-  navy: 'bg-navy',
-  ink: 'bg-ink',
 }
 
 // §5 Meta sidebar as data rows: thin hairline divider, text-meta keys.
@@ -62,7 +55,9 @@ export default function CaseStudy() {
     <main>
       <article>
         {/* Hero */}
-        <header className="container-page pt-14 pb-12 sm:pt-20">
+        <header className="container-page pt-8 pb-12 sm:pt-10">
+          <NavRow className="mb-12 border-b border-hairline pb-6 sm:mb-16" />
+
           <Link to="/#work" className="nav-link text-ink-muted hover:text-ink">
             &larr; All work
           </Link>
@@ -89,7 +84,7 @@ export default function CaseStudy() {
         {/* Cover: solid fill stand-in for a real screenshot. */}
         <div className="container-page">
           <Reveal
-            className={`aspect-16/9 w-full rounded-[20px] lg:aspect-21/9 ${fills[project.fill] ?? fills.sand}`}
+            className={`aspect-16/9 w-full rounded-[22px] lg:aspect-21/9 ${colorClass(project.fill) ?? 'bg-sand'}`}
           />
         </div>
 
@@ -155,11 +150,9 @@ export default function CaseStudy() {
           {more.map((p) => (
             <Link key={p.slug} to={`/work/${p.slug}`} className="group block">
               <div
-                className={`aspect-4/5 w-full rounded-[18px] ${fills[p.fill] ?? fills.sand} transition-transform duration-200 ease-out group-hover:-translate-y-0.5`}
+                className={`aspect-4/5 w-full overflow-hidden rounded-[22px] ${colorClass(p.fill) ?? 'bg-sand'} transition-transform duration-200 ease-out group-hover:-translate-y-0.5`}
               />
-              <p className="label-meta mt-4 text-ink group-hover:underline group-hover:underline-offset-4">
-                {p.title}
-              </p>
+              <p className="mt-4 text-ink">{p.title}</p>
             </Link>
           ))}
         </div>

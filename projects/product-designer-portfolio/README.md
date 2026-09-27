@@ -47,6 +47,45 @@ The rules that shape the code most:
 - **§9 Accessibility.** Dark text on every accent block; collage cards follow DOM order, which
   matches the visual reading flow.
 
+### Known divergences from `design.md`
+
+The first-screen spec asked for things `design.md` does not describe, or describes differently.
+These are deliberate, and `design.md` has not been edited to match:
+
+- **The gradient frame** is outside the palette (§2 is one accent plus neutrals for UI chrome).
+  Opt-in via `hero.frame`.
+- **The nav is not sticky.** §4 says fixed top; the first-screen spec says it scrolls with the
+  page. It is also the §5 pill variant rather than the flat uppercase one, and has no wordmark.
+- **Project card labels are plain text**, not the §5 uppercase `text-meta` treatment, and cards
+  carry no shadow. The §5 label rule still applies to the collage and the meta rows.
+
+If any of these should be reverted, `design.md` is the place to record it.
+
+### The first screen (hero)
+
+The first screen is built to a separate, more literal spec than the rest of the site: a **showcase
+frame** with the nav, the headline, and the projects grid, floating as one white canvas.
+
+- **Frame.** A full-viewport soft gradient with a white canvas on top: 1140px max width, 28px
+  radius, `0 24px 60px rgb(0 0 0 / 0.08)` shadow, 64px top/bottom margin, `max(20px, 5vw)` sides.
+  Configured by the `hero` export in `src/data.js`. The gradient is **deliberately not in the design
+  system palette** — §2 is one accent plus neutrals for UI chrome. Set `hero.frame: false` to drop
+  the frame and let the first screen sit directly on the design system background.
+- **Nav.** The §5 pill/outline variant: a bare asterisk mark on the left (no wordmark, the link's
+  accessible name carries it) and three outlined pills on the right, 12px gap, 1px ink border,
+  999px radius, 8px/20px padding. Scrolls with the page, not sticky. The links themselves come
+  from the `nav` export.
+- **Headline.** One paragraph read as an inline flow, `clamp(1.5rem, 3.3vw, 3rem)`, line-height
+  1.35, centred at a 780px measure. `profile.headline` is an array of parts, where a part is
+  `{ text, em? }` or `{ chip, ...props }`, so italic spans and chips interleave in the sentence.
+  The three chip types are `icon`, `photo`, and `block` (see `HeadlineChip.jsx`); they sit in word
+  slots, centre on the cap-height, and wrap with the line. Chips are decorative and hidden from
+  assistive tech. The three-line count is emergent, not hardcoded.
+- **Projects grid.** Two columns on desktop, one on mobile, 44px column gap, 48px row gap, canvas
+  padding. Cards are flat with a 22px radius and no border or shadow: `kind: 'brand'` is a solid
+  fill with a centred white lockup, `kind: 'photo'` is a full-bleed `object-cover` image. The label
+  is plain 16px sans text 16px beneath the card, not a bordered box.
+
 ### Where the tokens live
 
 `src/index.css` holds every design token in a Tailwind v4 `@theme` block: the `color-*`, `font-*`
@@ -65,8 +104,13 @@ one file.
 Each entry in `projects` needs:
 
 - `slug` — becomes the URL, `/work/<slug>`. Must be unique.
-- `title`, `year`, `summary`, `outcome`, `tags` — used on the work grid and the card.
-- `fill` — the card colour. One of `accent`, `sand`, `sky`, `terracotta`, `navy`, `ink`.
+- `title`, `year`, `summary`, `outcome`, `tags` — used on the card and the case study.
+- `kind` — `'brand'` (solid fill plus white lockup) or `'photo'` (full-bleed image).
+- `fill` — card colour for brand cards, the case-study cover, and the more-work cards. Either a
+  token name (`accent`, `sand`, `sky`, `terracotta`, `navy`, `ink`) or a raw hex, which is how a
+  client's real brand colour goes in. Resolved by `src/lib/color.js`.
+- `lockup` — the white logotype centred on a brand card. `null` falls back to the title.
+- `image` — path under `public/` for a photo card. `null` renders a placeholder swatch.
 - `meta` — the sidebar block (role, timeline, team, platform, status). Add or remove keys freely;
   the labels come from `metaLabels` in `src/pages/CaseStudy.jsx`.
 - `intro` and `sections` — the long-form body. `sections` is an array of `{ heading, body }`, where
@@ -82,23 +126,26 @@ and `rotate` in degrees. No two adjacent cards should share a type. The wrapper 
 
 | Route          | Page                                               |
 | -------------- | -------------------------------------------------- |
-| `/`            | Home: hero, statement, work grid, services, About collage, contact |
+| `/`            | First screen (frame, nav, headline, projects), then statement, services, About collage, contact |
 | `/work/:slug`  | Case study for that project                        |
 | anything else  | 404 page                                           |
+
+The nav is rendered by each page rather than a global header, so the home page can put it inside
+the frame. Case studies and the 404 page carry the same row above a hairline.
 
 An unknown `/work/:slug` redirects to `/#work` rather than showing a dead end. The
 `netlify.toml` SPA redirect is what makes these deep links work on refresh in production.
 
-The header's `Work / Services / About / Contact` links are `/#section` hash links. `SiteHeader`
-scrolls to them after the route changes, including when navigating in from a case study page.
-`Services` is hidden below the `sm` breakpoint so the header fits a 390px viewport.
+The nav's links are `/#section` hash links. `useHashScroll` (in `App.jsx`) scrolls to them after
+the route changes, including when navigating in from a case study.
 
 ## Project images
 
-Project cards, case-study covers, and the collage's photo/illustration cards are all solid colour
-blocks standing in for real assets. To add real images, drop files in `public/` (e.g.
-`public/work/atlas.png`) and replace the fill `<div>` in `src/components/ProjectCard.jsx`,
-`src/pages/CaseStudy.jsx`, and the `PhotoCard` in `src/components/CollageCard.jsx`.
+Brand cards render a white logotype and photo cards render a placeholder swatch until real assets
+exist. To add them, drop files in `public/` (e.g. `public/work/atlas.png`) and set `image` on the
+project. The same applies to the collage's photo cards (`PhotoCard` in
+`src/components/CollageCard.jsx`) and the hero's photo chip, which takes an `src` in
+`profile.headline`.
 
 ## Deploying to Netlify
 
