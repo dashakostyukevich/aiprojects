@@ -86,6 +86,43 @@ frame** with the nav, the headline, and the projects grid, floating as one white
   fill with a centred white lockup, `kind: 'photo'` is a full-bleed `object-cover` image. The label
   is plain 16px sans text 16px beneath the card, not a bordered box.
 
+### The display section
+
+`src/components/sections/HeroSection.jsx` is a headline row (display type left, supporting
+paragraph right, bottom-aligned) over three overlapping shapes. Rendered on the home page between
+the statement band and services.
+
+Spacing, sizing, rotation, container height, the mobile breakpoints, and the accent on one word
+all follow the reference spec exactly. What changed, to fit this project:
+
+- **Colours.** The reference's `#262626`, `#f2efec`, `#dd2f1b`, and `#e6aed3` became `ink`, `bg`,
+  the §3 accent highlight, and `sky`. The emphasised word uses the highlight pattern rather than
+  red text, because the accent fails contrast as a text colour (§9).
+- **Type.** Anton became the project's display serif. Its line-height is 100% rather than the
+  reference's 96%: 96% works only with Anton's tight metrics, and the two lines collide with the
+  project serif. The display size sits on the heading, not the child spans, so the percentage
+  line-height resolves against the right font size.
+- **Container.** `container-page` (1200px) rather than 1450px, to match every other section.
+- **Semantics.** An `h2`, not the reference's `h1`, since the first screen owns the page's only
+  `h1`.
+- **Copy and link** come from the `display` export in `src/data.js`. The quote reuses
+  `testimonials[1]`, so it also appears in the About section; swap it if you would rather not
+  repeat it.
+- **Entrance timing** follows §8 via `Reveal` (0/90/180ms), the project standard.
+
+Two fixes worth knowing about, in case the reference is used again:
+
+- The mobile rule was "all vectors become relative", but the reference's code only did that for
+  the first shape, which left the third absolutely positioned and overlapping it. All three are
+  relative below 768px here. The geometry lives in a `min-width: 48rem` media query in
+  `src/index.css` rather than inline styles, because inline values cannot be overridden at a
+  breakpoint.
+- The three SVGs were hotlinked from a third-party domain, so they are vendored into `public/hero/`
+  and recoloured to the project palette. One of them, the centre blob, had the source site's
+  "ECH©" logotype drawn into the SVG itself as paths; those four paths were deleted and only the
+  blob kept. What remains is plain decorative geometry. These came from a design reference, so
+  replace them with your own if that reference was not yours to use.
+
 ### Where the tokens live
 
 `src/index.css` holds every design token in a Tailwind v4 `@theme` block: the `color-*`, `font-*`
@@ -126,7 +163,7 @@ and `rotate` in degrees. No two adjacent cards should share a type. The wrapper 
 
 | Route          | Page                                               |
 | -------------- | -------------------------------------------------- |
-| `/`            | First screen (frame, nav, headline, projects), then statement, services, About collage, contact |
+| `/`            | First screen (frame, nav, headline, projects), statement band, display section, services, About collage, contact |
 | `/work/:slug`  | Case study for that project                        |
 | anything else  | 404 page                                           |
 

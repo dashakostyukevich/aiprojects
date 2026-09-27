@@ -335,6 +335,31 @@ export const testimonials = [
   },
 ]
 
+// Display section below the first screen: a headline row (display type left,
+// supporting paragraph right, bottom-aligned) over a composition of three
+// overlapping shapes. Layout and spacing follow the reference spec; colours,
+// fonts and copy are this project's.
+export const display = {
+  // Two lines. `accent: true` gets the §3 highlight treatment.
+  headline: {
+    line1: 'transform.',
+    line2: [
+      { text: 'connect.', accent: true },
+      { text: ' create.' },
+    ],
+  },
+  body: 'Product designer working end to end: research and framing, interface design, and the design systems that get it shipped.',
+  // Sits in the lime blob. A short line, because the blob is small and
+  // overlapped. It is the second testimonial, which also appears in the About
+  // section, so swap it if you would rather not repeat it.
+  quote: testimonials[1],
+  // Sits in the dark circle, with one real link.
+  cta: {
+    line: 'Read the full process',
+    link: { label: 'see the case study', to: '/work/atlas-analytics' },
+  },
+}
+
 // §5/§6 "Random-things" collage for the About section. Card sub-types come
 // from the design system — illustration, photo, quote, badge, stat — and no two
 // adjacent cards should be the same type.

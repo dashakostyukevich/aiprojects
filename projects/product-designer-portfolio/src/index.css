@@ -132,6 +132,38 @@ body {
   transform: translateY(0) rotate(var(--reveal-rest-rotate, var(--reveal-rotate, 0deg)));
 }
 
+/* Display section shape composition. The geometry lives here rather than in
+   inline styles because inline values cannot be overridden at a breakpoint, and
+   the reference stacks the shapes back into normal flow below 768px. */
+@media (min-width: 48rem) {
+  .hero-shape {
+    position: absolute;
+  }
+
+  .hero-shape-left {
+    top: 0;
+    left: 0;
+    width: 45%;
+  }
+
+  .hero-shape-centre {
+    top: -94px;
+    left: 75px;
+    right: 0;
+    z-index: 1;
+    margin-inline: auto;
+    width: 45%;
+  }
+
+  .hero-shape-right {
+    bottom: 0;
+    left: 0;
+    right: 24px;
+    width: 40%;
+    margin-left: auto;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

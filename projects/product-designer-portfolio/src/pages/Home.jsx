@@ -1,6 +1,7 @@
 import { experience, profile, projects, services, testimonials } from '../data.js'
 import CollageAbout from '../components/CollageAbout.jsx'
 import HeroHeadline from '../components/HeroHeadline.jsx'
+import HeroSection from '../components/sections/HeroSection.jsx'
 import NavRow from '../components/NavRow.jsx'
 import ProjectCard from '../components/ProjectCard.jsx'
 import Reveal from '../components/Reveal.jsx'
@@ -80,6 +81,9 @@ export default function Home() {
           ))}
         </p>
       </section>
+
+      {/* Display section: headline row over the three-shape composition. */}
+      <HeroSection />
 
       {/* Services */}
       <section id="services" className="container-page scroll-mt-24 py-16 sm:py-24 lg:py-32">
