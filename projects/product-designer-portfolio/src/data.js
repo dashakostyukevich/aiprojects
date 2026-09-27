@@ -56,8 +56,12 @@ export const experience = [
   },
 ]
 
+// Each project has a `slug` that becomes its URL: /work/<slug>
+// `summary`, `outcome` and `tags` are used on the work grid; the rest is the
+// long-form case study shown on the project page.
 export const projects = [
   {
+    slug: 'atlas-analytics',
     title: 'Atlas Analytics',
     year: '2025',
     summary:
@@ -65,8 +69,61 @@ export const projects = [
     outcome: 'Time to first insight cut from 6 min to 90 s',
     tags: ['Product design', 'Design system', 'Data viz'],
     accent: 'from-indigo-500 to-sky-400',
+    cover: null,
+    meta: {
+      role: 'Lead product designer',
+      timeline: '8 months',
+      team: '1 PM, 4 engineers, 1 data scientist',
+      platform: 'Web app',
+      status: 'Shipped',
+    },
+    intro: [
+      'Atlas is a reporting product for teams that do not have an analyst on staff. Before this project, using it well meant learning a query language. The brief was to make reporting feel obvious.',
+      'I owned the redesign end to end: discovery, interaction model, visual design, and the design system work needed to ship it across four squads without them each inventing their own patterns.',
+    ],
+    sections: [
+      {
+        heading: 'The problem',
+        body: [
+          'Support tickets told the story better than the roadmap did. People were opening the product, staring at an empty dashboard, and leaving. In session tests, six of eight participants could not produce their first chart without help.',
+          'The existing filter panel exposed all 40 filter types at once. The chart builder assumed you already knew which aggregation you wanted. And the empty state said “No data,” which was technically true and completely useless.',
+        ],
+      },
+      {
+        heading: 'What I did',
+        body: [
+          'I started with 14 interviews and 6 moderated sessions, then mapped every path from landing to saved report. Three problems showed up in every single one.',
+          'I proposed a progressive filter model: a single search field that surfaces relevant filters as you type, with the five most common ones pinned. Behind it, the full power set stayed one click away for people who knew what they wanted.',
+          'The chart builder got the opposite treatment. Instead of a blank canvas, it opened with three suggested charts based on the columns in the dataset, each one a starting point you could edit rather than a template you had to configure.',
+          'Empty states were rewritten as next actions: a sample report to explore, an import button, or a link to the column that was missing — whichever matched why the state was empty.',
+        ],
+      },
+      {
+        heading: 'Shipping it',
+        body: [
+          'The riskiest part was that this touched four squads at once. I built the filter model and chart builder first, then extracted them into the design system with tests in Storybook, and migrated each squad behind feature flags.',
+          'Two things made that work: shipping the visual language as tokens rather than screenshots, so engineers could pull the new values without asking; and writing migration notes per squad instead of one document everyone had to read.',
+        ],
+      },
+      {
+        heading: 'Outcome',
+        body: [
+          'Median time to first saved report went from just under six minutes to ninety seconds. Weekly report creators grew 34% in the quarter after launch, and dashboard abandonment dropped by half.',
+          'The empty-state work paid off fastest: users who hit an empty state were three times more likely to come back the next day than before.',
+        ],
+      },
+      {
+        heading: 'What I would do differently',
+        body: [
+          'I would have started the research eight weeks earlier. Most of the delay in the first month was learning the domain, and that knowledge would have sharpened the earlier design work.',
+        ],
+      },
+    ],
+    pullquote: '“The first week Alex was here, our PM stopped defending the redesign roadmap and started defending the research.”',
+    pullquoteBy: 'Priya Raman, VP Product',
   },
   {
+    slug: 'fieldnote-mobile',
     title: 'Fieldnote Mobile',
     year: '2024',
     summary:
@@ -74,8 +131,52 @@ export const projects = [
     outcome: '4.8★ across 2k reviews, 3x weekly active use',
     tags: ['Mobile', 'iOS / Android', 'Research'],
     accent: 'from-emerald-500 to-teal-300',
+    cover: null,
+    meta: {
+      role: 'Product designer',
+      timeline: '5 months',
+      team: '1 PM, 3 engineers',
+      platform: 'iOS and Android',
+      status: 'Shipped',
+    },
+    intro: [
+      'Field researchers take notes in places with no signal: basements, forests, remote sites. The previous app was online-first, which meant lost notes and a lot of quiet frustration.',
+      'I designed the offline experience end to end — what the app admits it cannot do, how it tells the truth about that, and the capture interactions fast enough to use one-handed in the rain.',
+    ],
+    sections: [
+      {
+        heading: 'The problem',
+        body: [
+          'Field researchers were keeping a paper notebook as backup. Not because they preferred paper, but because they did not trust the app with the one thing they were there to collect.',
+          'Every sync edge case leaked into the interface: spinner states that never resolved, photos silently failing to upload, no way to tell which notes had made it off the device.',
+        ],
+      },
+      {
+        heading: 'What I did',
+        body: [
+          'I spent four days shadowing researchers on live site visits. The observation that changed the design: they never look at the app while recording. Capture had to work without any of their attention.',
+          'So the capture flow became a single gesture — a swipe up from the bottom edge to start, voice or text, a flick to save. Nothing requires a target, nothing requires reading.',
+          'Sync became a visible, honest inbox. Every item shows one of three states — saved here, uploading, synced — and nothing is ever removed from the device until the server confirms it.',
+        ],
+      },
+      {
+        heading: 'Shipping it',
+        body: [
+          'Sync conflict resolution is where most of the engineering time went. I designed the states, not the resolution algorithm, and let engineering choose the merge strategy. We agreed on naming early so the UI vocabulary matched what engineers called things internally.',
+        ],
+      },
+      {
+        heading: 'Outcome',
+        body: [
+          'Weekly active use tripled. The app holds a 4.8 rating across 2,000 reviews, and the most common review text mentions not losing work — which is exactly the promise we set out to keep.',
+        ],
+      },
+    ],
+    pullquote: '“I stopped bringing the paper notebook. That is the whole review.”',
+    pullquoteBy: 'Field researcher, beta programme',
   },
   {
+    slug: 'kern-type-system',
     title: 'Kern Type System',
     year: '2023',
     summary:
@@ -83,8 +184,44 @@ export const projects = [
     outcome: '3.4k weekly downloads',
     tags: ['Typography', 'Open source', 'Tooling'],
     accent: 'from-rose-500 to-amber-300',
+    cover: null,
+    meta: {
+      role: 'Creator',
+      timeline: 'Ongoing side project',
+      team: 'Solo, with 30 contributors',
+      platform: 'Web, Figma, CSS',
+      status: 'Active',
+    },
+    intro: [
+      'Every product team I joined reinvented type scales and pairing rules, badly, from scratch. Kern is my attempt to publish one opinionated answer and make it easy to adopt.',
+      'It is a variable font family, a scale generator, and a token pipeline that outputs the same numbers to Figma and to CSS.',
+    ],
+    sections: [
+      {
+        heading: 'The problem',
+        body: [
+          'Type scales in most design systems are a set of magic numbers with no rationale. Change the base size and everything breaks, so nobody changes the base size, so the scale drifts from the product it is supposed to serve.',
+        ],
+      },
+      {
+        heading: 'What I did',
+        body: [
+          'I built the scale around a modular ratio with a fixed step count, so there are never more than seven sizes regardless of viewport. Each step carries a named role — body, caption, title — not a number.',
+          'The token pipeline reads one JSON file and writes both Figma variables and CSS custom properties, which means the design library and the codebase cannot disagree about type.',
+        ],
+      },
+      {
+        heading: 'Outcome',
+        body: [
+          '3,400 weekly downloads, 30 contributors, and used in production by six teams I know of. The most satisfying result is that the contribution model works: people send pull requests with new pairings and test cases.',
+        ],
+      },
+    ],
+    pullquote: null,
+    pullquoteBy: null,
   },
   {
+    slug: 'pulse-onboarding',
     title: 'Pulse Onboarding',
     year: '2023',
     summary:
@@ -92,6 +229,43 @@ export const projects = [
     outcome: 'Activation +27%',
     tags: ['Growth', 'UX writing', 'Prototyping'],
     accent: 'from-violet-500 to-fuchsia-300',
+    cover: null,
+    meta: {
+      role: 'Product designer',
+      timeline: '10 weeks',
+      team: '2 PMs, 3 engineers',
+      platform: 'Web app',
+      status: 'Shipped',
+    },
+    intro: [
+      'Pulse is a team feedback tool. New accounts landed on an empty dashboard, and the first thing the product asked them to do was invite a colleague — before they had any value to show.',
+      'I redesigned signup around one idea: show the product working before asking for anything.',
+    ],
+    sections: [
+      {
+        heading: 'The problem',
+        body: [
+          'Signup asked for a company name, a team size, a role, and three integration choices. Median completion was 41%, and the people who finished were not meaningfully more likely to activate than the people who did not.',
+          'So the fields were not the real problem. The empty dashboard was.',
+        ],
+      },
+      {
+        heading: 'What I did',
+        body: [
+          'New accounts now start with a worked example: three realistic feedback items in a live-looking dashboard that the user is invited to change rather than set up.',
+          'Signup dropped to email and password. Company details moved to a short prompt after the first login, framed as “what should we call your workspace” instead of a form.',
+          'I wrote all of it. The copy change was not decoration — “create your first board” became “this is your board, change anything in it,” and completion of that first edit is what we now track as activation.',
+        ],
+      },
+      {
+        heading: 'Outcome',
+        body: [
+          'Signup completion rose to 68%, and activation within seven days rose 27%. The invite step that used to come first now comes after the first edit, and invite rate is higher because the ask has context.',
+        ],
+      },
+    ],
+    pullquote: null,
+    pullquoteBy: null,
   },
 ]
 
@@ -108,3 +282,16 @@ export const testimonials = [
     title: 'Engineering Lead, Fieldnote',
   },
 ]
+
+export function getProject(slug) {
+  return projects.find((p) => p.slug === slug)
+}
+
+export function getAdjacentProjects(slug) {
+  const i = projects.findIndex((p) => p.slug === slug)
+  if (i === -1) return { prev: null, next: null }
+  return {
+    prev: projects[(i - 1 + projects.length) % projects.length] ?? null,
+    next: projects[(i + 1) % projects.length] ?? null,
+  }
+}
