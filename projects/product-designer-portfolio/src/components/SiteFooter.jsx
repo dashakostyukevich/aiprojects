@@ -2,26 +2,49 @@ import { profile } from '../data.js'
 
 export default function SiteFooter() {
   return (
-    <footer id="contact" className="scroll-mt-20 border-t border-neutral-200 bg-neutral-50">
-      <div className="mx-auto w-full max-w-5xl px-6 py-20">
-        <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
-          Let’s work together
+    <footer
+      id="contact"
+      className="scroll-mt-24 border-t border-hairline bg-ink text-bg"
+    >
+      <div className="container-page py-20 sm:py-28">
+        <p className="label-meta text-bg/60">Contact</p>
+        <h2 className="mt-6 max-w-3xl font-serif text-display leading-[1.05] text-balance">
+          Let&rsquo;s make something{' '}
+          <span className="highlight font-serif italic text-accent-ink">
+            clear and calm
+          </span>
+          .
         </h2>
-        <a
-          href={`mailto:${profile.email}`}
-          className="mt-4 inline-block text-lg text-neutral-600 underline underline-offset-4 hover:text-neutral-900"
-        >
-          {profile.email}
-        </a>
-        <div className="mt-10 flex flex-wrap gap-5 text-sm text-neutral-500">
+
+        <div className="mt-10 flex flex-wrap items-center gap-4">
+          <a
+            href={`mailto:${profile.email}`}
+            className="btn-accent focus-visible:ring-offset-ink"
+          >
+            {profile.email}
+          </a>
+          <a
+            href="#work"
+            className="btn-outline border-bg/40 text-bg hover:bg-bg hover:text-ink focus-visible:ring-offset-ink"
+          >
+            Back to work
+          </a>
+        </div>
+
+        <div className="mt-16 flex flex-wrap gap-x-8 gap-y-3 border-t border-bg/15 pt-8">
           {profile.links.map((l) => (
-            <a key={l.label} href={l.href} className="hover:text-neutral-900">
+            <a
+              key={l.label}
+              href={l.href}
+              className="nav-link text-bg/70 transition hover:text-bg"
+            >
               {l.label}
             </a>
           ))}
         </div>
-        <p className="mt-12 text-sm text-neutral-400">
-          © {new Date().getFullYear()} {profile.name}
+
+        <p className="mt-10 text-sm text-bg/50">
+          &copy; {new Date().getFullYear()} {profile.name} / {profile.role}
         </p>
       </div>
     </footer>

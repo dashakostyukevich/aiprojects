@@ -1,13 +1,135 @@
 @import 'tailwindcss';
 
+/* Design tokens. Source of truth is design.md — change them there first, then
+   mirror any new value here. */
 @theme {
+  /* §2 Color */
+  --color-bg: #fdfcf8;
+  --color-surface: #ffffff;
+  --color-ink: #0a0a0a;
+  --color-ink-muted: #6b6b6b;
+  --color-accent: #d4ff3d;
+  --color-accent-ink: #0a0a0a;
+  --color-hairline: #e8e6df;
+  --color-sand: #efebe2;
+  /* §2 Illustration accents — artwork only, never UI chrome. */
+  --color-terracotta: #c77b5c;
+  --color-navy: #1a1f2e;
+  --color-sky: #bfe3f0;
+
+  /* §3 Type. Fraunces stands in for the serif, Inter for the sans. */
   --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-serif: 'Fraunces', 'Iowan Old Style', Georgia, serif;
+
+  /* §3 Type scale. clamp() carries the desktop/mobile pair from the table. */
+  --text-display: clamp(2rem, 1.1rem + 3.6vw, 4rem);
+  --text-display-xl: clamp(3.5rem, 1.5rem + 8.5vw, 11.25rem);
+  --text-h1: clamp(1.75rem, 1.2rem + 2.2vw, 3.5rem);
+  --text-h2: clamp(1.375rem, 1.15rem + 0.9vw, 2rem);
+  --text-body: clamp(0.9375rem, 0.9rem + 0.2vw, 1.125rem);
+  --text-nav: 0.875rem;
+  --text-meta: 0.75rem;
+
+  /* §5 Floating collage card */
+  --radius-card: 18px;
+  --shadow-card: 0 8px 24px rgb(0 0 0 / 0.06);
+  --shadow-card-hover: 0 14px 34px rgb(0 0 0 / 0.1);
 }
 
 html {
   scroll-behavior: smooth;
+  /* Nav is a fixed 72px row; keep anchor targets clear of it. */
+  scroll-padding-top: 88px;
 }
 
 body {
-  @apply bg-white text-neutral-900 antialiased;
+  @apply bg-bg font-sans text-ink antialiased;
+}
+
+/* §5 Nav — flat utility variant, all uppercase text-nav with tracking. */
+@utility nav-link {
+  @apply font-sans text-[0.875rem] font-medium tracking-[0.04em] uppercase;
+}
+
+/* §3 text-meta: small uppercase labels for dates, tags, card labels. */
+@utility label-meta {
+  @apply text-[0.75rem] font-medium tracking-[0.02em] text-ink-muted uppercase;
+}
+
+/* §3 Highlight pattern: accent as a marker stroke behind an italic phrase. */
+@utility highlight {
+  @apply bg-accent px-[0.12em] text-accent-ink;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* §4 Container. Full-bleed sections use this inner wrapper. */
+@utility container-page {
+  @apply mx-auto w-full max-w-[1200px] px-6 lg:px-10;
+}
+
+/* §5 Buttons. Solid accent first, outline pill for secondary actions. */
+@utility btn-accent {
+  @apply inline-flex items-center justify-center rounded-[6px] bg-accent px-6 py-3
+    text-[0.9375rem] font-semibold text-accent-ink transition-colors duration-150
+    hover:bg-[#c4f226] focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2
+    focus-visible:ring-offset-bg focus-visible:outline-none;
+}
+
+@utility btn-outline {
+  @apply inline-flex items-center justify-center rounded-full border border-ink px-6 py-3
+    text-[0.9375rem] font-medium text-ink transition-colors duration-150 hover:bg-ink
+    hover:text-bg focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2
+    focus-visible:ring-offset-bg focus-visible:outline-none;
+}
+
+/* §5 Floating collage card. Consistent radius + shadow on every sub-type is
+   what keeps the random-things grid from reading as messy. */
+@utility collage-card {
+  @apply rounded-[18px] bg-surface p-5 shadow-card transition-[transform,box-shadow]
+    duration-200 ease-out;
+}
+
+/* §6 Random-things grid. Mobile is a 2-col masonry, so the card fills its
+   cell; from lg up it is placed on the invisible 12-col grid using the
+   percentage box its data declares. */
+@utility collage-item {
+  @apply collage-card w-full text-left;
+}
+
+@media (min-width: 64rem) {
+  .collage-item {
+    position: absolute;
+    left: var(--pos-left, auto);
+    top: var(--pos-top, auto);
+    width: var(--pos-width, 100%);
+  }
+}
+
+/* §8 Motion. Entrance states start hidden and are released by the Reveal
+   component; reduced-motion users get everything visible immediately. */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px) rotate(var(--reveal-rotate, 0deg));
+  transition:
+    opacity 500ms ease-out var(--reveal-delay, 0ms),
+    transform 600ms cubic-bezier(0.16, 1, 0.3, 1) var(--reveal-delay, 0ms);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0) rotate(var(--reveal-rest-rotate, var(--reveal-rotate, 0deg)));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .reveal,
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
 }

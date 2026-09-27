@@ -1,5 +1,6 @@
 import { Link, Navigate, useParams } from 'react-router-dom'
 import { getAdjacentProjects, getProject, projects } from '../data.js'
+import Reveal from '../components/Reveal.jsx'
 import useDocumentTitle from '../hooks/useDocumentTitle.js'
 
 const metaLabels = {
@@ -10,15 +11,26 @@ const metaLabels = {
   status: 'Status',
 }
 
+const fills = {
+  accent: 'bg-accent',
+  sand: 'bg-sand',
+  sky: 'bg-sky',
+  terracotta: 'bg-terracotta',
+  navy: 'bg-navy',
+  ink: 'bg-ink',
+}
+
+// §5 Meta sidebar as data rows: thin hairline divider, text-meta keys.
 function Meta({ project }) {
   return (
-    <dl className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+    <dl className="border-t border-hairline">
       {Object.entries(project.meta).map(([key, value]) => (
-        <div key={key}>
-          <dt className="text-xs font-semibold tracking-[0.15em] text-neutral-400 uppercase">
-            {metaLabels[key] ?? key}
-          </dt>
-          <dd className="mt-1 text-neutral-800">{value}</dd>
+        <div
+          key={key}
+          className="flex items-baseline justify-between gap-6 border-b border-hairline py-3"
+        >
+          <dt className="label-meta">{metaLabels[key] ?? key}</dt>
+          <dd className="text-right text-sm font-medium">{value}</dd>
         </div>
       ))}
     </dl>
@@ -27,7 +39,7 @@ function Meta({ project }) {
 
 function Prose({ paragraphs }) {
   return paragraphs.map((p, i) => (
-    <p key={i} className="mb-4 text-lg leading-relaxed text-neutral-700">
+    <p key={i} className="mb-5 text-body leading-relaxed text-ink-muted">
       {p}
     </p>
   ))
@@ -47,28 +59,26 @@ export default function CaseStudy() {
   const more = projects.filter((p) => p.slug !== slug).slice(0, 2)
 
   return (
-    <main className="mx-auto w-full max-w-5xl px-6">
+    <main>
       <article>
         {/* Hero */}
-        <header className="py-16 sm:py-24">
-          <Link
-            to="/#work"
-            className="text-sm text-neutral-500 hover:text-neutral-900"
-          >
-            ← All work
+        <header className="container-page pt-14 pb-12 sm:pt-20">
+          <Link to="/#work" className="nav-link text-ink-muted hover:text-ink">
+            &larr; All work
           </Link>
-          <div className="mt-6 flex flex-wrap items-baseline gap-x-4 gap-y-1">
-            <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
-              {project.title}
-            </h1>
-            <span className="text-sm text-neutral-400">{project.year}</span>
+
+          <div className="mt-8 flex flex-wrap items-baseline gap-x-5 gap-y-2">
+            <h1 className="font-serif text-display leading-[1.05]">{project.title}</h1>
+            <span className="label-meta">{project.year}</span>
           </div>
-          <p className="mt-6 max-w-2xl text-lg text-neutral-600">{project.summary}</p>
-          <ul className="mt-5 flex flex-wrap gap-2">
+
+          <p className="mt-6 max-w-2xl text-body text-ink-muted">{project.summary}</p>
+
+          <ul className="mt-6 flex flex-wrap gap-2">
             {project.tags.map((t) => (
               <li
                 key={t}
-                className="rounded-full border border-neutral-200 px-2.5 py-0.5 text-xs text-neutral-500"
+                className="label-meta rounded-full border border-hairline px-3 py-1.5"
               >
                 {t}
               </li>
@@ -76,84 +86,83 @@ export default function CaseStudy() {
           </ul>
         </header>
 
-        <div className={`h-64 rounded-3xl bg-gradient-to-br sm:h-96 ${project.accent}`} />
+        {/* Cover: solid fill stand-in for a real screenshot. */}
+        <div className="container-page">
+          <Reveal
+            className={`aspect-16/9 w-full rounded-[20px] lg:aspect-21/9 ${fills[project.fill] ?? fills.sand}`}
+          />
+        </div>
 
-        {/* Intro + meta */}
-        <div className="mt-16 grid gap-12 sm:mt-20 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+        {/* Intro and meta */}
+        <div className="container-page mt-14 grid gap-12 sm:mt-20 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)] lg:gap-20">
           <div>
             <Prose paragraphs={project.intro} />
-            <p className="mt-8 border-l-2 border-neutral-900 pl-4 text-xl font-medium">
+            <p className="mt-8 inline-block rounded-[6px] bg-accent px-3 py-2 font-semibold text-accent-ink">
               {project.outcome}
             </p>
           </div>
-          <aside className="lg:border-l lg:border-neutral-200 lg:pl-8">
+          <aside className="lg:pt-1">
             <Meta project={project} />
           </aside>
         </div>
 
         {/* Body */}
-        {project.sections.map((section) => (
-          <section
-            key={section.heading}
-            className="mt-16 border-t border-neutral-200 pt-12 sm:mt-24"
-          >
-            <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-              {section.heading}
-            </h2>
-            <div className="mt-6 max-w-2xl">
-              <Prose paragraphs={section.body} />
-            </div>
-          </section>
-        ))}
+        <div className="container-page">
+          {project.sections.map((section, i) => (
+            <section key={section.heading} className="border-t border-hairline py-12 sm:py-16">
+              <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.7fr)] lg:gap-20">
+                <h2 className="text-h2 font-semibold tracking-tight">
+                  <span className="label-meta mr-4 text-terracotta">0{i + 1}</span>
+                  {section.heading}
+                </h2>
+                <div className="max-w-2xl">
+                  <Prose paragraphs={section.body} />
+                </div>
+              </div>
+            </section>
+          ))}
 
-        {project.pullquote && (
-          <figure className="mt-16 border-t border-neutral-200 pt-12 sm:mt-24">
-            <blockquote className="max-w-2xl text-2xl leading-snug font-medium tracking-tight sm:text-3xl">
-              {project.pullquote}
-            </blockquote>
-            <figcaption className="mt-4 text-sm text-neutral-500">
-              {project.pullquoteBy}
-            </figcaption>
-          </figure>
-        )}
+          {project.pullquote && (
+            <figure className="border-t border-hairline py-12 sm:py-16">
+              <blockquote className="max-w-3xl font-serif text-h1 leading-tight italic text-balance">
+                {project.pullquote}
+              </blockquote>
+              <figcaption className="label-meta mt-5">{project.pullquoteBy}</figcaption>
+            </figure>
+          )}
+        </div>
       </article>
 
       {/* More work */}
-      <section className="mt-20 border-t border-neutral-200 py-16 sm:mt-28">
-        <h2 className="text-sm font-semibold tracking-[0.2em] text-neutral-400 uppercase">
-          More work
-        </h2>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
+      <section className="container-page border-t border-hairline py-16 sm:py-24">
+        <div className="mb-10 flex flex-wrap items-end justify-between gap-4">
+          <h2 className="text-h2 font-semibold tracking-tight">More work</h2>
+          <div className="flex gap-6">
+            {prev && (
+              <Link to={`/work/${prev.slug}`} className="nav-link text-ink-muted hover:text-ink">
+                &larr; {prev.title}
+              </Link>
+            )}
+            {next && (
+              <Link to={`/work/${next.slug}`} className="nav-link text-ink-muted hover:text-ink">
+                {next.title} &rarr;
+              </Link>
+            )}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-8 sm:gap-12">
           {more.map((p) => (
-            <Link
-              key={p.slug}
-              to={`/work/${p.slug}`}
-              className="group flex items-center gap-4 rounded-xl border border-neutral-200 p-4 transition hover:border-neutral-400"
-            >
-              <div className={`h-12 w-20 shrink-0 rounded-lg bg-gradient-to-br ${p.accent}`} />
-              <span className="font-medium group-hover:underline group-hover:underline-offset-4">
+            <Link key={p.slug} to={`/work/${p.slug}`} className="group block">
+              <div
+                className={`aspect-4/5 w-full rounded-[18px] ${fills[p.fill] ?? fills.sand} transition-transform duration-200 ease-out group-hover:-translate-y-0.5`}
+              />
+              <p className="label-meta mt-4 text-ink group-hover:underline group-hover:underline-offset-4">
                 {p.title}
-              </span>
+              </p>
             </Link>
           ))}
         </div>
-
-        {prev && next && (
-          <div className="mt-10 flex flex-wrap justify-between gap-4 text-sm">
-            <Link
-              to={`/work/${prev.slug}`}
-              className="text-neutral-500 hover:text-neutral-900"
-            >
-              ← {prev.title}
-            </Link>
-            <Link
-              to={`/work/${next.slug}`}
-              className="text-neutral-500 hover:text-neutral-900"
-            >
-              {next.title} →
-            </Link>
-          </div>
-        )}
       </section>
     </main>
   )

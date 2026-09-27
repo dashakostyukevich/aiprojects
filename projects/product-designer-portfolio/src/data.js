@@ -4,6 +4,16 @@
 export const profile = {
   name: 'Alex Morgan',
   role: 'Product Designer',
+  // Hero display headline. The phrase marked `highlight: true` is the one the
+  // §3 highlight pattern applies to: italic + accent marker stroke behind it.
+  headline: [
+    { text: 'I design calm, useful interfaces for ' },
+    { text: 'complex products', italic: true, highlight: true },
+    { text: '.' },
+  ],
+  // §3 text-display-xl statement. Each line stays on one row and bleeds off an
+  // edge, so the second half reads as an intentional crop rather than a wrap.
+  statement: ['Structure first,', 'personality on top.'],
   tagline: 'I design calm, useful interfaces for complex products.',
   location: 'Berlin, Germany',
   email: 'hello@example.com',
@@ -68,7 +78,7 @@ export const projects = [
       'Redesigned the reporting experience for a data platform: faster filters, clearer empty states, and a chart builder non-analysts could use.',
     outcome: 'Time to first insight cut from 6 min to 90 s',
     tags: ['Product design', 'Design system', 'Data viz'],
-    accent: 'from-indigo-500 to-sky-400',
+    fill: 'accent',
     cover: null,
     meta: {
       role: 'Lead product designer',
@@ -130,7 +140,7 @@ export const projects = [
       'Offline-first field research app. Designed the sync model UI, gesture-based capture, and a map that works with no signal.',
     outcome: '4.8★ across 2k reviews, 3x weekly active use',
     tags: ['Mobile', 'iOS / Android', 'Research'],
-    accent: 'from-emerald-500 to-teal-300',
+    fill: 'sand',
     cover: null,
     meta: {
       role: 'Product designer',
@@ -183,7 +193,7 @@ export const projects = [
       'An open-source variable font and pairing guide for product teams, including a token pipeline for Figma and CSS.',
     outcome: '3.4k weekly downloads',
     tags: ['Typography', 'Open source', 'Tooling'],
-    accent: 'from-rose-500 to-amber-300',
+    fill: 'sky',
     cover: null,
     meta: {
       role: 'Creator',
@@ -228,7 +238,7 @@ export const projects = [
       'Reworked signup into a progressive flow that asks for nothing until it is needed, with sample data instead of empty dashboards.',
     outcome: 'Activation +27%',
     tags: ['Growth', 'UX writing', 'Prototyping'],
-    accent: 'from-violet-500 to-fuchsia-300',
+    fill: 'terracotta',
     cover: null,
     meta: {
       role: 'Product designer',
@@ -280,6 +290,100 @@ export const testimonials = [
     quote: 'The design system work paid for itself in the first quarter.',
     name: 'Jonas Weber',
     title: 'Engineering Lead, Fieldnote',
+  },
+]
+
+// §5/§6 "Random-things" collage for the About section. Card sub-types come
+// from the design system — illustration, photo, quote, badge, stat — and no two
+// adjacent cards should be the same type.
+//
+// `pos` is a percentage box on the invisible 12-col grid, desktop only. Mobile
+// ignores it and stacks the cards in a 2-column masonry in array order.
+// Cards cluster near the edges; the middle vertical band is left clear so the
+// headline stays legible (§6.4).
+export const collage = [
+  // Top cluster.
+  {
+    type: 'stat',
+    figure: '40k',
+    label: 'teams use Atlas daily',
+    fill: 'ink',
+    pos: { left: 0, top: 2, width: 15 },
+    rotate: -3,
+  },
+  {
+    type: 'illustration',
+    title: 'Doodle: filter to insight',
+    caption: 'Pen on paper, day 3',
+    fill: 'surface',
+    pos: { left: 20, top: 0, width: 16 },
+    rotate: 2,
+  },
+  {
+    type: 'badge',
+    label: 'Shipped it',
+    detail: '8 months, 4 squads',
+    fill: 'accent',
+    pos: { left: 62, top: 1, width: 14 },
+    rotate: 3,
+  },
+  {
+    type: 'photo',
+    title: 'Workshop wall',
+    caption: 'Journey map, week 2',
+    fill: 'sky',
+    pos: { left: 80, top: 7, width: 19 },
+    rotate: -2,
+  },
+  // Mid-height cards, hard against the edges only.
+  {
+    type: 'quote',
+    quote: 'Does this survive a bad signal?',
+    name: 'Field researcher',
+    fill: 'sand',
+    pos: { left: 0, top: 36, width: 16 },
+    rotate: -2,
+  },
+  {
+    type: 'stat',
+    figure: 'x3',
+    label: 'weekly active use',
+    fill: 'terracotta',
+    pos: { left: 83, top: 38, width: 16 },
+    rotate: 2,
+  },
+  // Bottom cluster.
+  {
+    type: 'badge',
+    label: 'Open source',
+    detail: '3.4k weekly downloads',
+    fill: 'sand',
+    pos: { left: 2, top: 68, width: 16 },
+    rotate: 3,
+  },
+  {
+    type: 'photo',
+    title: 'Type specimen',
+    caption: 'Kern, 14 sizes',
+    fill: 'sky',
+    pos: { left: 22, top: 73, width: 18 },
+    rotate: -3,
+  },
+  {
+    type: 'illustration',
+    title: 'Doodle: three states',
+    caption: 'Saved / uploading / synced',
+    fill: 'surface',
+    pos: { left: 46, top: 68, width: 17 },
+    rotate: 2,
+  },
+  {
+    type: 'quote',
+    quote: 'I stopped bringing the paper notebook.',
+    name: 'Beta tester',
+    fill: 'ink',
+    pos: { left: 70, top: 74, width: 20 },
+    rotate: -2,
   },
 ]
 

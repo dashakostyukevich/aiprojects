@@ -1,88 +1,154 @@
 import { experience, profile, projects, services, testimonials } from '../data.js'
-import Section from '../components/Section.jsx'
+import CollageAbout from '../components/CollageAbout.jsx'
 import ProjectCard from '../components/ProjectCard.jsx'
-import useDocumentTitle from '../hooks/useDocumentTitle.js'
+import Reveal from '../components/Reveal.jsx'
+
+// §5 Data/meta rows: plain rows, thin hairline divider, text-meta columns.
+function ExperienceRows() {
+  return (
+    <div className="border-t border-hairline">
+      {experience.map((e) => (
+        <div
+          key={e.company}
+          className="grid grid-cols-1 gap-1 border-b border-hairline py-5 sm:grid-cols-[7rem_1fr_1.4fr] sm:gap-6"
+        >
+          <span className="label-meta">{e.period}</span>
+          <span className="text-sm font-semibold sm:text-body">
+            {e.role}, {e.company}
+          </span>
+          <span className="text-sm text-ink-muted">{e.notes}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
 
 export default function Home() {
-  useDocumentTitle(null)
   return (
-    <main className="mx-auto w-full max-w-5xl px-6">
-      {/* Hero */}
-      <section className="py-20 sm:py-32">
-        <p className="mb-4 text-sm text-neutral-500">
-          {profile.role} · {profile.location}
+    <main>
+      {/* Hero: full-bleed, serif display with the highlight phrase. */}
+      <section className="container-page pt-16 pb-20 sm:pt-24 sm:pb-28 lg:pt-32 lg:pb-36">
+        <Reveal>
+          <p className="label-meta">
+            {profile.role} / {profile.location}
+          </p>
+        </Reveal>
+
+        <Reveal delay={80}>
+          <h1 className="mt-6 max-w-4xl font-serif text-display leading-[1.04] text-balance">
+            {profile.headline.map((part, i) =>
+              part.highlight ? (
+                <span key={i} className="highlight font-serif italic">
+                  {part.text}
+                </span>
+              ) : (
+                <span key={i} className={part.italic ? 'italic' : undefined}>
+                  {part.text}
+                </span>
+              ),
+            )}
+          </h1>
+        </Reveal>
+
+        <Reveal delay={160}>
+          <div className="mt-10 flex flex-wrap items-center gap-6">
+            <a href="#work" className="btn-accent">
+              See selected work
+            </a>
+            <span className="label-meta">{profile.availability}</span>
+          </div>
+        </Reveal>
+      </section>
+
+      {/* Statement: text-display-xl, one line per row, second line bleeding a
+          few percent off the right edge. Sized in vw so both lines stay close
+          to whole at any width. */}
+      <section className="border-y border-hairline bg-surface py-16 sm:py-24">
+        <p className="overflow-hidden text-[clamp(1.95rem,7.8vw,7rem)] leading-[0.94] font-extrabold tracking-[-0.03em] whitespace-nowrap uppercase">
+          {profile.statement.map((line, i) => (
+            <span
+              key={i}
+              className={`container-page block ${i % 2 ? 'text-ink-muted' : '-translate-x-[2vw]'}`}
+            >
+              {line}
+            </span>
+          ))}
         </p>
-        <h1 className="max-w-3xl text-4xl leading-tight font-semibold tracking-tight sm:text-6xl">
-          {profile.tagline}
-        </h1>
-        <p className="mt-6 text-lg text-neutral-500">{profile.availability}</p>
-        <a
-          href="#work"
-          className="mt-10 inline-block rounded-full bg-neutral-900 px-6 py-3 text-sm font-medium text-white transition hover:bg-neutral-700"
-        >
-          See selected work
-        </a>
       </section>
 
       {/* Work */}
-      <Section id="work" title="Selected work">
-        <div className="grid gap-10 sm:grid-cols-2">
-          {projects.map((p) => (
-            <ProjectCard key={p.slug} project={p} />
+      <section id="work" className="container-page scroll-mt-24 py-16 sm:py-24 lg:py-32">
+        <div className="mb-12 flex flex-wrap items-end justify-between gap-4 border-b border-hairline pb-6">
+          <h2 className="text-h2 font-semibold tracking-tight">Selected work</h2>
+          <p className="label-meta">{projects.length} projects</p>
+        </div>
+
+        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12">
+          {projects.map((p, i) => (
+            <Reveal key={p.slug} delay={i * 70}>
+              <ProjectCard project={p} />
+            </Reveal>
           ))}
         </div>
-      </Section>
+      </section>
 
       {/* Services */}
-      <Section id="services" title="What I do">
-        <div className="grid gap-8 sm:grid-cols-3">
-          {services.map((s) => (
-            <div key={s.title}>
-              <h3 className="font-medium">{s.title}</h3>
-              <p className="mt-2 text-neutral-600">{s.body}</p>
-            </div>
+      <section id="services" className="container-page scroll-mt-24 py-16 sm:py-24 lg:py-32">
+        <h2 className="mb-12 border-b border-hairline pb-6 text-h2 font-semibold tracking-tight">
+          What I do
+        </h2>
+        <div className="grid gap-10 sm:grid-cols-3 sm:gap-12">
+          {services.map((s, i) => (
+            <Reveal key={s.title} delay={i * 70}>
+              <p className="label-meta mb-3 text-terracotta">0{i + 1}</p>
+              <h3 className="text-h2 font-semibold tracking-tight">{s.title}</h3>
+              <p className="mt-3 text-body text-ink-muted">{s.body}</p>
+            </Reveal>
           ))}
         </div>
-      </Section>
+      </section>
 
-      {/* About */}
-      <Section id="about" title="About">
-        <div className="grid gap-10 sm:grid-cols-[2fr_1fr]">
+      {/* About: free-form collage section */}
+      <div id="about" className="scroll-mt-24 border-t border-hairline">
+        <CollageAbout />
+      </div>
+
+      {/* Bio, history, testimonials */}
+      <section className="container-page border-t border-hairline py-16 sm:py-24 lg:py-32">
+        <div className="grid gap-14 lg:grid-cols-[1.2fr_1fr] lg:gap-20">
           <div>
-            {profile.bio.map((p) => (
-              <p key={p.slice(0, 24)} className="mb-4 text-lg text-neutral-700">
+            {profile.bio.map((p, i) => (
+              <p
+                key={i}
+                className="mb-5 font-serif text-h2 leading-snug text-balance"
+              >
                 {p}
               </p>
             ))}
-            <div className="mt-8 space-y-6">
-              {experience.map((e) => (
-                <div key={e.company} className="border-l-2 border-neutral-200 pl-4">
-                  <div className="flex flex-wrap items-baseline justify-between gap-2">
-                    <h3 className="font-medium">
-                      {e.role}, {e.company}
-                    </h3>
-                    <span className="text-sm text-neutral-400">{e.period}</span>
-                  </div>
-                  <p className="mt-1 text-neutral-600">{e.notes}</p>
-                </div>
+          </div>
+
+          <div>
+            <h3 className="label-meta mb-6">Words from</h3>
+            <div className="space-y-4">
+              {testimonials.map((t) => (
+                <figure key={t.name} className="collage-card">
+                  <blockquote className="font-serif text-h2 leading-snug italic">
+                    {t.quote}
+                  </blockquote>
+                  <figcaption className="label-meta mt-4">
+                    {t.name} / {t.title}
+                  </figcaption>
+                </figure>
               ))}
             </div>
           </div>
-          <div>
-            <h3 className="mb-4 text-sm font-semibold tracking-[0.2em] text-neutral-400 uppercase">
-              Words from
-            </h3>
-            {testimonials.map((t) => (
-              <figure key={t.name} className="mb-6">
-                <blockquote className="text-neutral-700 italic">“{t.quote}”</blockquote>
-                <figcaption className="mt-2 text-sm text-neutral-500">
-                  {t.name} — {t.title}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
         </div>
-      </Section>
+
+        <div className="mt-16 lg:mt-24">
+          <h3 className="label-meta mb-6">Experience</h3>
+          <ExperienceRows />
+        </div>
+      </section>
     </main>
   )
 }
