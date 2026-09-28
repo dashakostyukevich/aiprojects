@@ -2,6 +2,16 @@
   command = "npm run build"
   publish = "dist"
 
+# Both metadata readers need the real origin: scripts/prerender.mjs reads
+# SITE_URL at build time (canonical, og:url, JSON-LD, sitemap, robots) and
+# src/hooks/useDocumentMeta.js reads VITE_SITE_URL at runtime for client-side
+# navigation. Left unset they fall back to https://example.com, which ships a
+# sitemap full of a domain that does not exist. Change this line when the site
+# gets a custom domain.
+[build.environment]
+  SITE_URL = "https://merry-haupia-7470ed.netlify.app"
+  VITE_SITE_URL = "https://merry-haupia-7470ed.netlify.app"
+
 # `npm run build` now also runs scripts/prerender.mjs, which writes a real HTML
 # file per route into dist/ (index.html, work/<slug>/index.html) plus
 # sitemap.xml and robots.txt.
