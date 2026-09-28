@@ -81,19 +81,18 @@ export const profile = {
   // remove the `grayscale` class in AboutEditorial.jsx to keep colour.
   portrait: null,
   portraitAlt: null,
-  // Footer links. The `Email` entry that used to be first here was removed: the
-  // footer already renders the same address as a button directly above this
-  // row, so it was a second control for one intent.
+  // Footer links. One entry, LinkedIn, pointing at the real profile.
   //
-  // LinkedIn points at the real profile. Dribbble and GitHub are still the bare
-  // domain roots — the footer renders whatever is in this array, so those two
-  // are live links that go nowhere useful. Replace them with real profile URLs
-  // or delete the entries; do not leave a placeholder that looks intentional.
-  links: [
-    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/darya-kastsiukevich/' },
-    { label: 'Dribbble', href: 'https://dribbble.com' },
-    { label: 'GitHub', href: 'https://github.com' },
-  ],
+  // The `Email` entry that used to be first here was removed earlier: the
+  // footer rendered the same address as a button directly above this row, so it
+  // was a second control for one intent. Dribbble and GitHub were removed
+  // after that, because both still pointed at bare domain roots — the footer
+  // renders whatever is in this array, so they were live links that went
+  // nowhere useful. A row of placeholder destinations is worse than a row of
+  // one: it reads as "there are more places to find me" and then does not
+  // deliver. If they come back they need real profile URLs, and the row will
+  // need its `flex-wrap` and spacing re-checked at three entries.
+  links: [{ label: 'LinkedIn', href: 'https://www.linkedin.com/in/darya-kastsiukevich/' }],
 }
 
 // Nav is the §5 pill/outline variant: three outlined pills on the right, a bare
@@ -315,13 +314,12 @@ export const projects = [
       },
       {
         heading: 'Turning complex technology into a clear story',
+        // The image block that opened this section was a placeholder with no
+        // `src`, so it rendered a labelled "Image needed" slot above the prose.
+        // It has been removed. The progression it was going to illustrate is
+        // carried by the `note` line below, which is the same sequence in text,
+        // so the section still makes its point without the empty box.
         body: [
-          {
-            image: {
-              label: 'The site’s narrative structure — from what it is to how to learn more',
-              alt: 'The ARASTELLE site structure, laid out as a progression',
-            },
-          },
           'I approached the website as a storytelling experience rather than simply a collection of product pages. The information was structured around a simple progression:',
           { note: 'What is it? → How does it work? → What makes it different? → Where can it be used? → How can I learn more?' },
           'This allowed visitors to gradually understand the technology without being overwhelmed by technical information.',
@@ -742,13 +740,10 @@ export const projects = [
       },
       {
         heading: 'Testing the budgeting experience',
+        // The placeholder image block that opened this section has been removed;
+        // it had no `src` and rendered an "Image needed" slot. The finding it
+        // was going to illustrate is in the prose directly below.
         body: [
-          {
-            image: {
-              label: 'The first screen of the budgeting flow that two of three users found confusing',
-              alt: 'The entry screen of the budgeting flow used in usability testing',
-            },
-          },
           'Before finalizing the flow, I tested it with 3 users. The task was simple:',
           { note: 'Create a budget category for expenses and income from the first screen.' },
           'All three users successfully completed the task. However, the test revealed an important usability issue — 2 out of 3 users were confused by the first screen.',
@@ -764,13 +759,10 @@ export const projects = [
             sub: {
               number: '01',
               heading: 'Understand the user',
+              // The placeholder image block that opened this sub-section has
+              // been removed; it had no `src` and rendered an "Image needed"
+              // slot.
               body: [
-                {
-                  image: {
-                    label: 'The opening onboarding form — who the user is and what they are looking for',
-                    alt: 'The opening question form in Groshi onboarding',
-                  },
-                },
                 'At the beginning, we introduced a short form to understand who the user was and what they were looking for. This gave the product an opportunity to make onboarding more relevant to the user’s needs instead of presenting everyone with the same generic introduction.',
               ],
             },
@@ -779,13 +771,8 @@ export const projects = [
             sub: {
               number: '02',
               heading: 'Guide users through setup',
+              // Placeholder image block removed, as above.
               body: [
-                {
-                  image: {
-                    label: 'The step-by-step account setup flow',
-                    alt: 'The step-by-step account setup flow in Groshi onboarding',
-                  },
-                },
                 'I created a step-by-step account setup flow that broke the process into manageable stages. Rather than asking users to understand the whole product immediately, onboarding gradually introduced the information needed to get started.',
                 'The result was a more guided entry into a product that could otherwise feel complex from the first interaction.',
               ],
@@ -968,19 +955,14 @@ export const projects = [
       },
       {
         heading: 'From a complex product to a simple story',
+        // This section previously opened with a placeholder image block and no
+        // `src`, reserved on the grounds that a seven-step narrative cannot be
+        // shown with one screenshot and reusing the hero would say nothing about
+        // the progression. That reasoning was about whether to *fill* the slot;
+        // it was not an argument for showing a reader an empty labelled box. The
+        // block is gone. The sequence it was standing in for is the `note` line
+        // below, which carries the same seven steps in text.
         body: [
-          {
-            // Left as a placeholder, deliberately. The three supplied images are
-            // the hero, the two hero variants and nothing else — there is no
-            // capture of the sections below the fold, and no way to show a
-            // seven-step narrative with a picture of one of those steps. Putting
-            // the hero here would fill the box and say nothing about the
-            // progression the paragraph underneath is describing.
-            image: {
-              label: 'The page narrative — problem, product, how it works, features, use cases, outcomes, conversion',
-              alt: 'The NOXS landing page narrative structure',
-            },
-          },
           'I started by understanding the product positioning and its audience: developers, project managers, and digital leads.',
           'The core challenge was translating a technical B2B SaaS concept into a visual story that could be understood without requiring visitors to understand the underlying technology first. I structured the experience around a progressive narrative:',
           { note: 'Problem → Product → How it works → Features → Use cases → Outcomes → Conversion' },
@@ -1009,18 +991,9 @@ export const projects = [
       },
       {
         heading: 'Designing for conversion',
+        // Placeholder image block removed, as above. CTA placement is a claim
+        // about the whole page, and the prose below now carries it alone.
         body: [
-          {
-            // Also a placeholder, for the same reason as the narrative slot
-            // above: CTA placement is a claim about the whole page and can only
-            // be shown by the whole page. The pair itself is already shown in
-            // `stack.jpg` at the top of the case study — what is missing here is
-            // the scroll that would show the pattern repeating.
-            image: {
-              label: 'Primary and secondary CTA placement across the page',
-              alt: 'CTA placement across the NOXS landing page',
-            },
-          },
           'Because NOXS is a B2B SaaS product, the website wasn’t just an informational experience. It was also part of the acquisition funnel.',
           'I designed the information flow to move visitors from problem awareness, through understanding, trust, and interest, to a demo booking. Primary and secondary CTAs were placed throughout the experience so that users could take action once they had enough context.',
           'The page also used concrete outcomes and use cases to make the product’s value more tangible.',
@@ -1191,19 +1164,9 @@ export const projects = [
   },
 ]
 
-export const testimonials = [
-  {
-    quote:
-      'Darya turns vague problems into shipped product. Rare combination of craft and follow-through.',
-    name: 'Priya Raman',
-    title: 'VP Product, Northwind Labs',
-  },
-  {
-    quote: 'The design system work paid for itself in the first quarter.',
-    name: 'Jonas Weber',
-    title: 'Engineering Lead',
-  },
-]
+// The `testimonials` array lived here and has been removed with the "Words from"
+// section that rendered it. It held two quotes attributed to a named person at
+// a named company. Nothing else in the app referenced it.
 
 export function getProject(slug) {
   return projects.find((p) => p.slug === slug)

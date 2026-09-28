@@ -1,4 +1,4 @@
-import { experience, projects, testimonials } from '../data.js'
+import { experience, projects } from '../data.js'
 import AboutEditorial from '../components/AboutEditorial.jsx'
 import HeroVibes from '../components/HeroVibes.jsx'
 import ProjectCard from '../components/ProjectCard.jsx'
@@ -30,9 +30,11 @@ function ExperienceRows() {
 // made, this says where it was made.
 //
 // It gets the full container. It used to share a two-column row with the
-// testimonials and took seven of twelve columns, but the rows are a three-column
-// data table — period, role, notes — and the notes column is the only one worth
-// reading, so it was being squeezed for the sake of sitting beside two quotes.
+// testimonials section and took seven of twelve columns, but the rows are a
+// three-column data table — period, role, notes — and the notes column is the
+// only one worth reading, so it was being squeezed for the sake of sitting
+// beside two quotes. The testimonials have since been removed from the page
+// entirely; this note is kept because the width decision still stands.
 function Experience() {
   return (
     <section id="experience" className="container-page pad-section">
@@ -44,34 +46,16 @@ function Experience() {
   )
 }
 
-// Testimonials, after About rather than beside the experience rows. The quotes
-// are about the person, so they belong next to the section that introduces the
-// person; putting them two sections earlier asked the reader to weigh a
-// reference from someone they had not been told anything about yet.
-function References() {
-  return (
-    <section id="references" className="container-page border-t border-hairline pad-section">
-      <h2 className="mb-8 font-display text-h2 font-semibold tracking-[-0.02em]">
-        Words from
-      </h2>
-      {/* Two cards on one row rather than two stacked in a narrow column: the
-          quotes are one to two lines each, and a full-width card holding two
-          lines of text is a very wide, very short rectangle. */}
-      <div className="grid gap-4 sm:grid-cols-2">
-        {testimonials.map((t) => (
-          <figure key={t.name} className="card-surface">
-            <blockquote className="text-lg leading-snug font-medium text-balance">
-              &ldquo;{t.quote}&rdquo;
-            </blockquote>
-            <figcaption className="label-meta mt-4">
-              {t.name} / {t.title}
-            </figcaption>
-          </figure>
-        ))}
-      </div>
-    </section>
-  )
-}
+// The "Words from" testimonials section was here until it was removed. The
+// section, the `References` component and the `testimonials` array in data.js
+// all went together; nothing else in the app read any of them.
+//
+// The case for removing it: the quotes were attributed to a named person at a
+// named company, which is a claim about a relationship rather than about the
+// work, and a portfolio that cannot show the reference is better off not
+// gesturing at one. If they come back, the previous arrangement — two cards on
+// one row, after About and before the footer — was deliberate, and the reason
+// is in the git history of this file.
 
 // First screen is full-bleed: no canvas, no frame, no max-width wrapper. The
 // hero fills the viewport below the nav, and the projects grid runs edge to
@@ -114,7 +98,6 @@ function FirstScreen() {
 //   experience  where the work was done — proof, before the pitch
 //   services    what they can hire for
 //   about       who they are, read slowly
-//   references  what other people say about them
 //
 // Experience sits between the work and the services on purpose: the work is the
 // claim, the experience is the evidence for it, and the services are what the
@@ -130,7 +113,10 @@ function FirstScreen() {
 // with the `statement` field in `profile` and the `--text-statement` token.
 //
 // The page also gets quieter as it goes: full-bleed type, then data rows, then
-// cards, then a centred column, then two small quote cards.
+// cards, then a centred column. The "Words from" testimonials used to close it,
+// as two small quote cards after the About column. That section is gone — see
+// the note where `References` used to be defined — and the page now ends on
+// About, which is the same shape of ending minus the borrowed authority.
 export default function Home() {
   return (
     <main>
@@ -138,7 +124,6 @@ export default function Home() {
       <Experience />
       <Services />
       <AboutEditorial />
-      <References />
     </main>
   )
 }

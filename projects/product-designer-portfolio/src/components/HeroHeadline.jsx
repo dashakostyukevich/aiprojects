@@ -5,15 +5,29 @@ import SplitReveal from './SplitReveal.jsx'
 // the line count is emergent from the measure rather than hardcoded, so the
 // block reflows on narrow screens.
 //
-// `em` used to mean italic. Space Grotesk ships no italic cut, so the browser
-// would synthesise a slanted oblique, which looks broken next to the upright
-// text. Emphasis is weight instead: 600 against the surrounding 400, which the
-// variable font supports natively. The data key is unchanged, so restoring real
-// italics later is a one-line change here.
+// `em` carries the same `highlight` treatment the About column and the footer
+// use: the accent as a marker block behind the phrase, with `text-accent-ink` on
+// top. It used to be `font-semibold` — 600 against 400 — and the reason it was
+// weight rather than the marker is in the git history of this file. In short:
+// the hero is the one place on the site where a 400/600 pair was doing real
+// work, because at `uppercase` and up to 44px the caps have so little stroke
+// contrast that a weight shift alone was nearly invisible. The marker block
+// reads at any size and in any case, so the hero no longer has to shout to be
+// seen. Weight is kept *underneath* the highlight as well, so the phrase is
+// still differentiated by more than colour alone.
+//
+// `box-decoration-break: clone` inside the utility is what makes this survive
+// the headline wrapping across three lines: without it a phrase broken over two
+// lines gets a full-height block on the first and a full-height block on the
+// second, with the background butting into the line gap. With it, each fragment
+// of the phrase gets its own padding and the rag reads as intentional.
 //
 // The words are wrapped in `SplitReveal`, which masks and slides each one in,
 // scrubbed by scroll (see that component). It is a heading, so it is <h1> via
-// the `as` prop.
+// the `as` prop. `data-split` is what lets the marker survive that split: the
+// wrapper's classes are copied onto every word it produces, and the spaces
+// between those words carry the class too, so a two-word phrase stays one
+// continuous block rather than two blocks with a gap.
 //
 // `className` is appended rather than ignored, because the hero sets its own
 // measure. The headline is not a full-bleed line across the page any more, it
@@ -27,11 +41,8 @@ export default function HeroHeadline({ className = '' }) {
     >
       {profile.headline.map((part, i) => (
         // `data-split` tells SplitReveal to break this run into words so each
-        // gets its own mask, while keeping `font-semibold` on all of them.
-        // 600, not 500: uppercase caps have far less stroke contrast than
-        // lowercase, so a 400/500 pair is almost invisible once the text is
-        // shouted. 600 against 400 reads clearly at this size.
-        <span key={i} data-split className={part.em ? 'font-semibold' : undefined}>
+        // gets its own mask, while keeping the run's classes on all of them.
+        <span key={i} data-split className={part.em ? 'highlight font-semibold' : undefined}>
           {part.text}
         </span>
       ))}

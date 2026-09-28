@@ -1,0 +1,225 @@
+- generic [ref=f148e3]:
+  - banner [ref=f148e4]:
+    - generic [ref=f148e5]:
+      - link "Darya Kastsiukevich, home" [ref=f148e6] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=f148e10]:
+        - link "Projects" [ref=f148e11] [cursor=pointer]:
+          - /url: /#work
+          - text: "[Projects]"
+        - link "About" [ref=f148e12] [cursor=pointer]:
+          - /url: /#about
+          - text: "[About]"
+        - link "Contact" [ref=f148e13] [cursor=pointer]:
+          - /url: /#contact
+          - text: "[Contact]"
+  - main [ref=f148e15]:
+    - article [ref=f148e16]:
+      - generic [ref=f148e17]:
+        - link "← All work" [ref=f148e18] [cursor=pointer]:
+          - /url: /#work
+        - generic [ref=f148e19]:
+          - heading "NOXS" [level=1] [ref=f148e20]
+          - generic [ref=f148e21]: "2025"
+        - paragraph [ref=f148e22]: Turning a complex AI product into a clear B2B experience. A conversion-focused landing page for an AI delivery assistant, including an A/B test on the hero.
+        - list [ref=f148e23]:
+          - listitem [ref=f148e24]: Web design
+          - listitem [ref=f148e25]: UX
+          - listitem [ref=f148e26]: Conversion
+          - listitem [ref=f148e27]: A/B testing
+      - img "The NOXS landing page hero — “AI Delivery Assistant” with the product visual, a Book a Demo button and a How it works button" [ref=f148e30]
+      - generic [ref=f148e31]:
+        - generic [ref=f148e32]:
+          - generic [ref=f148e33]:
+            - paragraph [ref=f148e34]: NOXS is an AI-powered virtual assistant for technical teams. It connects with tools such as Slack, Jira, Confluence, and Notion to help teams monitor delivery, detect blockers, automate routine tasks, and turn fragmented project data into actionable information.
+            - paragraph [ref=f148e35]: The challenge was to turn a technically complex B2B SaaS product into a website that visitors could understand quickly — and ultimately convince them to book a demo.
+          - paragraph [ref=f148e36]: "A/B test: the direct, benefit-led hero won"
+        - complementary [ref=f148e37]:
+          - generic [ref=f148e38]:
+            - generic [ref=f148e39]:
+              - term [ref=f148e40]: Role
+              - definition [ref=f148e41]: UX/UI and Web Designer
+            - generic [ref=f148e42]:
+              - term [ref=f148e43]: Timeline
+              - definition [ref=f148e44]: 1 month
+            - generic [ref=f148e45]:
+              - term [ref=f148e46]: Team
+              - definition [ref=f148e47]: With product and marketing
+            - generic [ref=f148e48]:
+              - term [ref=f148e49]: Platform
+              - definition [ref=f148e50]: Webflow-ready design
+            - generic [ref=f148e51]:
+              - term [ref=f148e52]: Status
+              - definition [ref=f148e53]: Shipped
+      - generic [ref=f148e54]:
+        - generic [ref=f148e56]:
+          - heading "The challenge" [level=2] [ref=f148e57]
+          - generic [ref=f148e59]:
+            - figure "The integration row and the primary CTA, in one crop. NOXS does not ask the team to move — the four tools they already live in are named under the button that asks for the demo, so the pitch and the proof are the same object." [ref=f148e60]:
+              - img "The Book a Demo and How it works buttons above the Confluence, Jira, GitLab and GitHub integration logos" [ref=f148e61]
+            - paragraph [ref=f148e63]: "Technical teams already work across many tools: Slack for communication, Jira for tasks, Confluence for documentation, Git for development. NOXS was designed to connect these fragmented sources and provide an additional layer of intelligence without forcing teams to adopt another complicated interface."
+            - paragraph [ref=f148e64]: "The website needed to answer three questions almost immediately:"
+            - paragraph [ref=f148e65]: What is NOXS? How does it fit into my existing workflow? Why should I care?
+            - paragraph [ref=f148e66]: The goal was to create a clear, persuasive landing page that could explain the product, build trust, and generate new leads.
+        - generic [ref=f148e68]:
+          - heading "From a complex product to a simple story" [level=2] [ref=f148e69]
+          - generic [ref=f148e71]:
+            - paragraph [ref=f148e72]: "I started by understanding the product positioning and its audience: developers, project managers, and digital leads."
+            - paragraph [ref=f148e73]: "The core challenge was translating a technical B2B SaaS concept into a visual story that could be understood without requiring visitors to understand the underlying technology first. I structured the experience around a progressive narrative:"
+            - paragraph [ref=f148e74]: Problem → Product → How it works → Features → Use cases → Outcomes → Conversion
+            - paragraph [ref=f148e75]: Instead of starting with technical details, the page first established the problem — delivery chaos, fragmented data, missed blockers, and inefficient processes — and then positioned NOXS as the solution.
+        - generic [ref=f148e77]:
+          - heading "Making the value proposition obvious" [level=2] [ref=f148e78]
+          - generic [ref=f148e80]:
+            - paragraph [ref=f148e81]: "The product offered a lot of functionality:"
+            - list [ref=f148e82]:
+              - listitem [ref=f148e83]:
+                - generic [ref=f148e85]: blocker and technical debt detection
+              - listitem [ref=f148e86]:
+                - generic [ref=f148e88]: sprint planning and efficiency insights
+              - listitem [ref=f148e89]:
+                - generic [ref=f148e91]: real-time KPIs
+              - listitem [ref=f148e92]:
+                - generic [ref=f148e94]: smart search across tools
+              - listitem [ref=f148e95]:
+                - generic [ref=f148e97]: automated reporting
+              - listitem [ref=f148e98]:
+                - generic [ref=f148e100]: historical delivery insights
+            - paragraph [ref=f148e101]: The challenge was not to show everything at once. It was to create a hierarchy that allowed visitors to understand the value first and explore the functionality second. The design therefore combined concise messaging with visual demonstrations and progressive information disclosure.
+            - paragraph [ref=f148e102]: Don’t make users understand the technology before they understand the benefit.
+        - generic [ref=f148e104]:
+          - heading "Designing for conversion" [level=2] [ref=f148e105]
+          - generic [ref=f148e107]:
+            - paragraph [ref=f148e108]: Because NOXS is a B2B SaaS product, the website wasn’t just an informational experience. It was also part of the acquisition funnel.
+            - paragraph [ref=f148e109]: I designed the information flow to move visitors from problem awareness, through understanding, trust, and interest, to a demo booking. Primary and secondary CTAs were placed throughout the experience so that users could take action once they had enough context.
+            - paragraph [ref=f148e110]: The page also used concrete outcomes and use cases to make the product’s value more tangible.
+        - generic [ref=f148e112]:
+          - heading "Testing the first impression" [level=2] [ref=f148e113]
+          - generic [ref=f148e115]:
+            - figure "The whole test, in one frame. Everything below the headline is identical; what changed is the framing and the second button. A visitor who already knows the category gets “intelligence layer above your tech infrastructure” from A, and everyone else gets “AI Delivery Assistant” from B — and the second one is the one that shipped." [ref=f148e116]:
+              - 'img "The two NOXS hero variants side by side: variant A reading Intelligence layer above your tech infrastructure, variant B reading AI Delivery Assistant" [ref=f148e117]'
+            - paragraph [ref=f148e119]: The hero section was particularly important. For a lead-generation landing page, the first screen needs to communicate the product’s value quickly and give visitors a clear next step.
+            - paragraph [ref=f148e120]: "Instead of relying only on intuition, I tested two different approaches:"
+            - generic [ref=f148e121]:
+              - heading "A Conceptual" [level=3] [ref=f148e122]:
+                - generic [ref=f148e123]: A
+                - generic [ref=f148e124]: Conceptual
+              - paragraph [ref=f148e126]: Positioned NOXS as a strategic technology layer and introduced the product more conceptually.
+            - generic [ref=f148e127]:
+              - heading "B Direct" [level=3] [ref=f148e128]:
+                - generic [ref=f148e129]: B
+                - generic [ref=f148e130]: Direct
+              - paragraph [ref=f148e132]: Explained what NOXS does more explicitly and focused on the immediate benefit.
+            - paragraph [ref=f148e133]: Both variants used the same supporting paragraph, but differed in headline framing, CTA hierarchy, and supporting elements.
+        - generic [ref=f148e135]:
+          - heading "What the data showed" [level=2] [ref=f148e136]
+          - generic [ref=f148e138]:
+            - paragraph [ref=f148e139]: I used Google Analytics to track conversion behavior and Hotjar to analyze scroll depth and interaction through heatmaps. The direct, benefit-oriented version performed better in overall engagement and conversion.
+            - paragraph [ref=f148e140]: "The testing also revealed several useful patterns:"
+            - list [ref=f148e141]:
+              - listitem [ref=f148e142]:
+                - generic [ref=f148e144]: a shorter, action-oriented headline improved clarity for new visitors
+              - listitem [ref=f148e145]:
+                - generic [ref=f148e147]: users interacted more with the main section in the direct version
+              - listitem [ref=f148e148]:
+                - generic [ref=f148e150]: adding a secondary CTA increased views
+              - listitem [ref=f148e151]:
+                - generic [ref=f148e153]: communicating monetary benefits increased interest in booking a demo
+            - paragraph [ref=f148e154]: For a complex B2B product, clarity can be more persuasive than sophistication.
+        - generic [ref=f148e156]:
+          - heading "Visual direction" [level=2] [ref=f148e157]
+          - generic [ref=f148e159]:
+            - 'figure "The product visual doing the explaining: a gradient field, a release-notes action, a task marked approved and the sprint board it came from. It is the only part of the page that shows the product doing something, and it sits beside the headline rather than below it." [ref=f148e160]':
+              - img "The NOXS product visual — a gradient field with a release-notes action, an approved task notification and a sprint board" [ref=f148e161]
+            - paragraph [ref=f148e163]: "The visual system was designed to communicate the same qualities the product promised:"
+            - generic [ref=f148e164]:
+              - heading "Clarity" [level=3] [ref=f148e165]
+              - paragraph [ref=f148e168]: Clean hierarchy and concise information.
+            - generic [ref=f148e169]:
+              - heading "Technology" [level=3] [ref=f148e170]
+              - paragraph [ref=f148e173]: Modern UI patterns and product-focused visuals.
+            - generic [ref=f148e174]:
+              - heading "Structure" [level=3] [ref=f148e175]
+              - paragraph [ref=f148e178]: Organized layouts that make complex information easier to scan.
+            - generic [ref=f148e179]:
+              - heading "Trust" [level=3] [ref=f148e180]
+              - paragraph [ref=f148e183]: Concrete capabilities, integrations, use cases, and outcomes rather than abstract AI messaging.
+            - paragraph [ref=f148e184]: The result was a landing page designed to feel sophisticated without becoming difficult to understand.
+        - generic [ref=f148e186]:
+          - heading "Designed for implementation" [level=2] [ref=f148e187]
+          - generic [ref=f148e189]:
+            - paragraph [ref=f148e190]: "The final layouts were prepared with responsive behavior and Webflow development in mind. The design system and page structure were built to support:"
+            - list [ref=f148e191]:
+              - listitem [ref=f148e192]:
+                - generic [ref=f148e194]: responsive layouts
+              - listitem [ref=f148e195]:
+                - generic [ref=f148e197]: reusable components
+              - listitem [ref=f148e198]:
+                - generic [ref=f148e200]: interactive sections
+              - listitem [ref=f148e201]:
+                - generic [ref=f148e203]: clear CTA patterns
+              - listitem [ref=f148e204]:
+                - generic [ref=f148e206]: feature and use-case sections
+              - listitem [ref=f148e207]:
+                - generic [ref=f148e209]: conversion-focused content hierarchy
+            - paragraph [ref=f148e210]: This allowed the visual design to translate into a practical marketing website rather than remaining a static concept.
+        - generic [ref=f148e212]:
+          - heading "Outcome" [level=2] [ref=f148e213]
+          - generic [ref=f148e215]:
+            - paragraph [ref=f148e216]: The project resulted in a B2B SaaS landing page that combined product storytelling, visual design, and conversion experimentation.
+            - paragraph [ref=f148e217]: More importantly, the design decisions weren’t based entirely on subjective preference. The A/B test demonstrated that visitors responded better to a more direct explanation of the product and its benefits. This gave the team a clearer direction for future iterations of the website.
+        - generic [ref=f148e219]:
+          - heading "What I learned" [level=2] [ref=f148e220]
+          - generic [ref=f148e222]:
+            - generic [ref=f148e223]:
+              - heading "Clarity beats complexity" [level=3] [ref=f148e224]
+              - paragraph [ref=f148e227]: When the product itself is technically complex, the website doesn’t need to be. The testing showed that first-time visitors responded better when the product’s value was communicated directly rather than conceptually.
+            - generic [ref=f148e228]:
+              - heading "Design decisions should be testable" [level=3] [ref=f148e229]
+              - paragraph [ref=f148e232]: The A/B test turned a subjective question — which hero feels better? — into a measurable product question.
+            - generic [ref=f148e233]:
+              - heading "Product and marketing need to work together" [level=3] [ref=f148e234]
+              - paragraph [ref=f148e237]: For B2B SaaS, the website sits between product understanding and business goals. Working closely with product and marketing helped balance technical accuracy with a clear commercial proposition.
+        - figure "What the A/B test showed" [ref=f148e238]:
+          - blockquote [ref=f148e239]: For a complex B2B product, clarity can be more persuasive than sophistication.
+    - generic [ref=f148e241]:
+      - heading "More work" [level=2] [ref=f148e243]
+      - generic [ref=f148e244]:
+        - article [ref=f148e245]:
+          - link [ref=f148e246] [cursor=pointer]:
+            - /url: /work/arastelle
+            - img "The BASTION ISR tethered station, the product at the centre of the ARASTELLE site" [ref=f148e247]
+            - generic [aria-hidden]:
+              - generic:
+                - generic: "Designed and shipped: Figma to responsive Webflow"
+                - generic: View case study →
+          - generic [ref=f148e248]:
+            - paragraph [ref=f148e249]: ARASTELLE
+            - generic [ref=f148e250]: "2026"
+        - article [ref=f148e251]:
+          - link [ref=f148e252] [cursor=pointer]:
+            - /url: /work/groshi
+            - img "The Groshi categories screen, with a category selected and its year-over-year chart" [ref=f148e253]
+            - generic [aria-hidden]:
+              - generic:
+                - generic: "Structure before scale: researched, tested, and implemented"
+                - generic: View case study →
+          - generic [ref=f148e254]:
+            - paragraph [ref=f148e255]: Groshi
+            - generic [ref=f148e256]: "2025"
+  - contentinfo [ref=f148e257]:
+    - generic [ref=f148e258]:
+      - heading "Let’s make something clear and calm ." [level=2] [ref=f148e259]:
+        - generic [ref=f148e260]: Let’s
+        - generic [ref=f148e262]: make
+        - generic [ref=f148e264]: something
+        - generic [ref=f148e266]:
+          - generic [ref=f148e267]: clear
+          - generic [ref=f148e269]: and
+          - generic [ref=f148e271]: calm
+        - generic [ref=f148e273]: .
+      - link "Back to work" [ref=f148e276] [cursor=pointer]:
+        - /url: "#work"
+      - link "LinkedIn" [ref=f148e278] [cursor=pointer]:
+        - /url: https://www.linkedin.com/in/darya-kastsiukevich/
+      - paragraph [ref=f148e279]: © 2026 Darya Kastsiukevich / Product Designer

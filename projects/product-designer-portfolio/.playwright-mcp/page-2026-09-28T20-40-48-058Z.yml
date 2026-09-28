@@ -1,0 +1,165 @@
+- generic [ref=f136e3]:
+  - banner [ref=f136e4]:
+    - generic [ref=f136e5]:
+      - link "Darya Kastsiukevich, home" [ref=f136e6] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=f136e10]:
+        - link "Projects" [ref=f136e11] [cursor=pointer]:
+          - /url: /#work
+          - text: "[Projects]"
+        - link "About" [ref=f136e12] [cursor=pointer]:
+          - /url: /#about
+          - text: "[About]"
+        - link "Contact" [ref=f136e13] [cursor=pointer]:
+          - /url: /#contact
+          - text: "[Contact]"
+  - main [ref=f136e15]:
+    - generic [ref=f136e17]:
+      - generic [ref=f136e18]:
+        - list [aria-hidden]:
+          - listitem:
+            - generic: First coffee
+          - listitem:
+            - generic: Weekend baking
+          - listitem:
+            - generic: Film camera
+          - listitem:
+            - generic: Weekdays baking
+          - listitem:
+            - generic: Smiley days
+          - listitem:
+            - generic: Red-eye flights
+        - generic [ref=f136e19]:
+          - paragraph [ref=f136e20]: Product Designer · Gdansk, Poland
+          - heading "I design calm, useful interfaces for complex products that people actually enjoy using." [level=1] [ref=f136e21]:
+            - generic [ref=f136e22]:
+              - generic [ref=f136e23]: I
+              - generic [ref=f136e25]: design
+              - generic [ref=f136e27]: calm,
+            - generic [ref=f136e29]:
+              - generic [ref=f136e30]: useful
+              - generic [ref=f136e32]: interfaces
+            - generic [ref=f136e34]: for
+            - generic [ref=f136e37]:
+              - generic [ref=f136e38]: complex
+              - generic [ref=f136e40]: products
+            - generic [ref=f136e42]:
+              - generic [ref=f136e43]: that
+              - generic [ref=f136e45]: people
+              - generic [ref=f136e47]: actually
+              - generic [ref=f136e49]: enjoy
+              - generic [ref=f136e51]: using.
+          - paragraph [ref=f136e53]: Besides my job, I enjoy traveling, experimenting with baking, and organizing my home. I also love going for walks and taking photos—I really enjoy that!
+          - link "See the work" [ref=f136e55] [cursor=pointer]:
+            - /url: "#work"
+      - paragraph [ref=f136e56]: Open to new projects, 2026
+    - generic [ref=f136e60]:
+      - article [ref=f136e63]:
+        - link [ref=f136e64] [cursor=pointer]:
+          - /url: /work/arastelle
+          - img "The BASTION ISR tethered station, the product at the centre of the ARASTELLE site" [ref=f136e65]
+          - generic [aria-hidden]:
+            - generic:
+              - generic: "Designed and shipped: Figma to responsive Webflow"
+              - generic: View case study →
+        - generic [ref=f136e66]:
+          - paragraph [ref=f136e67]: ARASTELLE
+          - generic [ref=f136e68]: "2026"
+      - article [ref=f136e71]:
+        - link [ref=f136e72] [cursor=pointer]:
+          - /url: /work/groshi
+          - img "The Groshi categories screen, with a category selected and its year-over-year chart" [ref=f136e73]
+          - generic [aria-hidden]:
+            - generic:
+              - generic: "Structure before scale: researched, tested, and implemented"
+              - generic: View case study →
+        - generic [ref=f136e74]:
+          - paragraph [ref=f136e75]: Groshi
+          - generic [ref=f136e76]: "2025"
+      - article [ref=f136e79]:
+        - link [ref=f136e80] [cursor=pointer]:
+          - /url: /work/noxs
+          - 'img "The NOXS landing page: the AI Delivery Assistant hero, with the product visual beside it and the Confluence, Jira, GitLab and GitHub integrations below" [ref=f136e81]'
+          - generic [aria-hidden]:
+            - generic:
+              - generic: "A/B test: the direct, benefit-led hero won"
+              - generic: View case study →
+        - generic [ref=f136e82]:
+          - paragraph [ref=f136e83]: NOXS
+          - generic [ref=f136e84]: "2025"
+    - generic [ref=f136e85]:
+      - heading "Experience" [level=2] [ref=f136e86]
+      - generic [ref=f136e87]:
+        - generic [ref=f136e88]:
+          - generic [ref=f136e89]: Nov 2021 – Present
+          - generic [ref=f136e90]: Freelance Product / Web Designer, Upwork
+          - generic [ref=f136e91]: Designed 100+ web and digital product interfaces for SaaS, FinTech, and data-driven businesses, covering user flows, UX/UI, responsive design, prototyping, and design systems. Collaborated closely with clients and developers throughout the design and implementation process, using Figma and AI-assisted workflows to explore, iterate, and deliver developer-ready solutions.
+        - generic [ref=f136e92]:
+          - generic [ref=f136e93]: Jan 2026 – Sep 2026
+          - generic [ref=f136e94]: Webflow Designer, MyStudio
+          - generic [ref=f136e95]: Designed and developed responsive websites in Webflow, translating Figma concepts into polished, production-ready digital experiences. Worked with reusable components, CMS, interactions, and responsive layouts while collaborating with clients and developers to refine designs and solve implementation challenges.
+        - generic [ref=f136e96]:
+          - generic [ref=f136e97]: Mar 2021 – Sep 2025
+          - generic [ref=f136e98]: Web Designer, LinguaTrip
+          - generic [ref=f136e99]: Designed user flows and interfaces for an education mobile app, focusing on onboarding, course discovery, and improving the overall user experience. Used analytics, testing, and user feedback to iterate on designs, contributing to an increase in conversion from 18% to 22%.
+        - generic [ref=f136e100]:
+          - generic [ref=f136e101]: Jun 2022 – Feb 2023
+          - generic [ref=f136e102]: Web Designer, Wizart
+          - generic [ref=f136e103]: Designed and tested product features and interface concepts to validate product hypotheses and improve user experiences. Collaborated with analytics teams to interpret A/B test results and used data-driven insights to refine UX and product decisions.
+    - generic [ref=f136e104]:
+      - generic [ref=f136e105]:
+        - heading "What I do" [level=2] [ref=f136e106]:
+          - generic [ref=f136e107]: What
+          - generic [ref=f136e109]: I
+          - generic [ref=f136e111]: do
+        - list [ref=f136e113]:
+          - listitem [ref=f136e114]: Services
+          - listitem [ref=f136e115]: How I work
+      - paragraph [ref=f136e116]: Three ways I usually get pulled into a product. Most engagements combine them — the split depends on how much of the problem is still undefined when we start.
+      - generic [ref=f136e117]:
+        - generic [ref=f136e118]:
+          - generic [ref=f136e119]: "01"
+          - generic [ref=f136e120]:
+            - heading "Product Design" [level=3] [ref=f136e121]
+            - paragraph [ref=f136e122]: I design digital products from early concepts to polished, developer-ready interfaces. I work on user flows, information architecture, interaction design, responsive UI, prototyping, and design systems, with a focus on making complex products simple and intuitive.
+        - generic [ref=f136e123]:
+          - generic [ref=f136e124]: "02"
+          - generic [ref=f136e125]:
+            - heading "Webflow Development" [level=3] [ref=f136e126]
+            - paragraph [ref=f136e127]: I turn Figma designs into responsive, production-ready websites in Webflow. I build scalable components, CMS-powered pages, interactions, and animations while keeping the design accurate, accessible, and easy to maintain.
+        - generic [ref=f136e128]:
+          - generic [ref=f136e129]: "03"
+          - generic [ref=f136e130]:
+            - heading "UX & Design Systems" [level=3] [ref=f136e131]
+            - paragraph [ref=f136e132]: I improve existing digital products by identifying usability issues, simplifying user flows, and creating consistent UI systems. From UX audits and iterative improvements to components, variants, and UI guidelines, I help products become clearer, more scalable, and easier to use.
+    - generic [ref=f136e135]:
+      - heading "[. About .]" [level=2] [ref=f136e136]:
+        - generic [ref=f136e137]: "[."
+        - generic [ref=f136e140]: About
+        - generic [ref=f136e143]: .]
+      - paragraph [ref=f136e147]: I am a product designer. I turn ambiguous, half-specified problems into software people can pick up and use without a tutorial.
+      - figure [ref=f136e148]:
+        - figure "Image needed Portrait of Darya Kastsiukevich" [ref=f136e151]:
+          - generic [ref=f136e153]:
+            - generic [ref=f136e154]: Image needed
+            - generic [ref=f136e155]: Portrait of Darya Kastsiukevich
+      - paragraph [ref=f136e157]:
+        - text: "I work end to end: research and framing, flows and wireframes, high-fidelity UI, then shipping alongside engineers, measuring what happens after launch. I like the work to be"
+        - emphasis [ref=f136e158]: clear first and unmistakably mine
+        - text: second.
+  - contentinfo [ref=f136e159]:
+    - generic [ref=f136e160]:
+      - heading "Let’s make something clear and calm ." [level=2] [ref=f136e161]:
+        - generic [ref=f136e162]: Let’s
+        - generic [ref=f136e164]: make
+        - generic [ref=f136e166]: something
+        - generic [ref=f136e168]:
+          - generic [ref=f136e169]: clear
+          - generic [ref=f136e171]: and
+          - generic [ref=f136e173]: calm
+        - generic [ref=f136e175]: .
+      - link "Back to work" [ref=f136e178] [cursor=pointer]:
+        - /url: "#work"
+      - link "LinkedIn" [ref=f136e180] [cursor=pointer]:
+        - /url: https://www.linkedin.com/in/darya-kastsiukevich/
+      - paragraph [ref=f136e181]: © 2026 Darya Kastsiukevich / Product Designer
