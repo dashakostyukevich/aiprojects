@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      /* Not shipped. A scratch page used to compose the responsive comparison
+         image for the ARASTELLE case study: the same section at 1440 and at
+         390, side by side, so the case study can show that the build reflows
+         rather than only asserting it. */
+      * { box-sizing: border-box; margin: 0; }
+      body {
+        background: #0a0a0a;
+        width: 1440px;
+        height: 810px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        padding: 48px;
+        font-family: -apple-system, system-ui, sans-serif;
+      }
+      figure { display: flex; flex-direction: column; gap: 14px; }
+      .desktop img {
+        width: 900px;
+        border-radius: 6px;
+        display: block;
+        border: 1px solid rgb(255 255 255 / 0.14);
+      }
+      .phone { width: 300px; }
+      .phone .frame {
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid rgb(255 255 255 / 0.14);
+      }
+      .phone img { width: 100%; display: block; }
+      figcaption {
+        color: rgb(255 255 255 / 0.55);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+    </style>
+  </head>
+  <body>
+    <figure class="desktop">
+      <img src="./source-solution.png" alt="" />
+      <figcaption>1440 — specification table beside the product</figcaption>
+    </figure>
+    <figure class="phone">
+      <div class="frame"><img src="./source-mobile-solution.png" alt="" /></div>
+      <figcaption>390 — stacked, table first</figcaption>
+    </figure>
+  </body>
+</html>

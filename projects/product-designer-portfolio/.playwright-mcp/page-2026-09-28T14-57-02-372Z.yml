@@ -1,0 +1,173 @@
+- generic [ref=f28e3]:
+  - banner [ref=f28e4]:
+    - generic [ref=f28e5]:
+      - link "Alex Morgan, home" [ref=f28e6] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=f28e10]:
+        - link "Projects" [ref=f28e11] [cursor=pointer]:
+          - /url: /#work
+          - text: "[Projects]"
+        - link "About" [ref=f28e12] [cursor=pointer]:
+          - /url: /#about
+          - text: "[About]"
+        - link "Contact" [ref=f28e13] [cursor=pointer]:
+          - /url: /#contact
+          - text: "[Contact]"
+  - main [ref=f28e15]:
+    - generic [ref=f28e17]:
+      - generic [ref=f28e18]:
+        - list [aria-hidden]:
+          - listitem:
+            - generic: First coffee
+          - listitem:
+            - generic: Weekend baking
+          - listitem:
+            - generic: Film camera
+          - listitem:
+            - generic: The laptop
+          - listitem:
+            - generic: Smiley days
+          - listitem:
+            - generic: Red-eye flights
+        - generic [ref=f28e19]:
+          - heading "I design calm, useful interfaces for complex products that people actually enjoy using." [level=1] [ref=f28e20]:
+            - generic [ref=f28e21]:
+              - generic [ref=f28e22]: I
+              - generic [ref=f28e24]: design
+              - generic [ref=f28e26]: calm,
+            - generic [ref=f28e28]:
+              - generic [ref=f28e29]: useful
+              - generic [ref=f28e31]: interfaces
+            - generic [ref=f28e33]: for
+            - generic [ref=f28e36]:
+              - generic [ref=f28e37]: complex
+              - generic [ref=f28e39]: products
+            - generic [ref=f28e41]:
+              - generic [ref=f28e42]: that
+              - generic [ref=f28e44]: people
+              - generic [ref=f28e46]: actually
+              - generic [ref=f28e48]: enjoy
+              - generic [ref=f28e50]: using.
+          - paragraph [ref=f28e52]: Product Designer · Berlin, Germany
+          - link "See the work" [ref=f28e54] [cursor=pointer]:
+            - /url: "#work"
+      - paragraph [ref=f28e55]: Open to new projects, 2026
+    - generic [ref=f28e59]:
+      - article [ref=f28e62]:
+        - link "ARASTELLE, 2026. Image pending, opens the case study." [ref=f28e63] [cursor=pointer]:
+          - /url: /work/arastelle
+          - generic [ref=f28e64]: ARASTELLE
+        - generic [ref=f28e66]:
+          - paragraph [ref=f28e67]: ARASTELLE
+          - generic [ref=f28e68]: "2026"
+      - article [ref=f28e71]:
+        - link "Groshi, 2025. Image pending, opens the case study." [ref=f28e72] [cursor=pointer]:
+          - /url: /work/groshi
+          - figure "Image needed Groshi — accounts overview in the shipped product" [ref=f28e73]:
+            - generic [ref=f28e75]:
+              - generic [ref=f28e76]: Image needed
+              - generic [ref=f28e77]: Groshi — accounts overview in the shipped product
+        - generic [ref=f28e78]:
+          - paragraph [ref=f28e79]: Groshi
+          - generic [ref=f28e80]: "2025"
+      - article [ref=f28e83]:
+        - link "NOXS, 2025. Image pending, opens the case study." [ref=f28e84] [cursor=pointer]:
+          - /url: /work/noxs
+          - figure "Image needed NOXS — the landing page, direct hero variant" [ref=f28e85]:
+            - generic [ref=f28e87]:
+              - generic [ref=f28e88]: Image needed
+              - generic [ref=f28e89]: NOXS — the landing page, direct hero variant
+        - generic [ref=f28e90]:
+          - paragraph [ref=f28e91]: NOXS
+          - generic [ref=f28e92]: "2025"
+    - generic [ref=f28e93]:
+      - heading "Experience" [level=2] [ref=f28e94]
+      - generic [ref=f28e95]:
+        - generic [ref=f28e96]:
+          - generic [ref=f28e97]: Nov 2021 – Present
+          - generic [ref=f28e98]: Freelance Product / Web Designer, Upwork
+          - generic [ref=f28e99]: Designed 100+ web and digital product interfaces for SaaS, FinTech, and data-driven businesses, covering user flows, UX/UI, responsive design, prototyping, and design systems. Collaborated closely with clients and developers throughout the design and implementation process, using Figma and AI-assisted workflows to explore, iterate, and deliver developer-ready solutions.
+        - generic [ref=f28e100]:
+          - generic [ref=f28e101]: Jan 2026 – Sep 2026
+          - generic [ref=f28e102]: Webflow Designer, MyStudio
+          - generic [ref=f28e103]: Designed and developed responsive websites in Webflow, translating Figma concepts into polished, production-ready digital experiences. Worked with reusable components, CMS, interactions, and responsive layouts while collaborating with clients and developers to refine designs and solve implementation challenges.
+        - generic [ref=f28e104]:
+          - generic [ref=f28e105]: Mar 2021 – Sep 2025
+          - generic [ref=f28e106]: Web Designer, LinguaTrip
+          - generic [ref=f28e107]: Designed user flows and interfaces for an education mobile app, focusing on onboarding, course discovery, and improving the overall user experience. Used analytics, testing, and user feedback to iterate on designs, contributing to an increase in conversion from 18% to 22%.
+        - generic [ref=f28e108]:
+          - generic [ref=f28e109]: Jun 2022 – Feb 2023
+          - generic [ref=f28e110]: Web Designer, Wizart
+          - generic [ref=f28e111]: Designed and tested product features and interface concepts to validate product hypotheses and improve user experiences. Collaborated with analytics teams to interpret A/B test results and used data-driven insights to refine UX and product decisions.
+    - generic [ref=f28e112]:
+      - generic [ref=f28e113]:
+        - heading "What I do" [level=2] [ref=f28e114]:
+          - generic [ref=f28e115]: What
+          - generic [ref=f28e117]: I
+          - generic [ref=f28e119]: do
+        - list [ref=f28e121]:
+          - listitem [ref=f28e122]: Services
+          - listitem [ref=f28e123]: How I work
+      - paragraph [ref=f28e124]: Three ways I usually get pulled into a product. Most engagements combine them — the split depends on how much of the problem is still undefined when we start.
+      - generic [ref=f28e125]:
+        - generic [ref=f28e126]:
+          - generic [ref=f28e127]: "01"
+          - generic [ref=f28e128]:
+            - heading "Product Design" [level=3] [ref=f28e129]
+            - paragraph [ref=f28e130]: I design digital products from early concepts to polished, developer-ready interfaces. I work on user flows, information architecture, interaction design, responsive UI, prototyping, and design systems, with a focus on making complex products simple and intuitive.
+        - generic [ref=f28e131]:
+          - generic [ref=f28e132]: "02"
+          - generic [ref=f28e133]:
+            - heading "Webflow Development" [level=3] [ref=f28e134]
+            - paragraph [ref=f28e135]: I turn Figma designs into responsive, production-ready websites in Webflow. I build scalable components, CMS-powered pages, interactions, and animations while keeping the design accurate, accessible, and easy to maintain.
+        - generic [ref=f28e136]:
+          - generic [ref=f28e137]: "03"
+          - generic [ref=f28e138]:
+            - heading "UX & Design Systems" [level=3] [ref=f28e139]
+            - paragraph [ref=f28e140]: I improve existing digital products by identifying usability issues, simplifying user flows, and creating consistent UI systems. From UX audits and iterative improvements to components, variants, and UI guidelines, I help products become clearer, more scalable, and easier to use.
+    - generic [ref=f28e143]:
+      - heading "[. About .]" [level=2] [ref=f28e144]:
+        - generic [ref=f28e145]: "[."
+        - generic [ref=f28e148]: About
+        - generic [ref=f28e151]: .]
+      - paragraph [ref=f28e155]: I am a product designer. I turn ambiguous, half-specified problems into software people can pick up and use without a tutorial.
+      - figure [ref=f28e156]:
+        - figure "Image needed Portrait of Alex Morgan" [ref=f28e159]:
+          - generic [ref=f28e161]:
+            - generic [ref=f28e162]: Image needed
+            - generic [ref=f28e163]: Portrait of Alex Morgan
+      - paragraph [ref=f28e165]:
+        - text: "I work end to end: research and framing, flows and wireframes, high-fidelity UI, then shipping alongside engineers, measuring what happens after launch. I like the work to be"
+        - emphasis [ref=f28e166]: clear first and unmistakably mine
+        - text: second.
+    - generic [ref=f28e167]:
+      - heading "Words from" [level=2] [ref=f28e168]
+      - generic [ref=f28e169]:
+        - figure "Priya Raman / VP Product, Northwind Labs" [ref=f28e170]:
+          - blockquote [ref=f28e171]: “Alex turns vague problems into shipped product. Rare combination of craft and follow-through.”
+        - figure "Jonas Weber / Engineering Lead" [ref=f28e173]:
+          - blockquote [ref=f28e174]: “The design system work paid for itself in the first quarter.”
+  - contentinfo [ref=f28e176]:
+    - generic [ref=f28e177]:
+      - heading "Let’s make something clear and calm ." [level=2] [ref=f28e178]:
+        - generic [ref=f28e179]: Let’s
+        - generic [ref=f28e181]: make
+        - generic [ref=f28e183]: something
+        - generic [ref=f28e185]:
+          - generic [ref=f28e186]: clear
+          - generic [ref=f28e188]: and
+          - generic [ref=f28e190]: calm
+        - generic [ref=f28e192]: .
+      - generic [ref=f28e194]:
+        - link "hello@example.com" [ref=f28e195] [cursor=pointer]:
+          - /url: mailto:hello@example.com
+        - link "Back to work" [ref=f28e196] [cursor=pointer]:
+          - /url: "#work"
+      - generic [ref=f28e197]:
+        - link "Dribbble" [ref=f28e198] [cursor=pointer]:
+          - /url: https://dribbble.com
+        - link "LinkedIn" [ref=f28e199] [cursor=pointer]:
+          - /url: https://linkedin.com
+        - link "GitHub" [ref=f28e200] [cursor=pointer]:
+          - /url: https://github.com
+      - paragraph [ref=f28e201]: © 2026 Alex Morgan / Product Designer

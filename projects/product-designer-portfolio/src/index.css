@@ -79,8 +79,8 @@
   --color-surface: #ffffff;
   --color-ink: #0a0a0a;
   --color-ink-muted: #6b6b6b;
-  --color-accent: #d4ff3d;
-  --color-accent-ink: #0a0a0a;
+  --color-accent: #e84436;
+  --color-accent-ink: #ffffff;
   --color-hairline: #e8e6df;
   --color-sand: #efebe2;
   /* §2 Illustration accents — artwork only, never UI chrome. */
@@ -102,28 +102,42 @@
   --text-body: clamp(0.9375rem, 0.9rem + 0.2vw, 1.125rem);
   --text-nav: 0.875rem;
   --text-meta: 0.75rem;
-  /* §3 Statement band. Was a bare clamp() in Home.jsx; display type now has
-     one source. Sized in vw because both lines must stay close to whole at any
-     width, which is what lets the second line bleed off the right edge. */
-  --text-statement: clamp(1.95rem, 7.8vw, 7rem);
+  /* `--text-statement` lived here for the statement band, sized in vw so both
+     lines stayed close to whole and the second could bleed off the right edge.
+     The band is gone from the page, so the token went with it. */
 
   /* §4 Radius system. Two documented values, not a free-for-all:
-       --radius-control  6px   things that read as buttons and controls
+       --radius-control  6px   small accent chips and inline labels
        --radius-card    18px   content surfaces (cards, covers, tag pills)
-     Nav pills and outline buttons are `rounded-full`, which is the third
-     documented member of the system: a pill is always a control, never a
-     surface. Nothing else may introduce a radius. */
+     Buttons are `rounded-full`, which is the third documented member of the
+     system: a pill is always a control, never a surface. Nothing else may
+     introduce a radius. Nav links carry no radius at all — they are flat text,
+     and their active state is the bracket mark, not a filled pill. */
   --radius-control: 6px;
   --radius-card: 18px;
-  --shadow-card: 0 8px 24px rgb(0 0 0 / 0.06);
-  --shadow-card-hover: 0 14px 34px rgb(0 0 0 / 0.1);
+
+  /* §4 Fixed nav height. Declared once as a token because three places have to
+     agree on it: the header's own height, the top padding that keeps the first
+     screen out from under it, and the anchor offset that stops a hash jump from
+     landing a heading behind it. A fixed nav is out of flow, so nothing about
+     the page reserves space for it — these are the only three things that do. */
+  --nav-h: 4.5rem;
+
+  /* No shadow tokens. The site had --shadow-card and --shadow-card-hover for
+     the testimonial cards, which were the only thing using them; those cards are
+     flat now, matching the §5 service cards, so a card elevation would be a
+     second system with nothing using it. Adding an elevation back means
+     reintroducing the token deliberately, not finding it already defined. */
 }
 
 html {
   scroll-behavior: smooth;
-  /* The nav scrolls with the page rather than sticking, so anchors only need
-     enough offset to clear the section's own top padding plus a little air. */
-  scroll-padding-top: 2rem;
+  /* The nav is fixed, so an anchor jump has to clear it or the section heading
+     it points at arrives underneath. The extra 1rem is air: landing a heading
+     flush against the bottom edge of the bar reads as clipped. This replaces the
+     per-section `scroll-mt-8`, which existed to clear a nav that no longer
+     scrolled away. */
+  scroll-padding-top: calc(var(--nav-h) + 1rem);
 }
 
 body {
@@ -155,22 +169,99 @@ body {
    --font-display theme token, so components just use `font-display`.
    Space Grotesk runs wide with a large x-height, so the big display sizes
    (text-display-xl, the 110px hero) also carry an explicit negative tracking
-   class, as the statement band already did. */
+   class, because the default tracking is set for body-sized type. */
 
 /* §5 Nav — flat utility variant, all uppercase text-nav with tracking. */
 @utility nav-link {
   @apply font-sans text-[0.875rem] font-medium tracking-[0.04em] uppercase;
 }
 
-/* §5 Nav, pill/outline variant: transparent fill, 1px ink border, full radius.
-   Hover darkens the border rather than adding shadow or scale. Sizes are
-   responsive down to a 350px canvas, where three pills plus the mark have to
-   fit without overflowing. */
-@utility nav-pill {
-  @apply rounded-full border border-ink px-3.5 py-1.5 font-sans text-[0.8125rem] font-medium
-    whitespace-nowrap text-ink transition-colors duration-150 hover:bg-ink hover:text-bg
+/* §5 Nav, flat utility variant: no fill, no border, no radius. Hover steps the
+   label down to the muted tone rather than inverting a pill, which is what the
+   outline buttons do. Kept at `text-nav` weight and tracking so it matches the
+   footer links, and sized down only to the 350px canvas, where the mark plus
+   three labels have to fit. The old 1px pill border is gone: three bordered
+   pills read as a row of buttons, and there is no hover or second state left
+   to justify the outline.
+
+   The focus ring is offset against `bg` rather than `surface`: the bar this sits
+   in paints the page background, so a white offset ring would put a white
+   outline inside a warm off-white bar at the moment the bar is already hard to
+   see against the page. The bar is translucent now, so that offset is a solid
+   `bg` ring sitting inside a `bg/80` bar — a mismatch that is invisible because
+   the two are the same colour. */
+@utility nav-item {
+  @apply font-sans text-[0.8125rem] font-medium tracking-[0.04em] whitespace-nowrap text-ink
+    transition-colors duration-150 hover:text-ink-muted
     focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2
-    focus-visible:ring-offset-surface focus-visible:outline-none sm:px-5 sm:py-2 sm:text-[0.875rem];
+    focus-visible:ring-offset-bg focus-visible:outline-none sm:text-[0.875rem];
+}
+
+/* §5 The fixed bar the nav row sits in. One of these per page, in App, so the
+   nav is a single instance that cannot drift between routes — the previous
+   arrangement had each page render its own row inside its own container, which
+   is why a case study and the home page had been able to disagree about it.
+
+   The fill is glass: `bg-bg/80` over a backdrop blur, so content passing
+   underneath reads as a soft wash rather than as a hard edge. This site was
+   flat by rule — "no blur, no shadow, no glass" — and the bar was `bg-bg`, which
+   made it invisible at rest. That rule is reversed deliberately, and the 80% is
+   what makes it safe: the bar crosses both the near-black footer and the accent
+   service card while the nav labels stay near-black. The blur handles
+   legibility, but the tint is what carries contrast, and it cannot go much
+   below this without the muted hover label (`#6B6B6B`) dropping under 3:1
+   against the dark footer. Measured at 80%:
+
+     nav label on the dark footer     12.3:1
+     nav label on the accent card     14.8:1
+     muted hover label, dark footer    3.3:1   <- the binding constraint
+     muted hover label, accent card    4.0:1
+
+   `saturate-150` is there because blur alone desaturates whatever passes under
+   the bar, and the accent card going grey behind the nav would read as a bug
+   rather than as a material.
+
+   Browsers without `backdrop-filter` get an opaque bar rather than a
+   translucent unblurred one — the same thing the site had before, and not
+   something that can be misread as broken.
+
+   The hairline is not decoration. Content scrolls under a fixed bar, and a bar
+   with no edge lets a headline slide halfway out of sight before it clears,
+   which reads as a rendering fault rather than as depth. One 1px line says the
+   content is passing beneath something. */
+@utility nav-bar {
+  @apply fixed inset-x-0 top-0 z-50 h-[var(--nav-h)] border-b border-hairline
+    bg-bg/80 backdrop-blur-xl backdrop-saturate-150;
+}
+
+/* The fallback is a plain class rather than a utility variant because
+   `@apply`-ing a conditional into Tailwind would re-apply the blur inside the
+   query. Setting the colour directly here is the only way to make the
+   unsupported case opaque without the blur utility fighting it. */
+@supports not (backdrop-filter: blur(1px)) {
+  .nav-bar {
+    background-color: var(--color-bg);
+  }
+}
+
+/* The active-page mark. Brackets are the About heading's punctuation, so the
+   nav says where you are in the same characters the section heading uses. They
+   are muted like the About brackets, and they are always present in the layout
+   at full size — only their opacity changes — so a link becoming active moves
+   nothing. */
+.nav-bracket {
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+.nav-item[data-active] .nav-bracket {
+  opacity: 1;
+}
+
+/* Reduced motion: the bracket still appears, it just stops fading in. */
+@media (prefers-reduced-motion: reduce) {
+  .nav-bracket {
+    transition: none;
+  }
 }
 
 /* §3 text-meta: small uppercase labels for dates, tags, card labels. */
@@ -190,18 +281,39 @@ body {
   @apply mx-auto w-full max-w-[1200px] px-6 lg:px-10;
 }
 
+/* §4 Offset for the top of a page, so the first block clears the fixed nav.
+   The nav is out of flow, so it reserves nothing by itself — every page needs
+   this once, on its first element, and forgetting it hides the top of the first
+   screen behind the bar.
+
+   The utility carries the page's own reading padding in the same declaration
+   rather than leaving it to a `pt-8` beside it. Two padding-top utilities on
+   one element is a collision, not a sum: whichever the stylesheet happens to
+   emit last wins outright, and on the case study that silently put the "All
+   work" link underneath the bar. Anything that needs different space above
+   should change this value, not add a competing `pt-*`. */
+@utility nav-offset {
+  @apply pt-[calc(var(--nav-h)+1.5rem)] sm:pt-[calc(var(--nav-h)+2.5rem)];
+}
+
 /* §4 Section rhythm. One value for every banded section, so the vertical
    cadence is a single decision rather than a per-section guess. */
 @utility pad-section {
   @apply py-16 sm:py-24 lg:py-32;
 }
 
-/* §5 Buttons. Solid accent first, outline pill for secondary actions. Both are
-   controls, so they sit in the radius system as --radius-control and pill. */
+/* §5 Buttons. Solid accent first, outline pill for secondary actions.
+
+   Both are pills, `rounded-full`, which is the one radius in the system every
+   control shares. The solid button was `rounded-control` (6px) while the
+   outline one was already a pill, so the primary and secondary actions on the
+   same screen — the footer's "Let's talk" and "Email me" — had visibly
+   different shapes. A pill is always a control, never a surface, so the two
+   button utilities are now identical in radius and differ only in fill. */
 @utility btn-accent {
-  @apply inline-flex items-center justify-center rounded-control bg-accent px-6 py-3
+  @apply inline-flex items-center justify-center rounded-full bg-accent px-6 py-3
     text-[0.9375rem] font-semibold text-accent-ink transition-colors duration-150
-    hover:bg-[#c4f226] focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2
+    hover:bg-[#c83a2e] focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2
     focus-visible:ring-offset-bg focus-visible:outline-none;
 }
 
@@ -212,11 +324,25 @@ body {
     focus-visible:ring-offset-bg focus-visible:outline-none;
 }
 
-/* §4 Floating collage card. Consistent radius + shadow on every sub-type is
-   what keeps the collage from reading as messy. */
-@utility collage-card {
-  @apply rounded-card bg-surface p-5 shadow-card transition-[transform,box-shadow]
-    duration-200 ease-out;
+/* §5 Content surface. One radius, one fill, for the cards that sit on the page
+   background rather than inside a grid of other cards. It was named
+   `collage-card` for the scattered-objects section; that section is gone and the
+   testimonial cards were the last thing using it, so the name now says what it
+   actually is.
+
+   Flat, and flat at rest, on the same reasoning as the §5 service cards: a card
+   here is a coloured shape on the page, not a surface floating above it. The
+   fill is `bg-sand`, the service cards' base colour, so the two sets of cards
+   on this page are made of the same material — previously these were white on
+   warm off-white with a drop shadow, which read as a different, heavier object
+   from the sand cards a screen earlier. No border either: a border on top of a
+   fill makes a ghost card.
+
+   There is no shadow and no hover state. These are not links — they open
+   nothing — and a card that lifts and gains a shadow under the cursor has lied
+   about what it does. */
+@utility card-surface {
+  @apply rounded-card bg-sand p-5;
 }
 
 /* §8 Motion. Entrance states start hidden and are released by the Reveal
@@ -255,6 +381,254 @@ body {
   animation-delay: var(--hero-delay, 0ms);
 }
 
+/* The hero objects settle in rather than sliding: they scale up a little and
+   rotate out of a slight tilt, which is the gesture that reads as an object
+   being placed rather than as a piece of UI arriving. The delay is set per item
+   in HeroVibes.jsx and runs past the headline's own reveal, so the composition
+   assembles itself in reading order instead of everything landing at once.
+
+   The keyframes rotate *into* `--hero-rest-rotate`, the object's own resting
+   angle, rather than out of zero. Six scattered objects all coming to rest
+   perfectly upright is a row of objects that happens not to be in a row; each
+   one arriving at a slightly different few degrees of tilt is what makes the
+   arrangement look placed by hand.
+
+   The entrance owns `transform` on this element, which is why a scattered
+   object's centring `-translate-x-1/2 -translate-y-1/2` sits on the parent: a
+   translate here would be overwritten by the keyframes on every frame. */
+@keyframes hero-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.86) rotate(calc(var(--hero-rest-rotate, 0deg) - 12deg));
+  }
+  to {
+    opacity: 1;
+    transform: rotate(var(--hero-rest-rotate, 0deg));
+  }
+}
+
+.hero-pop {
+  animation: hero-pop 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--hero-delay, 0ms);
+}
+
+/* §4 Pointer reaction for the hero objects. This is a third element in the stack
+   on purpose. `.hero-pop` owns `transform` — the entrance keyframes write it on
+   every frame of the animation — so the pointer could not live there. The centring
+   on the `<li>` would have been safe to share, because Tailwind v4 emits
+   `-translate-x-1/2` as the `translate` property rather than as `transform`, but
+   keeping one property per owner is what stops this breaking the next time that
+   assumption changes. The hook writes only the three custom properties read here.
+
+   It wraps the label as well as the picture. Moving the picture alone slides it
+   out from under its own caption.
+
+   `translate3d` rather than `translate`, for the compositor. There is
+   deliberately no `will-change`: it would promote all nine objects to their own
+   layer for the whole life of the page, including the seconds before anyone moves
+   the mouse, to save a promotion that `translate3d` already gets for free.
+
+   The curve is the hero's existing entrance curve, not a new one. This is the
+   third animation in the section and the second distinct curve in it; a third
+   value would be a parallel easing system with one member.
+
+   520ms is longer than the 300ms a UI transition gets, and deliberately so. This
+   is not a response to a click, it is the settle after a continuous sweep, and it
+   needs to read as weight. Shorten it and the objects snap between positions;
+   lengthen it and they trail the cursor.
+
+   Worth noting now that the reaction never reaches zero: this transition is
+   running for essentially the whole time the pointer is on the page, not only
+   while it is inside the hero. That is what the heavy easing is carrying. A
+   520ms settle is expensive-looking on an effect that never fully rests, and the
+   weight is what stops the constant motion from reading as jitter. */
+.hero-drift {
+  transform: translate3d(var(--drift-x, 0px), var(--drift-y, 0px), 0)
+    rotate(var(--drift-spin, 0deg));
+  transition: transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* The hook refuses to attach for a reduced-motion reader, so these properties
+   are never set and the transform stays at its 0px default. This rule is the
+   belt to that braces: it means the objects cannot drift even if a future caller
+   writes the variables directly. */
+@media (prefers-reduced-motion: reduce) {
+  .hero-drift {
+    transform: none;
+    transition: none;
+  }
+}
+
+/* §8 Work-card hover. Three layers, each owning exactly one property, because
+   they animate at different rates and putting them on one element would mean
+   the fastest one had to wait for the slowest.
+
+   `.work-card`      the magnetic lean. Reads the two custom properties
+                     `useCardDrift` writes, and nothing else writes transform on
+                     it.
+   `.work-card-media` the image crop, scaling a little inside the card's own
+                     overflow. Separate from the lean so the picture grows while
+                     the card holds still under it.
+   `.work-card-veil`  the scrim and the revealed line, which fade together.
+
+   The lean is deliberately small — 8px at the card's edge. It is a lean, not a
+   magnet: the card acknowledges the cursor and stays where it was placed in the
+   grid. A larger travel makes the row look like it is coming apart, because
+   adjacent cards lean away from each other and the gutter between them visibly
+   changes width.
+
+   420ms on the lean and 700ms on the scale. The lean has to settle faster than
+   the scale, or the card arrives at the cursor and then keeps growing under it,
+   which reads as two separate effects that happen to overlap. The scale is the
+   slower one deliberately: it is the reveal, and a reveal that arrives before
+   the pointer does looks like the card was already open.
+
+   The veil is a flat 65% wash rather than a gradient. It was a bottom-weighted
+   gradient for as long as the blur was 5px, because at that strength the top of
+   a screenshot still had legible detail and a gradient was the only way to keep
+   it clear while darkening the text end. At 12px the image is already an even
+   field of colour, so there is no detailed top left to protect — the gradient
+   was buying contrast the blur had already solved, and paying for it with a
+   second thing that could be wrong.
+
+   The wash covers the *whole* card, which the gradient's own height used to
+   take care of by fading out. A content-height wash leaves a hard horizontal
+   edge across the card, and the eye reads that as a seam in the image rather
+   than as a scrim.
+
+   65% is set by the lightest screenshot this grid can be given, not by taste.
+   A flat wash is only as strong as its worst backing, and the worst case is a
+   white dashboard: 55% ink over #fff puts the revealed line at 4.4:1 and a
+   `white/75` CTA at 3.25:1, both failures. At 65% with a full-white CTA both
+   clear 6.3:1. The gradient was silently carrying this.
+
+   ## The blur
+
+   12px. Still well under the 60px this effect is usually copied at, which does
+   not read as "the card softened" but as "the card broke": a screenshot becomes
+   an undifferentiated grey field, so the hover stops showing the work and
+   starts hiding it. At 12px the image is unmistakably gone and the card is
+   still recognisably its own colours — the navy Groshi bar, the terracotta
+   ARASTELLE field. Past roughly 20px even that goes and the card is a smudge
+   with a word on it.
+
+   Three constraints the blur forces:
+
+     - **It is on `img` only.** A brand card's fill is a flat colour, so
+       blurring it is a no-op, and its lockup is *text* set inside the same
+       element — blurring that would soften a wordmark for no gain. Selecting
+       on `img.work-card-media` gets real photographs and nothing else, without
+       the component having to know which kind of card it rendered.
+     - **A blurred edge samples transparent, not the card behind it.** Blur
+       pulls from outside the element's own box, so the outermost pixels of every
+       edge fade out and the card grows a soft halo against the page. The 1.12
+       scale is what covers it — see the note on that rule. This is the one
+       number pair where changing one without the other shows up immediately.
+     - **The veil is a sibling, so it stays sharp.** The revealed line is not
+       inside the blurred element, which is the whole point — the text has to
+       arrive in focus or the card has simply gone soft.
+
+   Focus parity: `:focus-visible` triggers the same three states as `:hover`, so
+   the reveal is not mouse-only. Without it the card would be a link whose
+   destination information only appears for one input method. */
+.work-card {
+  transform: translate3d(var(--card-x, 0px), var(--card-y, 0px), 0);
+  transition: transform 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.work-card-media {
+  transition:
+    transform 700ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Photographs only — see "The blur" above.
+
+   `scale(1.12)` is not decoration, it is arithmetic. A CSS blur of radius R
+   fades the outermost ~1.5R pixels of the element toward transparent, sampling
+   from outside its own box; at R=12 that is roughly 18px of fringe per edge. On
+   a 460px card, 1.12 is what puts those 18px outside the visible frame — 1.04
+   covered 5px of blur with 9px of scale, and it is the ratio between those two
+   numbers, not either of them, that has to hold. Raise the blur and the scale
+   has to rise with it or the card grows a soft halo against the page. */
+.work-card:hover img.work-card-media,
+.work-card a:focus-visible img.work-card-media {
+  filter: blur(12px);
+}
+
+/* `:focus-visible` sits on the link, not on `.work-card` — the article never
+   receives focus, so a `.work-card:focus-visible` selector matches nothing and
+   the keyboard user gets an outline around a card that looks unchanged. Both
+   states are therefore written against the descendant combinator from the
+   anchor. */
+.work-card:hover .work-card-media,
+.work-card a:focus-visible .work-card-media {
+  transform: scale(1.12);
+}
+
+.work-card-veil {
+  opacity: 0;
+  transition: opacity 320ms ease-out;
+}
+
+.work-card:hover .work-card-veil,
+.work-card a:focus-visible .work-card-veil {
+  opacity: 1;
+}
+
+/* Touch. The veil is a `:hover` state, and a finger produces no hover, so on a
+   coarse pointer the outcome line moves out from under the picture and into the
+   label block as `.work-card-fallback`. One copy is visible at a time: the
+   fallback's `hidden` is a Tailwind `display: none`, so it is out of the
+   accessibility tree as well as the layout on any hover-capable device. */
+@media not (hover: hover) {
+  .work-card-fallback {
+    display: block;
+  }
+}
+
+/* Reduced motion: the card stops leaning and the picture stops growing, but the
+   veil still fades. The fade is the only part carrying information — it reveals
+   the outcome line — so removing it would leave a keyboard user's focus with
+   nothing, and a fade this short is not the kind of motion this setting is
+   asking to be spared. */
+@media (prefers-reduced-motion: reduce) {
+  /* The hover rules above have to be overridden in their hovered form, not just
+     at rest. `.work-card-media { transform: none }` is one class; the rule that
+     scales it on hover is three (`card:hover media`), and a media query adds no
+     specificity, so the reset loses and the picture still grows.
+
+     The blur is a different case and stays. It is a change of focus, not
+     movement: nothing travels, nothing has a direction, and no one is made
+     ill by it. Dropping it here would mean the reduced-motion card still lifted
+     a veil over its own image with nothing softened behind it, which is the
+     state that actually looks broken. Only the *timing* is removed — the
+     `transition: none` below makes it an instant swap rather than a 420ms
+     fade, so there is no animation to spare. */
+  .work-card,
+  .work-card-media,
+  .work-card:hover .work-card-media,
+  .work-card a:focus-visible .work-card-media {
+    transform: none;
+    transition: none;
+  }
+
+  .work-card:hover img.work-card-media,
+  .work-card a:focus-visible img.work-card-media {
+    filter: blur(12px);
+    transition: none;
+  }
+}
+
+/* Browser surfaces. Selection is the one piece of the page the visitor triggers
+   by accident, and the default is a saturated system blue that belongs to
+   nothing here. Tying it to the accent is the cheapest way to make the page
+   feel authored rather than assembled. */
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -267,7 +641,8 @@ body {
     transition: none;
   }
 
-  .hero-enter {
+  .hero-enter,
+  .hero-pop {
     animation: none;
   }
 }

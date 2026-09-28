@@ -1,9 +1,8 @@
 import { Link, Navigate, useLocation, useParams } from "react-router-dom";
 import { getAdjacentProjects, getProject, projects } from "../data.js";
-import { color, colorClass } from "../lib/color.js";
 import Body from "../components/CaseStudyBody.jsx";
-import NavRow from "../components/NavRow.jsx";
 import PhotoSlot from "../components/PhotoSlot.jsx";
+import ProjectCard from "../components/ProjectCard.jsx";
 import Reveal from "../components/Reveal.jsx";
 import useDocumentMeta from "../hooks/useDocumentMeta.js";
 
@@ -57,10 +56,11 @@ export default function CaseStudy() {
   return (
     <main>
       <article>
-        {/* Hero */}
-        <header className="container-page pt-8 pb-12 sm:pt-10">
-          <NavRow className="mb-12 border-b border-hairline pb-6 sm:mb-16" />
-
+        {/* Hero. `nav-offset` replaces the nav row that used to sit here: the
+            nav is fixed and global now, so this page no longer renders one —
+            which is also why the hairline under it is gone, the bar carries its
+            own. */}
+        <header className="container-page nav-offset pb-12">
           <Link to="/#work" className="nav-link text-ink-muted hover:text-ink">
             &larr; All work
           </Link>
@@ -205,47 +205,15 @@ export default function CaseStudy() {
             )}
           </div>
 
+          {/* `ProjectCard` rather than a second, near-identical card written
+              out here. The inline version had its own hover — a 2px lift on the
+              picture — which meant the same project appeared under two
+              different hover behaviours depending on which page you reached it
+              from, and every change to the card had to be made twice. It only
+              differed in ratio, which is a prop. */}
           <div className="grid grid-cols-2 gap-8 sm:gap-12">
             {more.map((p) => (
-              <Link key={p.slug} to={`/work/${p.slug}`} className="group block">
-                {p.kind === "photo" ? (
-                  <PhotoSlot
-                    src={p.image}
-                    alt={p.imageAlt ?? `${p.title}, ${p.year}`}
-                    label={p.imageLabel ?? "Product screenshot"}
-                    ratio="aspect-4/5"
-                    sizes="(min-width: 640px) 30vw, 45vw"
-                    className="rounded-card transition-transform duration-200 ease-out group-hover:-translate-y-0.5"
-                  />
-                ) : (
-                  <div
-                    className={`${colorClass(p.fill) ?? ""} aspect-4/5 w-full overflow-hidden rounded-card transition-transform duration-200 ease-out group-hover:-translate-y-0.5`}
-                    style={
-                      colorClass(p.fill)
-                        ? undefined
-                        : { backgroundColor: color(p.fill) }
-                    }
-                  >
-                    {/* Per-fill ink, same reason as ProjectCard: white on the
-                      chartreuse fill is 1.16:1 and on terracotta 3.27:1. */}
-                    <span
-                      className={`flex h-full w-full items-center justify-center p-8 text-center font-display text-2xl tracking-tight select-none ${
-                        p.fill === "accent" || p.fill === "sky"
-                          ? "text-accent-ink"
-                          : "text-white"
-                      }`}
-                    >
-                      {p.lockup ?? p.title}
-                    </span>
-                  </div>
-                )}
-                <div className="mt-4 flex items-baseline justify-between gap-4">
-                  <p className="text-ink transition-colors duration-150 group-hover:text-ink-muted">
-                    {p.title}
-                  </p>
-                  <span className="label-meta shrink-0">{p.year}</span>
-                </div>
-              </Link>
+              <ProjectCard key={p.slug} project={p} ratio="aspect-4/5" />
             ))}
           </div>
         </section>

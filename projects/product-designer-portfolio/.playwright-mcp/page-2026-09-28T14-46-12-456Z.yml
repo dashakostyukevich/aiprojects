@@ -1,0 +1,173 @@
+- generic [ref=f170e3]:
+  - banner [ref=f170e4]:
+    - generic [ref=f170e5]:
+      - link "Alex Morgan, home" [ref=f170e6] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=f170e10]:
+        - link "Projects" [ref=f170e11] [cursor=pointer]:
+          - /url: /#work
+          - text: "[Projects]"
+        - link "About" [ref=f170e12] [cursor=pointer]:
+          - /url: /#about
+          - text: "[About]"
+        - link "Contact" [ref=f170e13] [cursor=pointer]:
+          - /url: /#contact
+          - text: "[Contact]"
+  - main [ref=f170e15]:
+    - generic [ref=f170e17]:
+      - generic [ref=f170e18]:
+        - list [aria-hidden]:
+          - listitem:
+            - generic: First coffee
+          - listitem:
+            - generic: Weekend baking
+          - listitem:
+            - generic: Film camera
+          - listitem:
+            - generic: The laptop
+          - listitem:
+            - generic: Smiley days
+          - listitem:
+            - generic: Red-eye flights
+        - generic [ref=f170e19]:
+          - heading "I design calm, useful interfaces for complex products that people actually enjoy using." [level=1] [ref=f170e20]:
+            - generic [ref=f170e21]:
+              - generic [ref=f170e22]: I
+              - generic [ref=f170e24]: design
+              - generic [ref=f170e26]: calm,
+            - generic [ref=f170e28]:
+              - generic [ref=f170e29]: useful
+              - generic [ref=f170e31]: interfaces
+            - generic [ref=f170e33]: for
+            - generic [ref=f170e36]:
+              - generic [ref=f170e37]: complex
+              - generic [ref=f170e39]: products
+            - generic [ref=f170e41]:
+              - generic [ref=f170e42]: that
+              - generic [ref=f170e44]: people
+              - generic [ref=f170e46]: actually
+              - generic [ref=f170e48]: enjoy
+              - generic [ref=f170e50]: using.
+          - paragraph [ref=f170e52]: Product Designer · Berlin, Germany
+          - link "See the work" [ref=f170e54] [cursor=pointer]:
+            - /url: "#work"
+      - paragraph [ref=f170e55]: Open to new projects, 2026
+    - generic [ref=f170e59]:
+      - article [ref=f170e62]:
+        - link "ARASTELLE, 2026. Image pending, opens the case study." [ref=f170e63] [cursor=pointer]:
+          - /url: /work/arastelle
+          - generic [ref=f170e64]: ARASTELLE
+        - generic [ref=f170e66]:
+          - paragraph [ref=f170e67]: ARASTELLE
+          - generic [ref=f170e68]: "2026"
+      - article [ref=f170e71]:
+        - link "Groshi, 2025. Image pending, opens the case study." [ref=f170e72] [cursor=pointer]:
+          - /url: /work/groshi
+          - figure "Image needed Groshi — accounts overview in the shipped product" [ref=f170e73]:
+            - generic [ref=f170e75]:
+              - generic [ref=f170e76]: Image needed
+              - generic [ref=f170e77]: Groshi — accounts overview in the shipped product
+        - generic [ref=f170e78]:
+          - paragraph [ref=f170e79]: Groshi
+          - generic [ref=f170e80]: "2025"
+      - article [ref=f170e83]:
+        - link "NOXS, 2025. Image pending, opens the case study." [ref=f170e84] [cursor=pointer]:
+          - /url: /work/noxs
+          - figure "Image needed NOXS — the landing page, direct hero variant" [ref=f170e85]:
+            - generic [ref=f170e87]:
+              - generic [ref=f170e88]: Image needed
+              - generic [ref=f170e89]: NOXS — the landing page, direct hero variant
+        - generic [ref=f170e90]:
+          - paragraph [ref=f170e91]: NOXS
+          - generic [ref=f170e92]: "2025"
+    - generic [ref=f170e93]:
+      - heading "Experience" [level=2] [ref=f170e94]
+      - generic [ref=f170e95]:
+        - generic [ref=f170e96]:
+          - generic [ref=f170e97]: Nov 2021 – Present
+          - generic [ref=f170e98]: Freelance Product / Web Designer, Upwork
+          - generic [ref=f170e99]: Designed 100+ web and digital product interfaces for SaaS, FinTech, and data-driven businesses, covering user flows, UX/UI, responsive design, prototyping, and design systems. Collaborated closely with clients and developers throughout the design and implementation process, using Figma and AI-assisted workflows to explore, iterate, and deliver developer-ready solutions.
+        - generic [ref=f170e100]:
+          - generic [ref=f170e101]: Jan 2026 – Sep 2026
+          - generic [ref=f170e102]: Webflow Designer, MyStudio
+          - generic [ref=f170e103]: Designed and developed responsive websites in Webflow, translating Figma concepts into polished, production-ready digital experiences. Worked with reusable components, CMS, interactions, and responsive layouts while collaborating with clients and developers to refine designs and solve implementation challenges.
+        - generic [ref=f170e104]:
+          - generic [ref=f170e105]: Mar 2021 – Sep 2025
+          - generic [ref=f170e106]: Web Designer, LinguaTrip
+          - generic [ref=f170e107]: Designed user flows and interfaces for an education mobile app, focusing on onboarding, course discovery, and improving the overall user experience. Used analytics, testing, and user feedback to iterate on designs, contributing to an increase in conversion from 18% to 22%.
+        - generic [ref=f170e108]:
+          - generic [ref=f170e109]: Jun 2022 – Feb 2023
+          - generic [ref=f170e110]: Web Designer, Wizart
+          - generic [ref=f170e111]: Designed and tested product features and interface concepts to validate product hypotheses and improve user experiences. Collaborated with analytics teams to interpret A/B test results and used data-driven insights to refine UX and product decisions.
+    - generic [ref=f170e112]:
+      - generic [ref=f170e113]:
+        - heading "What I do" [level=2] [ref=f170e114]:
+          - generic [ref=f170e115]: What
+          - generic [ref=f170e117]: I
+          - generic [ref=f170e119]: do
+        - list [ref=f170e121]:
+          - listitem [ref=f170e122]: Services
+          - listitem [ref=f170e123]: How I work
+      - paragraph [ref=f170e124]: Three ways I usually get pulled into a product. Most engagements combine them — the split depends on how much of the problem is still undefined when we start.
+      - generic [ref=f170e125]:
+        - generic [ref=f170e126]:
+          - generic [ref=f170e127]: "01"
+          - generic [ref=f170e128]:
+            - heading "Product Design" [level=3] [ref=f170e129]
+            - paragraph [ref=f170e130]: I design digital products from early concepts to polished, developer-ready interfaces. I work on user flows, information architecture, interaction design, responsive UI, prototyping, and design systems, with a focus on making complex products simple and intuitive.
+        - generic [ref=f170e131]:
+          - generic [ref=f170e132]: "02"
+          - generic [ref=f170e133]:
+            - heading "Webflow Development" [level=3] [ref=f170e134]
+            - paragraph [ref=f170e135]: I turn Figma designs into responsive, production-ready websites in Webflow. I build scalable components, CMS-powered pages, interactions, and animations while keeping the design accurate, accessible, and easy to maintain.
+        - generic [ref=f170e136]:
+          - generic [ref=f170e137]: "03"
+          - generic [ref=f170e138]:
+            - heading "UX & Design Systems" [level=3] [ref=f170e139]
+            - paragraph [ref=f170e140]: I improve existing digital products by identifying usability issues, simplifying user flows, and creating consistent UI systems. From UX audits and iterative improvements to components, variants, and UI guidelines, I help products become clearer, more scalable, and easier to use.
+    - generic [ref=f170e143]:
+      - heading "[. About .]" [level=2] [ref=f170e144]:
+        - generic [ref=f170e145]: "[."
+        - generic [ref=f170e148]: About
+        - generic [ref=f170e151]: .]
+      - paragraph [ref=f170e155]: I am a product designer. I turn ambiguous, half-specified problems into software people can pick up and use without a tutorial.
+      - figure [ref=f170e156]:
+        - figure "Image needed Portrait of Alex Morgan" [ref=f170e159]:
+          - generic [ref=f170e161]:
+            - generic [ref=f170e162]: Image needed
+            - generic [ref=f170e163]: Portrait of Alex Morgan
+      - paragraph [ref=f170e165]:
+        - text: "I work end to end: research and framing, flows and wireframes, high-fidelity UI, then shipping alongside engineers, measuring what happens after launch. I like the work to be"
+        - emphasis [ref=f170e166]: clear first and unmistakably mine
+        - text: second.
+    - generic [ref=f170e167]:
+      - heading "Words from" [level=2] [ref=f170e168]
+      - generic [ref=f170e169]:
+        - figure "Priya Raman / VP Product, Northwind Labs" [ref=f170e170]:
+          - blockquote [ref=f170e171]: “Alex turns vague problems into shipped product. Rare combination of craft and follow-through.”
+        - figure "Jonas Weber / Engineering Lead" [ref=f170e173]:
+          - blockquote [ref=f170e174]: “The design system work paid for itself in the first quarter.”
+  - contentinfo [ref=f170e176]:
+    - generic [ref=f170e177]:
+      - heading "Let’s make something clear and calm ." [level=2] [ref=f170e178]:
+        - generic [ref=f170e179]: Let’s
+        - generic [ref=f170e181]: make
+        - generic [ref=f170e183]: something
+        - generic [ref=f170e185]:
+          - generic [ref=f170e186]: clear
+          - generic [ref=f170e188]: and
+          - generic [ref=f170e190]: calm
+        - generic [ref=f170e192]: .
+      - generic [ref=f170e194]:
+        - link "hello@example.com" [ref=f170e195] [cursor=pointer]:
+          - /url: mailto:hello@example.com
+        - link "Back to work" [ref=f170e196] [cursor=pointer]:
+          - /url: "#work"
+      - generic [ref=f170e197]:
+        - link "Dribbble" [ref=f170e198] [cursor=pointer]:
+          - /url: https://dribbble.com
+        - link "LinkedIn" [ref=f170e199] [cursor=pointer]:
+          - /url: https://linkedin.com
+        - link "GitHub" [ref=f170e200] [cursor=pointer]:
+          - /url: https://github.com
+      - paragraph [ref=f170e201]: © 2026 Alex Morgan / Product Designer

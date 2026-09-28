@@ -1,0 +1,176 @@
+- generic [ref=f66e3]:
+  - main [ref=f66e5]:
+    - generic [ref=f66e6]:
+      - link "Alex Morgan, home" [ref=f66e7] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=f66e11]:
+        - link "Projects" [ref=f66e12] [cursor=pointer]:
+          - /url: /#work
+          - text: "[Projects]"
+        - link "About" [ref=f66e13] [cursor=pointer]:
+          - /url: /#about
+          - text: "[About]"
+        - link "Contact" [ref=f66e14] [cursor=pointer]:
+          - /url: /#contact
+          - text: "[Contact]"
+    - generic [ref=f66e15]:
+      - generic [ref=f66e16]:
+        - list [aria-hidden]:
+          - listitem:
+            - generic: First coffee
+          - listitem:
+            - generic: Windowsill
+          - listitem:
+            - generic: Film camera
+          - listitem:
+            - generic: Long playlists
+          - listitem:
+            - generic: Long rides
+          - listitem:
+            - generic: Paper manuals
+        - generic [ref=f66e17]:
+          - heading "I design calm, useful interfaces for complex products that people actually enjoy using." [level=1] [ref=f66e18]:
+            - generic [ref=f66e19]:
+              - generic [ref=f66e20]: I
+              - generic [ref=f66e22]: design
+              - generic [ref=f66e24]: calm,
+            - generic [ref=f66e26]:
+              - generic [ref=f66e27]: useful
+              - generic [ref=f66e29]: interfaces
+            - generic [ref=f66e31]: for
+            - generic [ref=f66e34]:
+              - generic [ref=f66e35]: complex
+              - generic [ref=f66e37]: products
+            - generic [ref=f66e39]:
+              - generic [ref=f66e40]: that
+              - generic [ref=f66e42]: people
+              - generic [ref=f66e44]: actually
+              - generic [ref=f66e46]: enjoy
+              - generic [ref=f66e48]: using.
+          - paragraph [ref=f66e50]: Product Designer · Berlin, Germany
+          - link "See the work" [ref=f66e52] [cursor=pointer]:
+            - /url: "#work"
+      - paragraph [ref=f66e53]: Open to new projects, 2026
+    - generic [ref=f66e57]:
+      - article [ref=f66e60]:
+        - link "ARASTELLE, 2026. Image pending, opens the case study." [ref=f66e61] [cursor=pointer]:
+          - /url: /work/arastelle
+          - generic [ref=f66e62]: ARASTELLE
+        - generic [ref=f66e64]:
+          - paragraph [ref=f66e65]: ARASTELLE
+          - generic [ref=f66e66]: "2026"
+      - article [ref=f66e69]:
+        - link "Groshi, 2025. Image pending, opens the case study." [ref=f66e70] [cursor=pointer]:
+          - /url: /work/groshi
+          - figure "Image needed Groshi — accounts overview in the shipped product" [ref=f66e71]:
+            - generic [ref=f66e73]:
+              - generic [ref=f66e74]: Image needed
+              - generic [ref=f66e75]: Groshi — accounts overview in the shipped product
+        - generic [ref=f66e76]:
+          - paragraph [ref=f66e77]: Groshi
+          - generic [ref=f66e78]: "2025"
+      - article [ref=f66e81]:
+        - link "NOXS, 2025. Image pending, opens the case study." [ref=f66e82] [cursor=pointer]:
+          - /url: /work/noxs
+          - figure "Image needed NOXS — the landing page, direct hero variant" [ref=f66e83]:
+            - generic [ref=f66e85]:
+              - generic [ref=f66e86]: Image needed
+              - generic [ref=f66e87]: NOXS — the landing page, direct hero variant
+        - generic [ref=f66e88]:
+          - paragraph [ref=f66e89]: NOXS
+          - generic [ref=f66e90]: "2025"
+    - paragraph [ref=f66e93]:
+      - generic [ref=f66e94]:
+        - generic [ref=f66e95]: Structure
+        - generic [ref=f66e97]: first,
+      - generic [ref=f66e99]:
+        - generic [ref=f66e100]: personality
+        - generic [ref=f66e102]: "on"
+        - generic [ref=f66e104]: top.
+    - generic [ref=f66e109]:
+      - heading "Experience" [level=2] [ref=f66e110]
+      - generic [ref=f66e111]:
+        - generic [ref=f66e112]:
+          - generic [ref=f66e113]: 2022 – Present
+          - generic [ref=f66e114]: Senior Product Designer, Northwind Labs
+          - generic [ref=f66e115]: Led design for the analytics platform used by 40k teams. Built the first shared design system.
+        - generic [ref=f66e116]:
+          - generic [ref=f66e117]: 2019 – 2022
+          - generic [ref=f66e118]: Product Designer, Fieldnote
+          - generic [ref=f66e119]: Designed mobile onboarding and the offline sync engine experience. Cut first-week churn by a third.
+        - generic [ref=f66e120]:
+          - generic [ref=f66e121]: 2017 – 2019
+          - generic [ref=f66e122]: UI Designer, Studio Kern
+          - generic [ref=f66e123]: Client work across fintech and healthcare. Learned to love constraints and typography.
+    - generic [ref=f66e124]:
+      - generic [ref=f66e125]:
+        - heading "What I do" [level=2] [ref=f66e126]:
+          - generic [ref=f66e127]: What
+          - generic [ref=f66e129]: I
+          - generic [ref=f66e131]: do
+        - list [ref=f66e133]:
+          - listitem [ref=f66e134]: Services
+          - listitem [ref=f66e135]: How I work
+      - paragraph [ref=f66e136]: Three ways I usually get pulled into a product. Most engagements combine them — the split depends on how much of the problem is still undefined when we start.
+      - generic [ref=f66e137]:
+        - generic [ref=f66e138]:
+          - generic [ref=f66e139]: "01"
+          - generic [ref=f66e140]:
+            - heading "Product design" [level=3] [ref=f66e141]
+            - paragraph [ref=f66e142]: End-to-end design for web and mobile features, from problem framing to polished UI.
+        - generic [ref=f66e143]:
+          - generic [ref=f66e144]: "02"
+          - generic [ref=f66e145]:
+            - heading "Design systems" [level=3] [ref=f66e146]
+            - paragraph [ref=f66e147]: Component libraries, tokens and documentation that keep design and engineering in sync.
+        - generic [ref=f66e148]:
+          - generic [ref=f66e149]: "03"
+          - generic [ref=f66e150]:
+            - heading "Research and strategy" [level=3] [ref=f66e151]
+            - paragraph [ref=f66e152]: User interviews, usability testing and product direction grounded in evidence.
+    - generic [ref=f66e155]:
+      - heading "[. About .]" [level=2] [ref=f66e156]:
+        - generic [ref=f66e157]: "[."
+        - generic [ref=f66e160]: About
+        - generic [ref=f66e163]: .]
+      - paragraph [ref=f66e167]: I am a product designer. I turn ambiguous, half-specified problems into software people can pick up and use without a tutorial.
+      - figure [ref=f66e168]:
+        - figure "Image needed Portrait of Alex Morgan" [ref=f66e171]:
+          - generic [ref=f66e173]:
+            - generic [ref=f66e174]: Image needed
+            - generic [ref=f66e175]: Portrait of Alex Morgan
+      - paragraph [ref=f66e177]:
+        - text: "I work end to end: research and framing, flows and wireframes, high-fidelity UI, then shipping alongside engineers, measuring what happens after launch. I like the work to be"
+        - emphasis [ref=f66e178]: clear first and unmistakably mine
+        - text: second.
+    - generic [ref=f66e179]:
+      - heading "Words from" [level=2] [ref=f66e180]
+      - generic [ref=f66e181]:
+        - figure "Priya Raman / VP Product, Northwind Labs" [ref=f66e182]:
+          - blockquote [ref=f66e183]: “Alex turns vague problems into shipped product. Rare combination of craft and follow-through.”
+        - figure "Jonas Weber / Engineering Lead" [ref=f66e185]:
+          - blockquote [ref=f66e186]: “The design system work paid for itself in the first quarter.”
+  - contentinfo [ref=f66e188]:
+    - generic [ref=f66e189]:
+      - heading "Let’s make something clear and calm ." [level=2] [ref=f66e190]:
+        - generic [ref=f66e191]: Let’s
+        - generic [ref=f66e193]: make
+        - generic [ref=f66e195]: something
+        - generic [ref=f66e197]:
+          - generic [ref=f66e198]: clear
+          - generic [ref=f66e200]: and
+          - generic [ref=f66e202]: calm
+        - generic [ref=f66e204]: .
+      - generic [ref=f66e206]:
+        - link "hello@example.com" [ref=f66e207] [cursor=pointer]:
+          - /url: mailto:hello@example.com
+        - link "Back to work" [ref=f66e208] [cursor=pointer]:
+          - /url: "#work"
+      - generic [ref=f66e209]:
+        - link "Dribbble" [ref=f66e210] [cursor=pointer]:
+          - /url: https://dribbble.com
+        - link "LinkedIn" [ref=f66e211] [cursor=pointer]:
+          - /url: https://linkedin.com
+        - link "GitHub" [ref=f66e212] [cursor=pointer]:
+          - /url: https://github.com
+      - paragraph [ref=f66e213]: © 2026 Alex Morgan / Product Designer

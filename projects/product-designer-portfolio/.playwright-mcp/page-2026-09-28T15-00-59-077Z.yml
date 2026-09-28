@@ -1,0 +1,234 @@
+- generic [ref=f38e3]:
+  - banner [ref=f38e4]:
+    - generic [ref=f38e5]:
+      - link "Darya Kastsiukevich, home" [ref=f38e6] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=f38e10]:
+        - link "Projects" [ref=f38e11] [cursor=pointer]:
+          - /url: /#work
+          - text: "[Projects]"
+        - link "About" [ref=f38e12] [cursor=pointer]:
+          - /url: /#about
+          - text: "[About]"
+        - link "Contact" [ref=f38e13] [cursor=pointer]:
+          - /url: /#contact
+          - text: "[Contact]"
+  - main [ref=f38e15]:
+    - article [ref=f38e16]:
+      - generic [ref=f38e17]:
+        - link "← All work" [ref=f38e18] [cursor=pointer]:
+          - /url: /#work
+        - generic [ref=f38e19]:
+          - heading "ARASTELLE" [level=1] [ref=f38e20]
+          - generic [ref=f38e21]: "2026"
+        - paragraph [ref=f38e22]: Communicating complex technology through a clear digital experience. A marketing site for tethered drone systems, designed in Figma and built in Webflow.
+        - list [ref=f38e23]:
+          - listitem [ref=f38e24]: Web design
+          - listitem [ref=f38e25]: Interaction design
+          - listitem [ref=f38e26]: Webflow
+          - listitem [ref=f38e27]: Brand site
+      - figure "Image needed The ARASTELLE website — hero section, designed and built in Webflow" [ref=f38e30]:
+        - generic [ref=f38e32]:
+          - generic [ref=f38e33]: Image needed
+          - generic [ref=f38e34]: The ARASTELLE website — hero section, designed and built in Webflow
+      - generic [ref=f38e35]:
+        - generic [ref=f38e36]:
+          - generic [ref=f38e37]:
+            - paragraph [ref=f38e38]: ARASTELLE develops tethered drone systems designed to extend the capabilities of micro-UAS for professional and institutional users. The website needed to communicate a highly technical product in a way that felt clear, credible, and engaging.
+            - paragraph [ref=f38e39]: Because the project is under NDA, this case study focuses only on the publicly available product and the design work I can share.
+          - paragraph [ref=f38e40]: "Designed and shipped: Figma to responsive Webflow"
+        - complementary [ref=f38e41]:
+          - generic [ref=f38e42]:
+            - generic [ref=f38e43]:
+              - term [ref=f38e44]: Role
+              - definition [ref=f38e45]: Product / Web Designer — UX/UI, interaction design, Webflow development
+            - generic [ref=f38e46]:
+              - term [ref=f38e47]: Timeline
+              - definition [ref=f38e48]: Ongoing project
+            - generic [ref=f38e49]:
+              - term [ref=f38e50]: Team
+              - definition [ref=f38e51]: ARASTELLE, with a development partner
+            - generic [ref=f38e52]:
+              - term [ref=f38e53]: Platform
+              - definition [ref=f38e54]: Webflow, responsive web
+            - generic [ref=f38e55]:
+              - term [ref=f38e56]: Status
+              - definition [ref=f38e57]: Shipped / under NDA
+      - generic [ref=f38e58]:
+        - generic [ref=f38e60]:
+          - heading "The challenge" [level=2] [ref=f38e61]
+          - generic [ref=f38e63]:
+            - paragraph [ref=f38e64]: "The product itself is technically complex, while the website needed to make its value understandable quickly. The experience had to communicate:"
+            - list [ref=f38e65]:
+              - listitem [ref=f38e66]:
+                - generic [ref=f38e68]: what the technology does
+              - listitem [ref=f38e69]:
+                - generic [ref=f38e71]: why tethered drones matter
+              - listitem [ref=f38e72]:
+                - generic [ref=f38e74]: how the solution works
+              - listitem [ref=f38e75]:
+                - generic [ref=f38e77]: where it can be used
+              - listitem [ref=f38e78]:
+                - generic [ref=f38e80]: what makes the system different
+            - paragraph [ref=f38e81]: At the same time, the brand needed to feel technical, reliable, and modern rather than like a traditional defense-industry website.
+            - paragraph [ref=f38e82]: Because the project is under NDA, this case study focuses only on the publicly available product and the design work I can share.
+        - generic [ref=f38e84]:
+          - heading "Turning complex technology into a clear story" [level=2] [ref=f38e85]
+          - generic [ref=f38e87]:
+            - figure [ref=f38e88]:
+              - figure "Image needed The site’s narrative structure — from what it is to how to learn more" [ref=f38e89]:
+                - generic [ref=f38e91]:
+                  - generic [ref=f38e92]: Image needed
+                  - generic [ref=f38e93]: The site’s narrative structure — from what it is to how to learn more
+            - paragraph [ref=f38e94]: "I approached the website as a storytelling experience rather than simply a collection of product pages. The information was structured around a simple progression:"
+            - paragraph [ref=f38e95]: What is it? → How does it work? → What makes it different? → Where can it be used? → How can I learn more?
+            - paragraph [ref=f38e96]: This allowed visitors to gradually understand the technology without being overwhelmed by technical information.
+        - generic [ref=f38e98]:
+          - heading "Designing the product experience" [level=2] [ref=f38e99]
+          - generic [ref=f38e101]:
+            - generic [ref=f38e102]:
+              - heading "01 Product first" [level=3] [ref=f38e103]:
+                - generic [ref=f38e104]: "01"
+                - generic [ref=f38e105]: Product first
+              - generic [ref=f38e106]:
+                - figure [ref=f38e107]:
+                  - figure "Image needed The BASTION ISR hero — product visuals, value proposition, key specifications" [ref=f38e108]:
+                    - generic [ref=f38e110]:
+                      - generic [ref=f38e111]: Image needed
+                      - generic [ref=f38e112]: The BASTION ISR hero — product visuals, value proposition, key specifications
+                - paragraph [ref=f38e113]: The BASTION ISR solution is introduced early, with the core value proposition and key specifications immediately visible. Instead of hiding technical information deeper in the page, I combined product visuals, concise messaging, and specifications to create a quick understanding of the solution.
+                - paragraph [ref=f38e114]: The public site communicates key attributes such as unlimited flight time, 100 m operating height, 30-second deployment, and its compatibility with multiple micro-UAS platforms.
+            - generic [ref=f38e115]:
+              - heading "02 Making multiple use cases easy to explore" [level=3] [ref=f38e116]:
+                - generic [ref=f38e117]: "02"
+                - generic [ref=f38e118]: Making multiple use cases easy to explore
+              - generic [ref=f38e119]:
+                - figure [ref=f38e120]:
+                  - figure "Image needed The use-case explorer — select a scenario to see how the technology applies" [ref=f38e121]:
+                    - generic [ref=f38e123]:
+                      - generic [ref=f38e124]: Image needed
+                      - generic [ref=f38e125]: The use-case explorer — select a scenario to see how the technology applies
+                - paragraph [ref=f38e126]: ARASTELLE’s technology can be applied across different scenarios, including defense, public safety, private security, event security, first response, crisis management, and critical infrastructure protection.
+                - paragraph [ref=f38e127]: Rather than presenting these as a long list, I designed the experience around use-case exploration. Visitors can select a scenario and discover how the technology applies to that specific context. This creates a more relevant experience for different audiences while keeping the overall page structure simple.
+            - generic [ref=f38e128]:
+              - heading "03 Combining technical information with visual storytelling" [level=3] [ref=f38e129]:
+                - generic [ref=f38e130]: "03"
+                - generic [ref=f38e131]: Combining technical information with visual storytelling
+              - generic [ref=f38e132]:
+                - figure [ref=f38e133]:
+                  - figure "Image needed Product imagery, motion, and interactive sections" [ref=f38e134]:
+                    - generic [ref=f38e136]:
+                      - generic [ref=f38e137]: Image needed
+                      - generic [ref=f38e138]: Product imagery, motion, and interactive sections
+                - paragraph [ref=f38e139]: "For a highly technical product, visuals are important for helping people understand the technology before they read every detail. I used:"
+                - list [ref=f38e140]:
+                  - listitem [ref=f38e141]:
+                    - generic [ref=f38e143]: large-scale product imagery
+                  - listitem [ref=f38e144]:
+                    - generic [ref=f38e146]: motion and video
+                  - listitem [ref=f38e147]:
+                    - generic [ref=f38e149]: interactive sections
+                  - listitem [ref=f38e150]:
+                    - generic [ref=f38e152]: 3D/visual representations
+                  - listitem [ref=f38e153]:
+                    - generic [ref=f38e155]: progressive disclosure of information
+                - paragraph [ref=f38e156]: The result is an experience that feels closer to a technology product presentation than a conventional corporate website.
+        - generic [ref=f38e158]:
+          - heading "Interaction & visual direction" [level=2] [ref=f38e159]
+          - generic [ref=f38e161]:
+            - figure [ref=f38e162]:
+              - figure "Image needed The visual language — precision, technology, reliability, mission focus" [ref=f38e163]:
+                - generic [ref=f38e165]:
+                  - generic [ref=f38e166]: Image needed
+                  - generic [ref=f38e167]: The visual language — precision, technology, reliability, mission focus
+            - paragraph [ref=f38e168]: "The visual language was built around the characteristics of the product itself:"
+            - generic [ref=f38e169]:
+              - heading "Precision" [level=3] [ref=f38e170]
+              - paragraph [ref=f38e173]: Structured layouts and strong typographic hierarchy.
+            - generic [ref=f38e174]:
+              - heading "Technology" [level=3] [ref=f38e175]
+              - paragraph [ref=f38e178]: Dark visual environments, motion, product renders, and interactive elements.
+            - generic [ref=f38e179]:
+              - heading "Reliability" [level=3] [ref=f38e180]
+              - paragraph [ref=f38e183]: Clear specifications, restrained UI, and direct communication.
+            - generic [ref=f38e184]:
+              - heading "Mission focus" [level=3] [ref=f38e185]
+              - paragraph [ref=f38e188]: Large imagery and contextual use cases that demonstrate the technology in action.
+            - paragraph [ref=f38e189]: The goal was to make the interface feel advanced without sacrificing clarity.
+        - generic [ref=f38e191]:
+          - heading "From Figma to Webflow" [level=2] [ref=f38e192]
+          - generic [ref=f38e194]:
+            - figure [ref=f38e195]:
+              - figure "Image needed The responsive build in Webflow" [ref=f38e196]:
+                - generic [ref=f38e198]:
+                  - generic [ref=f38e199]: Image needed
+                  - generic [ref=f38e200]: The responsive build in Webflow
+            - paragraph [ref=f38e201]: "I designed the experience in Figma and translated the final design into a responsive Webflow website. The implementation included:"
+            - list [ref=f38e202]:
+              - listitem [ref=f38e203]:
+                - generic [ref=f38e205]: responsive layouts
+              - listitem [ref=f38e206]:
+                - generic [ref=f38e208]: interactive sections
+              - listitem [ref=f38e209]:
+                - generic [ref=f38e211]: animated transitions
+              - listitem [ref=f38e212]:
+                - generic [ref=f38e214]: product showcases
+              - listitem [ref=f38e215]:
+                - generic [ref=f38e217]: use-case interactions
+              - listitem [ref=f38e218]:
+                - generic [ref=f38e220]: CMS/content structures where needed
+              - listitem [ref=f38e221]:
+                - generic [ref=f38e223]: responsive behavior across screen sizes
+            - paragraph [ref=f38e224]: The focus throughout development was keeping the visual experience from the design intact while making the interactions feel natural on the live website.
+        - generic [ref=f38e226]:
+          - heading "The result" [level=2] [ref=f38e227]
+          - generic [ref=f38e229]:
+            - paragraph [ref=f38e230]: The final website gives ARASTELLE a digital experience that combines technical credibility with visual storytelling. It helps visitors understand the product, explore its applications, and move naturally toward learning more or requesting a demo.
+            - paragraph [ref=f38e231]: The public website now communicates the company’s core proposition — persistent aerial observation through tethered drone technology — while giving different audiences a way to explore relevant use cases.
+        - generic [ref=f38e233]:
+          - heading "NDA" [level=2] [ref=f38e234]
+          - paragraph [ref=f38e237]: Some project details, including internal strategy, research, business requirements, and project discussions, cannot be shared publicly due to an NDA. This case study therefore focuses on the publicly available product and the design and development work I am permitted to show.
+        - figure "A guiding principle for this project" [ref=f38e238]:
+          - blockquote [ref=f38e239]: The goal was to make the interface feel advanced without sacrificing clarity.
+    - generic [ref=f38e241]:
+      - heading "More work" [level=2] [ref=f38e243]
+      - generic [ref=f38e244]:
+        - link "Image needed Groshi — accounts overview in the shipped product Groshi 2025" [ref=f38e245] [cursor=pointer]:
+          - /url: /work/groshi
+          - figure "Image needed Groshi — accounts overview in the shipped product" [ref=f38e246]:
+            - generic [ref=f38e248]:
+              - generic [ref=f38e249]: Image needed
+              - generic [ref=f38e250]: Groshi — accounts overview in the shipped product
+          - generic [ref=f38e251]:
+            - paragraph [ref=f38e252]: Groshi
+            - generic [ref=f38e253]: "2025"
+        - link "Image needed NOXS — the landing page, direct hero variant NOXS 2025" [ref=f38e254] [cursor=pointer]:
+          - /url: /work/noxs
+          - figure "Image needed NOXS — the landing page, direct hero variant" [ref=f38e255]:
+            - generic [ref=f38e257]:
+              - generic [ref=f38e258]: Image needed
+              - generic [ref=f38e259]: NOXS — the landing page, direct hero variant
+          - generic [ref=f38e260]:
+            - paragraph [ref=f38e261]: NOXS
+            - generic [ref=f38e262]: "2025"
+  - contentinfo [ref=f38e263]:
+    - generic [ref=f38e264]:
+      - heading "Let’s make something clear and calm ." [level=2] [ref=f38e265]:
+        - generic [ref=f38e266]: Let’s
+        - generic [ref=f38e268]: make
+        - generic [ref=f38e270]: something
+        - generic [ref=f38e272]:
+          - generic [ref=f38e273]: clear
+          - generic [ref=f38e275]: and
+          - generic [ref=f38e277]: calm
+        - generic [ref=f38e279]: .
+      - link "Back to work" [ref=f38e282] [cursor=pointer]:
+        - /url: "#work"
+      - generic [ref=f38e283]:
+        - link "Dribbble" [ref=f38e284] [cursor=pointer]:
+          - /url: https://dribbble.com
+        - link "LinkedIn" [ref=f38e285] [cursor=pointer]:
+          - /url: https://linkedin.com
+        - link "GitHub" [ref=f38e286] [cursor=pointer]:
+          - /url: https://github.com
+      - paragraph [ref=f38e287]: © 2026 Darya Kastsiukevich / Product Designer

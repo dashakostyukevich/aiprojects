@@ -1,0 +1,48 @@
+- generic [ref=f93e3]:
+  - banner [ref=f93e4]:
+    - generic [ref=f93e5]:
+      - link "Alex Morgan, home" [ref=f93e6] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=f93e10]:
+        - link "Projects" [ref=f93e11] [cursor=pointer]:
+          - /url: /#work
+          - text: "[Projects]"
+        - link "About" [ref=f93e12] [cursor=pointer]:
+          - /url: /#about
+          - text: "[About]"
+        - link "Contact" [ref=f93e13] [cursor=pointer]:
+          - /url: /#contact
+          - text: "[Contact]"
+  - main [ref=f93e15]:
+    - paragraph [ref=f93e16]: "404"
+    - heading "This page doesn’t exist" [level=1] [ref=f93e17]
+    - paragraph [ref=f93e18]: The link may be old, or the project may have moved.
+    - generic [ref=f93e19]:
+      - link "See the work" [ref=f93e20] [cursor=pointer]:
+        - /url: /#work
+      - link "Back home" [ref=f93e21] [cursor=pointer]:
+        - /url: /
+  - contentinfo [ref=f93e22]:
+    - generic [ref=f93e23]:
+      - heading "Let’s make something clear and calm ." [level=2] [ref=f93e24]:
+        - generic [ref=f93e25]: Let’s
+        - generic [ref=f93e27]: make
+        - generic [ref=f93e29]: something
+        - generic [ref=f93e31]:
+          - generic [ref=f93e32]: clear
+          - generic [ref=f93e34]: and
+          - generic [ref=f93e36]: calm
+        - generic [ref=f93e38]: .
+      - generic [ref=f93e40]:
+        - link "hello@example.com" [ref=f93e41] [cursor=pointer]:
+          - /url: mailto:hello@example.com
+        - link "Back to work" [ref=f93e42] [cursor=pointer]:
+          - /url: "#work"
+      - generic [ref=f93e43]:
+        - link "Dribbble" [ref=f93e44] [cursor=pointer]:
+          - /url: https://dribbble.com
+        - link "LinkedIn" [ref=f93e45] [cursor=pointer]:
+          - /url: https://linkedin.com
+        - link "GitHub" [ref=f93e46] [cursor=pointer]:
+          - /url: https://github.com
+      - paragraph [ref=f93e47]: © 2026 Alex Morgan / Product Designer

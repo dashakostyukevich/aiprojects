@@ -1,0 +1,217 @@
+- generic [ref=f39e3]:
+  - main [ref=f39e5]:
+    - generic [ref=f39e6]:
+      - link "Alex Morgan, home" [ref=f39e7] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=f39e11]:
+        - link "Projects" [ref=f39e12] [cursor=pointer]:
+          - /url: /#work
+        - link "About" [ref=f39e13] [cursor=pointer]:
+          - /url: /#about
+        - link "Contact" [ref=f39e14] [cursor=pointer]:
+          - /url: /#contact
+    - generic [ref=f39e15]:
+      - generic [ref=f39e16]:
+        - list [aria-hidden] [ref=f39e17]:
+          - listitem [ref=f39e18]:
+            - generic [ref=f39e25]: First coffee
+          - listitem [ref=f39e26]:
+            - generic [ref=f39e33]: Windowsill
+          - listitem [ref=f39e34]:
+            - generic [ref=f39e41]: Film camera
+        - generic [ref=f39e42]:
+          - heading "I design calm, useful interfaces for complex products that people actually enjoy using." [level=1] [ref=f39e43]:
+            - generic [ref=f39e44]:
+              - generic [ref=f39e45]: I
+              - generic [ref=f39e47]: design
+              - generic [ref=f39e49]: calm,
+            - generic [ref=f39e51]:
+              - generic [ref=f39e52]: useful
+              - generic [ref=f39e54]: interfaces
+            - generic [ref=f39e56]: for
+            - generic [ref=f39e59]:
+              - generic [ref=f39e60]: complex
+              - generic [ref=f39e62]: products
+            - generic [ref=f39e64]:
+              - generic [ref=f39e65]: that
+              - generic [ref=f39e67]: people
+              - generic [ref=f39e69]: actually
+              - generic [ref=f39e71]: enjoy
+              - generic [ref=f39e73]: using.
+          - paragraph [ref=f39e75]: Product Designer · Berlin, Germany
+          - link "See the work" [ref=f39e77] [cursor=pointer]:
+            - /url: "#work"
+        - list [aria-hidden] [ref=f39e78]:
+          - listitem [ref=f39e79]:
+            - generic [ref=f39e84]: Paper manuals
+          - listitem [ref=f39e85]:
+            - generic [ref=f39e92]: Long rides
+          - listitem [ref=f39e93]:
+            - generic [ref=f39e99]: Long playlists
+      - paragraph [ref=f39e100]: Open to new projects, 2026
+    - generic [ref=f39e104]:
+      - article [ref=f39e107]:
+        - link "ARASTELLE, 2026. Image pending, opens the case study." [ref=f39e108] [cursor=pointer]:
+          - /url: /work/arastelle
+          - generic [ref=f39e109]: ARASTELLE
+        - generic [ref=f39e111]:
+          - paragraph [ref=f39e112]: ARASTELLE
+          - generic [ref=f39e113]: "2026"
+      - article [ref=f39e116]:
+        - link "Groshi, 2025. Image pending, opens the case study." [ref=f39e117] [cursor=pointer]:
+          - /url: /work/groshi
+          - figure "Image needed Groshi — accounts overview in the shipped product" [ref=f39e118]:
+            - generic [ref=f39e120]:
+              - generic [ref=f39e121]: Image needed
+              - generic [ref=f39e122]: Groshi — accounts overview in the shipped product
+        - generic [ref=f39e123]:
+          - paragraph [ref=f39e124]: Groshi
+          - generic [ref=f39e125]: "2025"
+      - article [ref=f39e128]:
+        - link "NOXS, 2025. Image pending, opens the case study." [ref=f39e129] [cursor=pointer]:
+          - /url: /work/noxs
+          - figure "Image needed NOXS — the landing page, direct hero variant" [ref=f39e130]:
+            - generic [ref=f39e132]:
+              - generic [ref=f39e133]: Image needed
+              - generic [ref=f39e134]: NOXS — the landing page, direct hero variant
+        - generic [ref=f39e135]:
+          - paragraph [ref=f39e136]: NOXS
+          - generic [ref=f39e137]: "2025"
+    - paragraph [ref=f39e140]:
+      - generic [ref=f39e141]:
+        - generic [ref=f39e142]: Structure
+        - generic [ref=f39e144]: first,
+      - generic [ref=f39e146]:
+        - generic [ref=f39e147]: personality
+        - generic [ref=f39e149]: "on"
+        - generic [ref=f39e151]: top.
+    - generic [ref=f39e156]:
+      - generic [ref=f39e157]:
+        - generic [ref=f39e158]:
+          - heading "What I do" [level=2] [ref=f39e159]:
+            - generic [ref=f39e160]: What
+            - generic [ref=f39e162]: I
+            - generic [ref=f39e164]: do
+          - list [ref=f39e166]:
+            - listitem [ref=f39e167]: Services
+            - listitem [ref=f39e168]: How I work
+        - link "Jump to about" [ref=f39e169] [cursor=pointer]:
+          - /url: "#about"
+      - paragraph [ref=f39e172]: Three ways I usually get pulled into a product. Most engagements combine them — the split depends on how much of the problem is still undefined when we start.
+      - generic [ref=f39e173]:
+        - generic [ref=f39e174]:
+          - generic [ref=f39e175]: "01"
+          - generic [ref=f39e179]:
+            - heading "Product design" [level=3] [ref=f39e180]
+            - paragraph [ref=f39e181]: End-to-end design for web and mobile features, from problem framing to polished UI.
+        - generic [ref=f39e182]:
+          - generic [ref=f39e183]: "02"
+          - generic [ref=f39e187]:
+            - heading "Design systems" [level=3] [ref=f39e188]
+            - paragraph [ref=f39e189]: Component libraries, tokens and documentation that keep design and engineering in sync.
+        - generic [ref=f39e190]:
+          - generic [ref=f39e191]: "03"
+          - generic [ref=f39e195]:
+            - heading "Research and strategy" [level=3] [ref=f39e196]
+            - paragraph [ref=f39e197]: User interviews, usability testing and product direction grounded in evidence.
+    - generic [ref=f39e200]:
+      - heading "[. About .]" [level=2] [ref=f39e201]:
+        - generic [ref=f39e202]: "[."
+        - generic [ref=f39e205]: About
+        - generic [ref=f39e208]: .]
+      - paragraph [ref=f39e212]: I am a product designer. I turn ambiguous, half-specified problems into software people can pick up and use without a tutorial.
+      - figure [ref=f39e213]:
+        - figure "Image needed Portrait of Alex Morgan" [ref=f39e216]:
+          - generic [ref=f39e218]:
+            - generic [ref=f39e219]: Image needed
+            - generic [ref=f39e220]: Portrait of Alex Morgan
+      - paragraph [ref=f39e222]:
+        - text: "I work end to end: research and framing, flows and wireframes, high-fidelity UI, then shipping alongside engineers, measuring what happens after launch. I like the work to be"
+        - emphasis [ref=f39e223]: clear first and unmistakably mine
+        - text: second.
+    - generic [ref=f39e225]:
+      - generic [ref=f39e226]:
+        - heading "Random things" [level=2] [ref=f39e227]:
+          - generic [ref=f39e228]: Random
+          - generic [ref=f39e230]: things
+        - paragraph [ref=f39e232]: Numbers, notes and fragments pulled out of the work — the kind of detail that gets left out of a case study but decides whether one was any good.
+      - generic [ref=f39e233]:
+        - generic [ref=f39e234]:
+          - paragraph [ref=f39e235]: 2 of 3
+          - paragraph [ref=f39e236]: users confused by the budgeting entry screen
+        - generic [ref=f39e237]:
+          - paragraph [ref=f39e244]: "Doodle: architecture map"
+          - paragraph [ref=f39e245]: Accounts → budgets
+        - generic [ref=f39e246]:
+          - paragraph [ref=f39e250]: Shipped it
+          - paragraph [ref=f39e251]: Budgeting, from zero
+        - generic [ref=f39e252]:
+          - figure "Image needed" [ref=f39e253]
+          - paragraph [ref=f39e257]: BASTION ISR
+          - paragraph [ref=f39e258]: Tethered ISR system
+        - generic [ref=f39e259]:
+          - paragraph [ref=f39e260]: “The task worked. The entry point did not.”
+          - paragraph [ref=f39e261]: Groshi, usability test
+        - generic [ref=f39e262]:
+          - figure "Image needed" [ref=f39e263]
+          - paragraph [ref=f39e267]: Workshop wall
+          - paragraph [ref=f39e268]: Journey map, week 2
+        - generic [ref=f39e269]:
+          - paragraph [ref=f39e270]: 100 m
+          - paragraph [ref=f39e271]: BASTION ISR operating height
+        - generic [ref=f39e272]:
+          - paragraph [ref=f39e276]: Under NDA
+          - paragraph [ref=f39e277]: Some details withheld
+        - generic [ref=f39e278]:
+          - paragraph [ref=f39e285]: "Doodle: use-case map"
+          - paragraph [ref=f39e286]: Defense → first response
+        - generic [ref=f39e287]:
+          - paragraph [ref=f39e288]: “Persistent aerial observation.”
+          - paragraph [ref=f39e289]: ARASTELLE, in one line
+    - generic [ref=f39e291]:
+      - generic [ref=f39e292]:
+        - heading "Experience" [level=2] [ref=f39e293]
+        - generic [ref=f39e294]:
+          - generic [ref=f39e295]:
+            - generic [ref=f39e296]: 2022 – Present
+            - generic [ref=f39e297]: Senior Product Designer, Northwind Labs
+            - generic [ref=f39e298]: Led design for the analytics platform used by 40k teams. Built the first shared design system.
+          - generic [ref=f39e299]:
+            - generic [ref=f39e300]: 2019 – 2022
+            - generic [ref=f39e301]: Product Designer, Fieldnote
+            - generic [ref=f39e302]: Designed mobile onboarding and the offline sync engine experience. Cut first-week churn by a third.
+          - generic [ref=f39e303]:
+            - generic [ref=f39e304]: 2017 – 2019
+            - generic [ref=f39e305]: UI Designer, Studio Kern
+            - generic [ref=f39e306]: Client work across fintech and healthcare. Learned to love constraints and typography.
+      - generic [ref=f39e307]:
+        - heading "Words from" [level=2] [ref=f39e308]
+        - generic [ref=f39e309]:
+          - figure "Priya Raman / VP Product, Northwind Labs" [ref=f39e310]:
+            - blockquote [ref=f39e311]: “Alex turns vague problems into shipped product. Rare combination of craft and follow-through.”
+          - figure "Jonas Weber / Engineering Lead" [ref=f39e313]:
+            - blockquote [ref=f39e314]: “The design system work paid for itself in the first quarter.”
+  - contentinfo [ref=f39e316]:
+    - generic [ref=f39e317]:
+      - heading "Let’s make something clear and calm ." [level=2] [ref=f39e318]:
+        - generic [ref=f39e319]: Let’s
+        - generic [ref=f39e321]: make
+        - generic [ref=f39e323]: something
+        - generic [ref=f39e325]:
+          - generic [ref=f39e326]: clear
+          - generic [ref=f39e328]: and
+          - generic [ref=f39e330]: calm
+        - generic [ref=f39e332]: .
+      - generic [ref=f39e334]:
+        - link "hello@example.com" [ref=f39e335] [cursor=pointer]:
+          - /url: mailto:hello@example.com
+        - link "Back to work" [ref=f39e336] [cursor=pointer]:
+          - /url: "#work"
+      - generic [ref=f39e337]:
+        - link "Dribbble" [ref=f39e338] [cursor=pointer]:
+          - /url: https://dribbble.com
+        - link "LinkedIn" [ref=f39e339] [cursor=pointer]:
+          - /url: https://linkedin.com
+        - link "GitHub" [ref=f39e340] [cursor=pointer]:
+          - /url: https://github.com
+      - paragraph [ref=f39e341]: © 2026 Alex Morgan / Product Designer

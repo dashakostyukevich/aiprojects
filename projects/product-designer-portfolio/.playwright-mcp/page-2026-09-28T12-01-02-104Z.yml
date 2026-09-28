@@ -1,0 +1,358 @@
+- generic [ref=f61e3]:
+  - main [ref=f61e5]:
+    - article [ref=f61e6]:
+      - generic [ref=f61e7]:
+        - generic [ref=f61e8]:
+          - link "Alex Morgan, home" [ref=f61e9] [cursor=pointer]:
+            - /url: /
+          - navigation [ref=f61e13]:
+            - link "Projects" [ref=f61e14] [cursor=pointer]:
+              - /url: /#work
+              - text: "[Projects]"
+            - link "About" [ref=f61e15] [cursor=pointer]:
+              - /url: /#about
+              - text: "[About]"
+            - link "Contact" [ref=f61e16] [cursor=pointer]:
+              - /url: /#contact
+              - text: "[Contact]"
+        - link "← All work" [ref=f61e17] [cursor=pointer]:
+          - /url: /#work
+        - generic [ref=f61e18]:
+          - heading "Groshi" [level=1] [ref=f61e19]
+          - generic [ref=f61e20]: "2025"
+        - paragraph [ref=f61e21]: Bringing clarity to complex personal finances. Product architecture, a scalable category system, budgeting from scratch, and a rebuilt onboarding — all shipped.
+        - list [ref=f61e22]:
+          - listitem [ref=f61e23]: Product design
+          - listitem [ref=f61e24]: UX research
+          - listitem [ref=f61e25]: Information architecture
+          - listitem [ref=f61e26]: Fintech
+      - figure "Image needed Groshi — the shipped product, accounts and net worth overview" [ref=f61e29]:
+        - generic [ref=f61e31]:
+          - generic [ref=f61e32]: Image needed
+          - generic [ref=f61e33]: Groshi — the shipped product, accounts and net worth overview
+      - generic [ref=f61e34]:
+        - generic [ref=f61e35]:
+          - generic [ref=f61e36]:
+            - paragraph [ref=f61e37]: Managing money becomes complicated when it is spread across multiple accounts, banks, currencies, and sources of income. Groshi was designed to bring everything into one place and help people understand, plan, and control their finances with more confidence.
+            - paragraph [ref=f61e38]: I joined the product while it was already in development. My challenge was not simply to design new screens, but to bring structure to an evolving product, improve existing experiences, and introduce new functionality without making the experience more complicated.
+          - paragraph [ref=f61e39]: "Structure before scale: researched, tested, and implemented"
+        - complementary [ref=f61e40]:
+          - generic [ref=f61e41]:
+            - generic [ref=f61e42]:
+              - term [ref=f61e43]: Role
+              - definition [ref=f61e44]: Product Designer — UX/UI, research, UX audit, information architecture, feature design, design system
+            - generic [ref=f61e45]:
+              - term [ref=f61e46]: Timeline
+              - definition [ref=f61e47]: Ongoing product
+            - generic [ref=f61e48]:
+              - term [ref=f61e49]: Team
+              - definition [ref=f61e50]: Client, Product Manager, technical team
+            - generic [ref=f61e51]:
+              - term [ref=f61e52]: Platform
+              - definition [ref=f61e53]: Web app, multi-account and multi-currency
+            - generic [ref=f61e54]:
+              - term [ref=f61e55]: Status
+              - definition [ref=f61e56]: Implemented / ongoing
+      - generic [ref=f61e57]:
+        - generic [ref=f61e59]:
+          - heading "The challenge" [level=2] [ref=f61e60]
+          - generic [ref=f61e62]:
+            - paragraph [ref=f61e63]: Personal finances are becoming increasingly fragmented. People may have several bank accounts, credit cards, savings accounts, different currencies, and multiple sources of income. When all of this information lives in different places, it becomes difficult to understand the bigger picture.
+            - paragraph [ref=f61e64]: "The research behind Groshi highlighted several recurring needs:"
+            - list [ref=f61e65]:
+              - listitem [ref=f61e66]:
+                - generic [ref=f61e68]: seeing a complete financial picture
+              - listitem [ref=f61e69]:
+                - generic [ref=f61e71]: understanding where money is going
+              - listitem [ref=f61e72]:
+                - generic [ref=f61e74]: managing budgets and financial goals
+              - listitem [ref=f61e75]:
+                - generic [ref=f61e77]: reducing the amount of manual tracking
+              - listitem [ref=f61e78]:
+                - generic [ref=f61e80]: working with multiple accounts and currencies
+              - listitem [ref=f61e81]:
+                - generic [ref=f61e83]: feeling confident that financial information is organized and understandable
+            - paragraph [ref=f61e84]: The product needed to make this complexity feel manageable rather than overwhelming.
+        - generic [ref=f61e86]:
+          - heading "I joined an existing product — but there was no architecture" [level=2] [ref=f61e87]
+          - generic [ref=f61e89]:
+            - paragraph [ref=f61e90]: When I joined Groshi, the product already had screens and design decisions, but it did not yet have a clear information architecture. This quickly became a problem.
+            - paragraph [ref=f61e91]: With multiple accounts, transactions, categories, reports, budgets, and other features, designing screens individually made it difficult to create coherent user flows. Before expanding the product, I needed to understand how all these pieces fit together.
+            - paragraph [ref=f61e92]: So I created the product architecture and used it as a foundation for subsequent UX decisions. The goal was to establish a structure that could scale as new features were introduced, while keeping the relationship between accounts, transactions, categories, analytics, and budgets clear.
+        - generic [ref=f61e94]:
+          - 'heading "Research: understanding what users actually struggle with" [level=2] [ref=f61e95]'
+          - generic [ref=f61e97]:
+            - paragraph [ref=f61e98]: Rather than relying only on assumptions about personal finance, I collected qualitative feedback from discussions and reviews of finance products. I organized the feedback by feature and sentiment to identify recurring patterns and areas where users were experiencing friction.
+            - paragraph [ref=f61e99]: "Several themes emerged:"
+            - generic [ref=f61e100]:
+              - heading "01 The need for a complete picture" [level=3] [ref=f61e101]:
+                - generic [ref=f61e102]: "01"
+                - generic [ref=f61e103]: The need for a complete picture
+              - paragraph [ref=f61e105]: Users wanted to understand their overall financial situation rather than look at isolated transactions or accounts.
+            - generic [ref=f61e106]:
+              - heading "02 Too much information can become overwhelming" [level=3] [ref=f61e107]:
+                - generic [ref=f61e108]: "02"
+                - generic [ref=f61e109]: Too much information can become overwhelming
+              - paragraph [ref=f61e111]: Financial products often contain a lot of data. Simply adding more information does not necessarily make the experience more useful.
+            - generic [ref=f61e112]:
+              - heading "03 Budgeting is valuable, but needs to feel approachable" [level=3] [ref=f61e113]:
+                - generic [ref=f61e114]: "03"
+                - generic [ref=f61e115]: Budgeting is valuable, but needs to feel approachable
+              - paragraph [ref=f61e117]: Budgeting can help users plan their finances, but the experience needs to make the first step obvious.
+            - generic [ref=f61e118]:
+              - heading "04 Onboarding matters" [level=3] [ref=f61e119]:
+                - generic [ref=f61e120]: "04"
+                - generic [ref=f61e121]: Onboarding matters
+              - paragraph [ref=f61e123]: A complex financial product needs to explain itself. Users need guidance to understand what they can do and why the product is useful.
+            - generic [ref=f61e124]:
+              - heading "05 Flexibility and consistency matter" [level=3] [ref=f61e125]:
+                - generic [ref=f61e126]: "05"
+                - generic [ref=f61e127]: Flexibility and consistency matter
+              - paragraph [ref=f61e129]: With multiple accounts and currencies, users need flexibility without having to learn different rules in different parts of the product.
+            - paragraph [ref=f61e130]: These insights became the foundation for the product goals I proposed to the client.
+        - generic [ref=f61e132]:
+          - heading "From research to product goals" [level=2] [ref=f61e133]
+          - generic [ref=f61e135]:
+            - paragraph [ref=f61e136]: "Based on the research and the original product brief, I defined three core goals:"
+            - list [ref=f61e137]:
+              - listitem [ref=f61e138]:
+                - generic [ref=f61e140]: Create a sense of control — help users understand what is happening with their money.
+              - listitem [ref=f61e141]:
+                - generic [ref=f61e143]: Reduce financial stress — make complex financial information easier to understand and manage.
+              - listitem [ref=f61e144]:
+                - generic [ref=f61e146]: Help users work toward financial goals — turn financial data into something users can act on through budgeting and planning.
+            - paragraph [ref=f61e147]: These goals helped shift the design process from simply improving individual screens to thinking about the experience as a connected financial management system.
+        - generic [ref=f61e149]:
+          - heading "Competitive research" [level=2] [ref=f61e150]
+          - generic [ref=f61e152]:
+            - paragraph [ref=f61e153]: I looked at both direct finance products and products with useful patterns that could inform the experience.
+            - table [ref=f61e155]:
+              - rowgroup [ref=f61e156]:
+                - row [ref=f61e157]:
+                  - columnheader "Product" [ref=f61e158]
+                  - columnheader "What I looked at" [ref=f61e159]
+              - rowgroup [ref=f61e160]:
+                - row [ref=f61e161]:
+                  - rowheader "Revolut" [ref=f61e162]
+                  - cell "UI quality and account organization" [ref=f61e163]
+                - row [ref=f61e164]:
+                  - rowheader "Monarch Money" [ref=f61e165]
+                  - cell "Similar feature set and user flows" [ref=f61e166]
+                - row [ref=f61e167]:
+                  - rowheader "YNAB" [ref=f61e168]
+                  - cell "Budgeting experience" [ref=f61e169]
+                - row [ref=f61e170]:
+                  - rowheader "HomeMoney" [ref=f61e171]
+                  - cell "Managing multiple user accounts" [ref=f61e172]
+                - row [ref=f61e173]:
+                  - rowheader "Notion / Mint" [ref=f61e174]
+                  - cell "Broader patterns and indirect inspiration" [ref=f61e175]
+            - paragraph [ref=f61e176]: The goal was not to copy existing solutions. I used competitors to understand how established products solve similar problems, identify familiar interaction patterns, and find opportunities to make the Groshi experience clearer.
+        - generic [ref=f61e178]:
+          - heading "Designing a scalable financial structure" [level=2] [ref=f61e179]
+          - generic [ref=f61e181]:
+            - figure [ref=f61e182]:
+              - figure "Image needed Groshi information architecture — accounts, transactions, categories, analytics, budgets" [ref=f61e183]:
+                - generic [ref=f61e185]:
+                  - generic [ref=f61e186]: Image needed
+                  - generic [ref=f61e187]: Groshi information architecture — accounts, transactions, categories, analytics, budgets
+            - paragraph [ref=f61e188]: "The architecture became the foundation for the rest of the product. I organized the experience around the major objects users need to manage:"
+            - paragraph [ref=f61e189]: Accounts → Transactions → Categories → Analytics → Budgets
+            - paragraph [ref=f61e190]: "This made it possible to think about features as parts of one system rather than independent screens. It was particularly important because Groshi supports multiple accounts and currencies: a decision made in one part of the product could affect reports, transactions, categories, and budgets elsewhere."
+        - generic [ref=f61e192]:
+          - heading "Making financial data easier to understand" [level=2] [ref=f61e193]
+          - generic [ref=f61e195]:
+            - figure [ref=f61e196]:
+              - figure "Image needed Redesigned financial chart — selecting a month reveals the exact figures" [ref=f61e197]:
+                - generic [ref=f61e199]:
+                  - generic [ref=f61e200]: Image needed
+                  - generic [ref=f61e201]: Redesigned financial chart — selecting a month reveals the exact figures
+            - paragraph [ref=f61e202]: One of the existing experiences I redesigned was the financial chart. The original chart communicated information primarily through visual elements — columns and a line — but users had limited contextual information when looking at a particular month.
+            - paragraph [ref=f61e203]: I redesigned the interaction so that selecting a month also revealed the relevant figures. Instead of asking users to estimate values from the visualization, the interaction provided the exact numbers alongside the visual trend.
+            - paragraph [ref=f61e204]: "The principle: visual overview → contextual detail."
+            - paragraph [ref=f61e205]: The chart could communicate the overall trend while still allowing users to investigate a specific point when they needed more precise information. I also refined the visual hierarchy and interaction patterns to make the analytics experience more consistent with the rest of the product.
+        - generic [ref=f61e207]:
+          - heading "Building a category system that could scale" [level=2] [ref=f61e208]
+          - generic [ref=f61e210]:
+            - figure [ref=f61e211]:
+              - figure "Image needed Category management — creating, editing, and nesting categories" [ref=f61e212]:
+                - generic [ref=f61e214]:
+                  - generic [ref=f61e215]: Image needed
+                  - generic [ref=f61e216]: Category management — creating, editing, and nesting categories
+            - paragraph [ref=f61e217]: "Categories initially looked like a relatively simple feature. But once I considered the product as a whole, the challenge became much bigger. Groshi needed categories to work consistently across:"
+            - list [ref=f61e218]:
+              - listitem [ref=f61e219]:
+                - generic [ref=f61e221]: multiple accounts
+              - listitem [ref=f61e222]:
+                - generic [ref=f61e224]: transactions
+              - listitem [ref=f61e225]:
+                - generic [ref=f61e227]: reports
+              - listitem [ref=f61e228]:
+                - generic [ref=f61e230]: budgets
+              - listitem [ref=f61e231]:
+                - generic [ref=f61e233]: multiple currencies
+            - paragraph [ref=f61e234]: The main UX challenge was hierarchy and nesting. If categories are structured differently depending on where the user encounters them, the product quickly becomes difficult to understand.
+            - paragraph [ref=f61e235]: I therefore designed a more complete category management experience, including creating, editing, and organizing categories while maintaining consistency throughout the product.
+            - paragraph [ref=f61e236]: A feature should not only work on its own. It needs to work as part of the entire product system.
+        - generic [ref=f61e238]:
+          - heading "Designing budgeting from scratch" [level=2] [ref=f61e239]
+          - generic [ref=f61e241]:
+            - figure [ref=f61e242]:
+              - figure "Image needed Budget creation flow — prototyping in Figma and Lovable" [ref=f61e243]:
+                - generic [ref=f61e245]:
+                  - generic [ref=f61e246]: Image needed
+                  - generic [ref=f61e247]: Budget creation flow — prototyping in Figma and Lovable
+            - paragraph [ref=f61e248]: Budgeting was a completely new part of the product. Because Groshi was still developing its MVP, we had to balance research insights with business priorities and move quickly.
+            - paragraph [ref=f61e249]: Rather than trying to build an advanced budgeting system immediately, we focused on creating a basic experience that could validate the core concept. I explored the flows using Figma and Lovable, which allowed us to prototype and iterate quickly before moving toward implementation.
+            - paragraph [ref=f61e250]: The core flow allowed users to create budgets for their income and expenses.
+        - generic [ref=f61e252]:
+          - heading "Testing the budgeting experience" [level=2] [ref=f61e253]
+          - generic [ref=f61e255]:
+            - figure [ref=f61e256]:
+              - figure "Image needed The first screen of the budgeting flow that two of three users found confusing" [ref=f61e257]:
+                - generic [ref=f61e259]:
+                  - generic [ref=f61e260]: Image needed
+                  - generic [ref=f61e261]: The first screen of the budgeting flow that two of three users found confusing
+            - paragraph [ref=f61e262]: "Before finalizing the flow, I tested it with 3 users. The task was simple:"
+            - paragraph [ref=f61e263]: Create a budget category for expenses and income from the first screen.
+            - paragraph [ref=f61e264]: All three users successfully completed the task. However, the test revealed an important usability issue — 2 out of 3 users were confused by the first screen.
+            - paragraph [ref=f61e265]: They were not immediately sure what they were supposed to do or where they should go next. It took them some time to understand the entry point into the budgeting flow.
+            - paragraph [ref=f61e266]: This was valuable because the test showed that task completion alone was not enough. The flow technically worked, but the starting point was not immediately discoverable. That finding informed the way I thought about entry points and guidance in the broader product experience.
+        - generic [ref=f61e268]:
+          - heading "Rebuilding onboarding from scratch" [level=2] [ref=f61e269]
+          - generic [ref=f61e271]:
+            - paragraph [ref=f61e272]: Onboarding was another area where the product needed more structure. Instead of simply introducing users to the interface, I designed the onboarding experience from the ground up. The new experience had two important parts.
+            - generic [ref=f61e273]:
+              - heading "01 Understand the user" [level=3] [ref=f61e274]:
+                - generic [ref=f61e275]: "01"
+                - generic [ref=f61e276]: Understand the user
+              - generic [ref=f61e277]:
+                - figure [ref=f61e278]:
+                  - figure "Image needed The opening onboarding form — who the user is and what they are looking for" [ref=f61e279]:
+                    - generic [ref=f61e281]:
+                      - generic [ref=f61e282]: Image needed
+                      - generic [ref=f61e283]: The opening onboarding form — who the user is and what they are looking for
+                - paragraph [ref=f61e284]: At the beginning, we introduced a short form to understand who the user was and what they were looking for. This gave the product an opportunity to make onboarding more relevant to the user’s needs instead of presenting everyone with the same generic introduction.
+            - generic [ref=f61e285]:
+              - heading "02 Guide users through setup" [level=3] [ref=f61e286]:
+                - generic [ref=f61e287]: "02"
+                - generic [ref=f61e288]: Guide users through setup
+              - generic [ref=f61e289]:
+                - figure [ref=f61e290]:
+                  - figure "Image needed The step-by-step account setup flow" [ref=f61e291]:
+                    - generic [ref=f61e293]:
+                      - generic [ref=f61e294]: Image needed
+                      - generic [ref=f61e295]: The step-by-step account setup flow
+                - paragraph [ref=f61e296]: I created a step-by-step account setup flow that broke the process into manageable stages. Rather than asking users to understand the whole product immediately, onboarding gradually introduced the information needed to get started.
+                - paragraph [ref=f61e297]: The result was a more guided entry into a product that could otherwise feel complex from the first interaction.
+        - generic [ref=f61e299]:
+          - heading "Working within and extending the design system" [level=2] [ref=f61e300]
+          - generic [ref=f61e302]:
+            - paragraph [ref=f61e303]: "I inherited an existing design system when I joined the project. Rather than replacing it, I worked within the established visual language and extended it as the product evolved. I added:"
+            - list [ref=f61e304]:
+              - listitem [ref=f61e305]:
+                - generic [ref=f61e307]: new components
+              - listitem [ref=f61e308]:
+                - generic [ref=f61e310]: forms
+              - listitem [ref=f61e311]:
+                - generic [ref=f61e313]: interaction states
+              - listitem [ref=f61e314]:
+                - generic [ref=f61e316]: patterns required for new features
+            - paragraph [ref=f61e317]: "This allowed new functionality — including budgeting, categories, and onboarding — to feel like part of the same product rather than separate additions. For a growing product, consistency was not only a visual concern: it also helped establish predictable interactions across different parts of the experience."
+        - generic [ref=f61e319]:
+          - heading "From design to a real product" [level=2] [ref=f61e320]
+          - generic [ref=f61e322]:
+            - paragraph [ref=f61e323]: "One important aspect of the project is that the work did not stop at prototypes. The features I designed were implemented. The product evolved to include improvements and new functionality across:"
+            - list [ref=f61e324]:
+              - listitem [ref=f61e325]:
+                - generic [ref=f61e327]: onboarding
+              - listitem [ref=f61e328]:
+                - generic [ref=f61e330]: accounts
+              - listitem [ref=f61e331]:
+                - generic [ref=f61e333]: categories
+              - listitem [ref=f61e334]:
+                - generic [ref=f61e336]: analytics and charts
+              - listitem [ref=f61e337]:
+                - generic [ref=f61e339]: budgeting
+              - listitem [ref=f61e340]:
+                - generic [ref=f61e342]: merchant tracking
+              - listitem [ref=f61e343]:
+                - generic [ref=f61e345]: shared access
+              - listitem [ref=f61e346]:
+                - generic [ref=f61e348]: multi-account and multi-currency experiences
+            - paragraph [ref=f61e349]: The design system was also extended to support the growing product.
+            - paragraph [ref=f61e350]: Because the product is still ongoing, there are not reliable quantitative product metrics I can use to claim specific improvements in conversion, retention, or revenue. Instead, the most concrete evidence from the design process comes from the implemented product and the usability testing.
+        - generic [ref=f61e352]:
+          - heading "Outcome" [level=2] [ref=f61e353]
+          - generic [ref=f61e355]:
+            - paragraph [ref=f61e356]: "The project moved from an evolving collection of screens toward a more structured product experience. My contribution helped establish:"
+            - generic [ref=f61e357]:
+              - heading "A scalable product architecture" [level=3] [ref=f61e358]
+              - paragraph [ref=f61e361]: A clearer relationship between accounts, transactions, categories, analytics, and budgets.
+            - generic [ref=f61e362]:
+              - heading "A more understandable financial analytics experience" [level=3] [ref=f61e363]
+              - paragraph [ref=f61e366]: Charts became more informative by combining visual trends with contextual data.
+            - generic [ref=f61e367]:
+              - heading "A consistent category system" [level=3] [ref=f61e368]
+              - paragraph [ref=f61e371]: Categories could work across accounts, transactions, reports, and budgets.
+            - generic [ref=f61e372]:
+              - heading "A new budgeting experience" [level=3] [ref=f61e373]
+              - paragraph [ref=f61e376]: A previously nonexistent feature was researched, prototyped, tested, and implemented.
+            - generic [ref=f61e377]:
+              - heading "A new onboarding experience" [level=3] [ref=f61e378]
+              - paragraph [ref=f61e381]: A step-by-step setup flow and initial user discovery helped create a more guided entry into the product.
+            - generic [ref=f61e382]:
+              - heading "An evolving design system" [level=3] [ref=f61e383]
+              - paragraph [ref=f61e386]: New components, forms, and states were added without breaking the existing visual language.
+        - generic [ref=f61e388]:
+          - heading "What I learned" [level=2] [ref=f61e389]
+          - generic [ref=f61e391]:
+            - paragraph [ref=f61e392]: Joining a product in the middle of development taught me that Product Design is not always about starting with a blank canvas. Sometimes the challenge is understanding what already exists, identifying what is missing, and making new decisions fit into an evolving system.
+            - paragraph [ref=f61e393]: The biggest lesson from Groshi was the importance of structure before scale. Without a clear architecture, adding more features only makes a product harder to navigate. Establishing the underlying structure first made it easier to design new experiences while keeping the product coherent.
+            - paragraph [ref=f61e394]: I also learned to treat usability testing as a way to discover unexpected problems, not simply to confirm that a design works. In the budgeting test, every participant completed the task — but two still struggled with the first step. That distinction helped me look beyond successful task completion and pay more attention to discoverability and confidence.
+            - paragraph [ref=f61e395]: If I were continuing the project, I would involve stakeholders earlier in defining the overall product structure, and map the complete user journey before expanding individual feature areas.
+            - paragraph [ref=f61e396]: For me, Groshi became less about designing a finance dashboard and more about learning how to bring structure, clarity, and consistency to a complex product as it grows.
+        - figure "What I learned" [ref=f61e397]:
+          - blockquote [ref=f61e398]: The biggest lesson from Groshi was the importance of structure before scale. Without a clear architecture, adding more features only makes a product harder to navigate.
+    - generic [ref=f61e400]:
+      - heading "More work" [level=2] [ref=f61e402]
+      - generic [ref=f61e403]:
+        - link "ARASTELLE ARASTELLE 2026" [ref=f61e404] [cursor=pointer]:
+          - /url: /work/arastelle
+          - generic [ref=f61e405]: ARASTELLE
+          - generic [ref=f61e407]:
+            - paragraph [ref=f61e408]: ARASTELLE
+            - generic [ref=f61e409]: "2026"
+        - link "Image needed NOXS — the landing page, direct hero variant NOXS 2025" [ref=f61e410] [cursor=pointer]:
+          - /url: /work/noxs
+          - figure "Image needed NOXS — the landing page, direct hero variant" [ref=f61e411]:
+            - generic [ref=f61e413]:
+              - generic [ref=f61e414]: Image needed
+              - generic [ref=f61e415]: NOXS — the landing page, direct hero variant
+          - generic [ref=f61e416]:
+            - paragraph [ref=f61e417]: NOXS
+            - generic [ref=f61e418]: "2025"
+  - contentinfo [ref=f61e419]:
+    - generic [ref=f61e420]:
+      - heading "Let’s make something clear and calm ." [level=2] [ref=f61e421]:
+        - generic [ref=f61e422]: Let’s
+        - generic [ref=f61e424]: make
+        - generic [ref=f61e426]: something
+        - generic [ref=f61e428]:
+          - generic [ref=f61e429]: clear
+          - generic [ref=f61e431]: and
+          - generic [ref=f61e433]: calm
+        - generic [ref=f61e435]: .
+      - generic [ref=f61e437]:
+        - link "hello@example.com" [ref=f61e438] [cursor=pointer]:
+          - /url: mailto:hello@example.com
+        - link "Back to work" [ref=f61e439] [cursor=pointer]:
+          - /url: "#work"
+      - generic [ref=f61e440]:
+        - link "Dribbble" [ref=f61e441] [cursor=pointer]:
+          - /url: https://dribbble.com
+        - link "LinkedIn" [ref=f61e442] [cursor=pointer]:
+          - /url: https://linkedin.com
+        - link "GitHub" [ref=f61e443] [cursor=pointer]:
+          - /url: https://github.com
+      - paragraph [ref=f61e444]: © 2026 Alex Morgan / Product Designer

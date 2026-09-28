@@ -1,21 +1,38 @@
 import { Link } from 'react-router-dom'
 import { color, colorClass } from '../lib/color.js'
 import PhotoSlot from './PhotoSlot.jsx'
+import useCardDrift from '../hooks/useCardDrift.js'
 
 // First-screen project card. Flat, no border and no shadow: either a brand card
 // (solid fill, centred lockup) or a photo card (full-bleed image). The label is
 // plain text directly beneath, not a bordered box.
+//
+// Hover has three parts and they live in three separate elements, because they
+// animate at three different rates and cannot share one `transform`:
+//
+//   the card     leans toward the cursor, up to 8px (useCardDrift)
+//   the media    scales to 1.04 inside the card's own overflow
+//   the veil     fades up from the bottom carrying the outcome line
+//
+// The outcome line is the point of the reveal. The card already states its title
+// and year underneath, so a hover that only rescaled the picture would be
+// decoration; this puts the one sentence about what the work *did* inside the
+// card, where the eye already is. It is `aria-hidden` because the same sentence
+// is on the case study page and because it is inside the link — a screen reader
+// announcing it as part of the link's accessible name would make every card in
+// the grid read as a paragraph.
 export default function ProjectCard({ project, ratio = 'aspect-square' }) {
   const isPhoto = project.kind === 'photo'
   // Token fills come through as a class; a raw client brand hex has to be an
   // inline style, since Tailwind only sees class names it can find in source.
   const fillClass = colorClass(project.fill)
+  const cardRef = useCardDrift()
 
   return (
-    <article>
+    <article ref={cardRef} className="work-card">
       <Link
         to={`/work/${project.slug}`}
-        className="group block overflow-hidden rounded-card"
+        className="group relative block overflow-hidden rounded-card focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ink"
         // The visible label sits outside the link. Without this the accessible
         // name would be the entire slot, including the "Image needed" text that
         // only renders while a real photo is missing.
@@ -35,32 +52,90 @@ export default function ProjectCard({ project, ratio = 'aspect-square' }) {
             label={project.imageLabel ?? 'Product screenshot'}
             ratio={ratio}
             sizes="(min-width: 1024px) 42vw, 100vw"
-            className="rounded-card transition-transform duration-200 ease-out group-hover:scale-[1.02]"
+            className="work-card-media rounded-card"
           />
         ) : (
           <div
-            className={`${fillClass ?? ''} ${ratio} flex w-full items-center justify-center p-10 transition-transform duration-200 ease-out group-hover:scale-[1.02]`}
+            className={`work-card-media ${fillClass ?? ''} ${ratio} w-full`}
             style={fillClass ? undefined : { backgroundColor: color(project.fill) }}
-          >
-            {/* Client lockup, centred with generous internal padding. The word
-                is set in the display face rather than drawn as a logo, so it
-                reads as a placeholder until the real mark is supplied.
+          />
+        )}
 
-                The ink colour is chosen per fill, not fixed to white. White on
-                the chartreuse fill measured 1.16:1 and white on terracotta
-                3.27:1, both unreadable; ink on those fills is 17.1:1 and 6.1:1.
-                A real client logo would be supplied as an asset with its own
-                contrast, so this only has to be legible while it is a word. */}
-            <span
-              className={`font-display text-3xl tracking-tight select-none sm:text-4xl ${
-                project.fill === 'accent' || project.fill === 'sky'
-                  ? 'text-accent-ink'
-                  : 'text-white'
-              }`}
-            >
-              {project.lockup ?? project.title}
+        {/* The veil sits inside the link and above the media, so it covers the
+            whole reserved box regardless of which of the two card kinds is
+            above it.
+
+            A flat wash, not a gradient. The gradient was there to keep the top
+            of a screenshot readable while the text sat on the dark end — but at
+            this blur the image is already an even field of colour, so there is
+            no detailed top left to protect and the gradient was buying contrast
+            the blur had already solved. A flat wash is one less thing to get
+            wrong, and it darkens the card evenly instead of implying a light
+            source.
+
+            65%, and it has to be that deep. A flat wash is only as safe as its
+            *lightest* possible backing, which for this grid is a white dashboard
+            screenshot: 55% ink over #fff leaves the outcome at 4.4:1 and the CTA
+            at 3.25:1, both under 4.5 — the gradient had been carrying that
+            weight. At 65% over pure white both sit at 6.31:1, and the CTA is
+            full white rather than white/75, which is part of what let it pass.
+
+            To re-check after changing either number, composite the wash over
+            #fff and take the ratio against white. Under 4.5 is a fail on a
+            screenshot this light, and Groshi's own card is the one that fails
+            first. */}
+        <span aria-hidden="true" className="work-card-veil pointer-events-none absolute inset-0">
+          {/* `h-full` + `justify-end`, not `items-end` on the parent with a
+              content-height child. A wash that only covers the text block leaves
+              a hard horizontal edge across the card, which is more distracting
+              than the gradient it replaced — the eye reads that edge as a seam
+              in the image rather than as a scrim. */}
+          <span className="flex h-full w-full flex-col justify-end bg-[rgb(10_10_10/0.65)] px-5 pb-5 sm:px-7 sm:pb-7">
+            <span className="block font-display text-[0.9375rem] leading-snug font-medium text-white text-balance">
+              {project.outcome}
             </span>
-          </div>
+            <span className="mt-2 block text-[0.75rem] font-medium tracking-[0.02em] text-white uppercase">
+              View case study →
+            </span>
+          </span>
+        </span>
+
+        {/* Client lockup, for a brand card only. Centred with generous internal
+            padding, and the word is set in the display face rather than drawn as
+            a logo, so it reads as a placeholder until the real mark is supplied.
+
+            The ink colour is chosen per fill, not fixed to white. White on the
+            chartreuse fill measured 1.16:1 and white on terracotta 3.27:1, both
+            unreadable; ink on those fills is 17.1:1 and 6.1:1. A real client logo
+            would be an asset with its own contrast, so this only has to be
+            legible while it is a word.
+
+            A sibling of the veil, not a child of the media, and that is the whole
+            reason it is here. Two things forced it out:
+
+              - The veil used to be a gradient that faded out well before the
+                middle of the card, so the wordmark was never underneath it. A
+                flat wash covers everything, and 65% ink over the navy fill
+                takes white down to about 2:1 — the lockup all but vanished.
+              - Putting it back inside the media does not fix that with a
+                `z-index`. `.work-card-media` is transformed on hover, and a
+                transform creates a stacking context, so the lockup is pinned
+                below the veil no matter how high its `z-index` goes. Only
+                leaving the media's stacking context works.
+
+            It is `pointer-events-none` because the whole card is already one
+            link; nothing inside it needs to be separately clickable. */}
+        {!isPhoto && (
+          <span
+            aria-hidden="true"
+            className={`pointer-events-none absolute inset-0 z-10 flex items-center justify-center p-10 font-display text-3xl tracking-tight select-none sm:text-4xl ${
+              project.fill === 'accent' || project.fill === 'sky'
+                ? 'text-accent-ink'
+                : 'text-white'
+            }`}
+          >
+            {project.lockup ?? project.title}
+          </span>
         )}
       </Link>
 
@@ -73,6 +148,24 @@ export default function ProjectCard({ project, ratio = 'aspect-square' }) {
         </p>
         <span className="label-meta shrink-0">{project.year}</span>
       </div>
+
+      {/* The same outcome line again, for readers with no pointer to hover with.
+
+          A touch device fires no `:hover`, so the sentence inside the card would
+          simply never appear for them — the desktop reveal would be the only
+          place that sentence exists, which is the kind of parity a portfolio
+          cannot afford when the sentence is the argument. Rather than leave the
+          veil permanently up on touch (a permanent scrim over every card, hiding
+          the screenshot it exists to annotate), the line moves out from under the
+          picture and sits here in the label block, where it costs no image.
+
+          Hidden at `hover: hover` so exactly one copy is ever visible. Both are
+          `aria-hidden` or `aria`-neutral by construction: the veil copy is
+          hidden from assistive tech because it is inside the link, and this one
+          is a plain paragraph after it, read once, in normal document order. */}
+      <p className="work-card-fallback mt-2 hidden text-[0.9375rem] leading-snug text-ink-muted">
+        {project.outcome}
+      </p>
     </article>
   )
 }

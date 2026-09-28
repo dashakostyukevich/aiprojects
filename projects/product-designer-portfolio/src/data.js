@@ -2,48 +2,96 @@
 // from here, so editing this file is usually all you need.
 
 export const profile = {
-  name: 'Alex Morgan',
+  // The one place the name is written. Everything else reads it: the nav's home
+  // aria-label, the footer copyright, the About portrait alt text, the runtime
+  // document title (`useDocumentMeta`), and every per-route title, description
+  // and JSON-LD block written at build time by `scripts/prerender.mjs`. The
+  // literals in `index.html` are the template's placeholder values and are
+  // overwritten by that script, so they are not a second source of truth.
+  name: 'Darya Kastsiukevich',
   role: 'Product Designer',
   // Hero headline, first screen. One paragraph read as an inline flow, with
-  // `em` for italic spans and `chip` for the inline elements. Chips sit in a
-  // word slot, so the line count is emergent: three lines at the spec's ~780px
-  // measure. A part is either { text, em? } or { chip, ...props }.
-  // Hero headline, first screen. One paragraph read as an inline flow, with
-  // `em` for the emphasised spans and `chip` for the inline elements.
+  // `em` for the emphasised spans. The line count is emergent from the measure
+  // rather than hardcoded.
   //
-  // Only the asterisk chip survives here. The photo and block chips were
-  // decorative CSS-gradient capsules, and at a readable measure they pushed the
-  // headline to four lines on a laptop and six on a phone. They remain
-  // available in HeadlineChip.jsx if you want them back on a wider measure.
+  // This used to carry a `{ chip: 'icon' }` part — the asterisk dropped into
+  // the word slot after "useful interfaces". It is gone, and the reason is
+  // worth keeping: SplitReveal renders every word as its own `inline-block`
+  // mask, and a browser will break a line between two adjacent inline-blocks
+  // whether or not there is whitespace between them. So the asterisk reliably
+  // orphaned onto the start of the next line, reading as a stray glyph rather
+  // than as punctuation. Binding it to the preceding word would mean changing
+  // how SplitReveal groups units, which is not worth it for one decorative
+  // mark. The asterisk is now standalone punctuation — nav logo, About, the end
+  // of the services list — and never sits inside a sentence. See §3 of design.md.
   headline: [
     { text: 'I design calm, ' },
     { text: 'useful interfaces ', em: true },
-    { chip: 'icon' },
     { text: ' for ' },
     { text: 'complex products ', em: true },
     { text: 'that people actually enjoy using.' },
   ],
-  // §3 statement band. Each line stays on one row and bleeds off an edge, so
-  // the second half reads as an intentional crop rather than a wrap.
-  statement: ['Structure first,', 'personality on top.'],
+  // The §3 statement band ("Structure first, personality on top.") used to sit
+  // here as a two-line array. It has been removed from the page along with its
+  // component, because the hero headline already carries the same position and a
+  // second full-bleed claim further down repeated it. The hero is now the only
+  // place the design argues its case.
   tagline: 'I design calm, useful interfaces for complex products.',
-  location: 'Berlin, Germany',
-  email: 'hello@example.com',
+  // The personal aside at the top of the hero. A plain string, not the
+  // `[{ text, em }]` shape the headline and bio use: this is a throwaway line of
+  // small print, and the highlighter treatment that earns its keep on the
+  // headline and the editorial About column would be shouting at 15px.
+  //
+  // It reads *before* the headline, not after. It started below the role line on
+  // the reasoning that the headline and "Product Designer · Gdansk" are one
+  // nameplate that a paragraph should not split; putting the aside on top leaves
+  // that pair intact directly under the h1, so nothing is split and the order
+  // becomes a person, then a claim, then who is making it.
+  aside:
+    'Besides my job, I enjoy traveling, experimenting with baking, and organizing my home. I also love going for walks and taking photos—I really enjoy that!',
+  location: 'Gdansk, Poland',
+  email: 'darya.kasts@gmail.com',
   availability: 'Open to new projects, 2026',
+  // The About section is a centred editorial column, so the bio is the only
+  // place on the page that gets to be read slowly. Set it as two paragraphs of
+  // segments rather than two plain strings: `em` marks a phrase for the accent
+  // highlighter, `italic` for a real slanted cut, and everything else is
+  // ordinary copy. The markup lives in the component, not here.
+  //
   // No invented numbers. The previous first paragraph read "Placeholder bio. I
   // am a product designer with X years of experience", which is a literal
   // template artefact. Say what the work is, not how long you have done it.
   bio: [
-    'I am a product designer. I turn ambiguous, half-specified problems into software people can pick up and use without a tutorial.',
-    'I work end to end: research and framing, flows and wireframes, high-fidelity UI, then shipping alongside engineers and measuring what happens after launch.',
+    [
+      { text: 'I am a product designer. I turn ' },
+      { text: 'ambiguous, half-specified problems', em: true },
+      { text: ' into software people can pick up and use without a tutorial.' },
+    ],
+    [
+      { text: 'I work end to end: research and framing, flows and wireframes, high-fidelity UI, then shipping alongside engineers, measuring ' },
+      { text: 'what happens after launch', em: true },
+      { text: '. I like the work to be ' },
+      { text: 'clear first and unmistakably mine', italic: true },
+      { text: ' second.' },
+    ],
   ],
+  // Portrait for the About section. Null renders a labelled slot that already
+  // reserves the exact box, so dropping a file in public/ and setting the path
+  // here changes nothing about the layout. It is rendered black and white —
+  // remove the `grayscale` class in AboutEditorial.jsx to keep colour.
+  portrait: null,
+  portraitAlt: null,
   // Footer links. The `Email` entry that used to be first here was removed: the
   // footer already renders the same address as a button directly above this
-  // row, so it was a second control for one intent. Swap these three hrefs for
-  // your real profiles, they currently point at bare domain roots.
+  // row, so it was a second control for one intent.
+  //
+  // LinkedIn points at the real profile. Dribbble and GitHub are still the bare
+  // domain roots — the footer renders whatever is in this array, so those two
+  // are live links that go nowhere useful. Replace them with real profile URLs
+  // or delete the entries; do not leave a placeholder that looks intentional.
   links: [
+    { label: 'LinkedIn', href: 'https://www.linkedin.com/in/darya-kastsiukevich/' },
     { label: 'Dribbble', href: 'https://dribbble.com' },
-    { label: 'LinkedIn', href: 'https://linkedin.com' },
     { label: 'GitHub', href: 'https://github.com' },
   ],
 }
@@ -56,39 +104,131 @@ export const nav = [
   ['Contact', '/#contact'],
 ]
 
+// The objects scattered around the hero. They are here to say something about
+// the person before a word of the bio has been read, which is why they are
+// labelled like a shelf rather than captioned like a portfolio.
+//
+// `x` and `y` are percentages of the 1200px composition box, measured from its
+// top-left, and are the *centres* of each object. They are chosen, not
+// generated: six positions picked by eye, deliberately uneven in count per side
+// and in distance from the edge, because a scatter that is even left/right and
+// even top/bottom stops reading as a scatter. `size` picks a drawn size and
+// `tilt` a resting rotation of a few degrees — six identical objects at six
+// irregular positions look like a grid that gave up, not like a desk.
+//
+// The rule the positions have to respect: nothing may land inside the
+// introduction. `HeroVibes.jsx` caps the headline's measure at 58% of the box so
+// the clear band down the middle is 21%–79% at every width, which is what lets
+// these numbers stay honest from 1024px up without recomputing per breakpoint.
+//
+// These used to be line drawings from `Doodle.jsx` and are now photographs. The
+// `doodle` key is gone from every entry; `doodle` still works, so an entry can
+// name a drawing instead of a file, but nothing here uses it now. `Doodle.jsx`
+// has no callers left other than this fallback.
+//
+// The files are in `public/hero/`, downscaled to a 480px long edge. The
+// originals in `hero/` are 8.5MB in total and render at 120–136px, so shipping
+// them unchanged would have put roughly 8MB of PNG on the critical path for the
+// first screen. 480px is still about 3.5x the largest rendered size, so they
+// stay sharp on a 2x display.
+//
+// Order matters and is not alphabetical. Entry 1, 3 and 4 are the three the
+// phone layout picks (`HeroVibes.jsx` takes indices 0, 2, 3), chosen for
+// silhouette: a round cup, a boxy camera, and a wide laptop. The other three
+// are deliberately the awkward shapes — a tall baking dish and a wide diagonal
+// plane — because they are the ones that can take a position no doodle could.
+//
+// Two of the six are captioned with baking language, at two scales. The labels
+// are not a description of the photographs and are not meant to be read as one.
+//
+// The positions were re-picked when these became photographs. They used to be
+// the line drawings' coordinates, and two of them broke: the laptop and the star
+// overlapped, and the plane at `x: 74` pushed its right edge to 956px, eight
+// pixels inside the 948px clear band the headline is capped to. Photographs are
+// wider and taller than the drawings they replaced, so the gaps have to be
+// re-measured rather than inherited. The rule is unchanged and still holds —
+// nothing lands inside 21%–79% of the box, and nothing shares a baseline.
+//
+// `drift` is the object's character in the pointer reaction, and these six values
+// are as hand-picked as the coordinates above. Read by `useHeroDrift`:
+//
+//   scale  the distance at which this object is at half strength, as a fraction
+//          of the section's width. This is a falloff width, not a trigger: the
+//          hook's curve is `1 / (1 + (d/scale)²)` plus a floor, so the object
+//          always reacts and `scale` only decides how sharply it commits as the
+//          cursor arrives. A small `scale` is a twitchy object that jumps when
+//          the cursor comes near; a large one drifts lazily.
+//   gain   how far it travels at full strength, as a multiple of the hook's base.
+//          This is what stops the six from moving as one object.
+//   spin   degrees of extra rotation at full strength, on top of `tilt`. Small,
+//          and signed, so the pair reads as recoil rather than as a wobble.
+//
+// The spread is deliberate: `scale` from 0.13 to 0.26 and `gain` from 0.7 to 1.4
+// means the baking dish is the twitchy one that jumps at a passing cursor while
+// the star barely stirs until the cursor is nearly on it. Six identical values
+// would be a group of objects rather than a collection of them.
+//
+// These were `reach` values, and the rename is not cosmetic. `reach` was a hard
+// cutoff — past it the object was written to exactly zero and stayed there — so
+// "responds to the cursor anywhere on the page" was impossible no matter how the
+// listener was attached. `scale` describes the same spread of characters as a
+// curve parameter rather than a boundary.
+export const heroVibes = [
+  { image: '/hero/coffee.png', label: 'First coffee', x: 7.9, y: 11.3, size: 'sm', tilt: -6, drift: { scale: 0.2, gain: 1.0, spin: -2 } },
+  { image: '/hero/baking.png', label: 'Weekend baking', x: 11.4, y: 79.8, size: 'sm', tilt: 4, drift: { scale: 0.16, gain: 1.35, spin: 3 } },
+  { image: '/hero/camera.png', label: 'Film camera', x: 7.5, y: 42.9, size: 'lg', tilt: -3, drift: { scale: 0.26, gain: 0.8, spin: -1.5 } },
+  // The label reads "Weekdays baking" on a photograph of a laptop, which is
+  // deliberately not a description of the object. Two entries now carry baking
+  // language — this one and "Weekend baking" on the dish below it — so the shelf
+  // says the thing twice at two scales, once as a weekday habit and once as a
+  // weekend project. If that redundancy is not wanted, the label here is the one
+  // to change: the coordinates, size and drift were picked for a wide object in
+  // the top-right corner, and a baking photo needs re-measuring before it could
+  // take this slot.
+  { image: '/hero/laptop.png', label: 'Weekdays baking', x: 91.2, y: 21.1, size: 'md', tilt: 5, drift: { scale: 0.15, gain: 1.15, spin: 2.5 } },
+  { image: '/hero/star.png', label: 'Smiley days', x: 89.4, y: 90.2, size: 'sm', tilt: -4, drift: { scale: 0.24, gain: 0.7, spin: -3 } },
+  { image: '/hero/plane.png', label: 'Red-eye flights', x: 94.8, y: 55.1, size: 'lg', tilt: 3, drift: { scale: 0.13, gain: 1.4, spin: 1.5 } },
+]
+
 export const services = [
   {
-    title: 'Product design',
-    body: 'End-to-end design for web and mobile features, from problem framing to polished UI.',
+    title: 'Product Design',
+    body: 'I design digital products from early concepts to polished, developer-ready interfaces. I work on user flows, information architecture, interaction design, responsive UI, prototyping, and design systems, with a focus on making complex products simple and intuitive.',
   },
   {
-    title: 'Design systems',
-    body: 'Component libraries, tokens and documentation that keep design and engineering in sync.',
+    title: 'Webflow Development',
+    body: 'I turn Figma designs into responsive, production-ready websites in Webflow. I build scalable components, CMS-powered pages, interactions, and animations while keeping the design accurate, accessible, and easy to maintain.',
   },
   {
-    title: 'Research and strategy',
-    body: 'User interviews, usability testing and product direction grounded in evidence.',
+    title: 'UX & Design Systems',
+    body: 'I improve existing digital products by identifying usability issues, simplifying user flows, and creating consistent UI systems. From UX audits and iterative improvements to components, variants, and UI guidelines, I help products become clearer, more scalable, and easier to use.',
   },
 ]
 
 export const experience = [
   {
-    company: 'Northwind Labs',
-    role: 'Senior Product Designer',
-    period: '2022 – Present',
-    notes: 'Led design for the analytics platform used by 40k teams. Built the first shared design system.',
+    company: 'Upwork',
+    role: 'Freelance Product / Web Designer',
+    period: 'Nov 2021 – Present',
+    notes: 'Designed 100+ web and digital product interfaces for SaaS, FinTech, and data-driven businesses, covering user flows, UX/UI, responsive design, prototyping, and design systems. Collaborated closely with clients and developers throughout the design and implementation process, using Figma and AI-assisted workflows to explore, iterate, and deliver developer-ready solutions.',
   },
   {
-    company: 'Fieldnote',
-    role: 'Product Designer',
-    period: '2019 – 2022',
-    notes: 'Designed mobile onboarding and the offline sync engine experience. Cut first-week churn by a third.',
+    company: 'MyStudio',
+    role: 'Webflow Designer',
+    period: 'Jan 2026 – Sep 2026',
+    notes: 'Designed and developed responsive websites in Webflow, translating Figma concepts into polished, production-ready digital experiences. Worked with reusable components, CMS, interactions, and responsive layouts while collaborating with clients and developers to refine designs and solve implementation challenges.',
   },
   {
-    company: 'Studio Kern',
-    role: 'UI Designer',
-    period: '2017 – 2019',
-    notes: 'Client work across fintech and healthcare. Learned to love constraints and typography.',
+    company: 'LinguaTrip',
+    role: 'Web Designer',
+    period: 'Mar 2021 – Sep 2025',
+    notes: 'Designed user flows and interfaces for an education mobile app, focusing on onboarding, course discovery, and improving the overall user experience. Used analytics, testing, and user feedback to iterate on designs, contributing to an increase in conversion from 18% to 22%.',
+  },
+  {
+    company: 'Wizart',
+    role: 'Web Designer',
+    period: 'Jun 2022 – Feb 2023',
+    notes: 'Designed and tested product features and interface concepts to validate product hypotheses and improve user experiences. Collaborated with analytics teams to interpret A/B test results and used data-driven insights to refine UX and product decisions.',
   },
 ]
 
@@ -109,16 +249,39 @@ export const projects = [
     size: 'wide',
     ratio: 'landscape',
     drop: null,
-    // A brand card rather than a photo: the site has no public imagery to show
-    // yet, and a solid navy fill gives this row a different texture from the
-    // hatched photo slot beside it.
-    kind: 'brand',
+    // Was a brand card rather than a photo, on the grounds that the site had no
+    // public imagery. It does now: these are screenshots of the live site at
+    // 1440px, so the card can show the work instead of the client's name.
+    //
+    // The card is `landscape` (4:3) and centre-crops.
+    kind: 'photo',
     fill: 'navy',
     lockup: 'ARASTELLE',
-    image: null,
-    cover: null,
-    coverAlt: 'The ARASTELLE website, hero section',
-    coverLabel: 'The ARASTELLE website — hero section, designed and built in Webflow',
+    // Its own crop, not the section screenshot the case study uses. A 4:3
+    // centre-crop of a 16:9 section catches the seam between the two columns and
+    // a half-cut heading; this is the product frame on its own, which is what
+    // survives the crop and what a 673px card has room to show.
+    image: '/arastelle/card.jpg',
+    imageAlt: 'The BASTION ISR tethered station, the product at the centre of the ARASTELLE site',
+    imageLabel: 'ARASTELLE — BASTION ISR',
+    // The cover is the device mockup rather than a screenshot of the page. A
+    // flat screenshot says "here is a website"; this says "here is a website,
+    // running, on hardware" — which is the thing a marketing site is for and the
+    // thing a screenshot cannot show.
+    //
+    // It is 4:3 in a 16:9 / 21:9 band, so `object-cover` crops the top and
+    // bottom. Checked at both: the laptop sits centre and slightly low in the
+    // frame, so a centred crop keeps the screen and the base at 16:9 and only
+    // trims empty wall at 21:9. There is no `object-position` override here
+    // because none is needed — adding one would only be a guess at a crop that
+    // measurably works.
+    //
+    // `hero.jpg` is kept in `public/arastelle/` and can go back in here if that
+    // ever stops being true. It is the same site, unframed.
+    cover: '/arastelle/cover.jpg',
+    coverAlt:
+      'A laptop showing the ARASTELLE homepage — the tethered station on a rooftop under the headline Unlimited Aerial Surveillance',
+    coverLabel: 'ARASTELLE — the shipped site, running',
     meta: {
       role: 'Product / Web Designer — UX/UI, interaction design, Webflow development',
       timeline: 'Ongoing project',
@@ -174,8 +337,11 @@ export const projects = [
               body: [
                 {
                   image: {
+                    src: '/arastelle/solution.jpg',
+                    caption:
+                      'The product and its specifications in one screen. Unlimited flight time, 100 m height and 30-second deployment are the three numbers a buyer actually decides on, so they sit above the fold of this section rather than on a separate specs page.',
                     label: 'The BASTION ISR hero — product visuals, value proposition, key specifications',
-                    alt: 'The BASTION ISR hero section on the ARASTELLE website',
+                    alt: 'The BASTION ISR section on the ARASTELLE website, showing the tethered station beside its specifications',
                   },
                 },
                 'The BASTION ISR solution is introduced early, with the core value proposition and key specifications immediately visible. Instead of hiding technical information deeper in the page, I combined product visuals, concise messaging, and specifications to create a quick understanding of the solution.',
@@ -190,8 +356,11 @@ export const projects = [
               body: [
                 {
                   image: {
+                    src: '/arastelle/usecase.jpg',
+                    caption:
+                      'The explorer with a scenario selected — border security. Choosing a use case redraws the map from that station’s field of view and writes the scenario beside it, so the claim and the picture of it arrive together.',
                     label: 'The use-case explorer — select a scenario to see how the technology applies',
-                    alt: 'The use-case explorer on the ARASTELLE website',
+                    alt: 'The use-case explorer on the ARASTELLE website, with the border security scenario selected and the station’s coverage drawn over the map',
                   },
                 },
                 'ARASTELLE’s technology can be applied across different scenarios, including defense, public safety, private security, event security, first response, crisis management, and critical infrastructure protection.',
@@ -206,8 +375,11 @@ export const projects = [
               body: [
                 {
                   image: {
+                    src: '/arastelle/interop.jpg',
+                    caption:
+                      'Interoperability told as four places rather than a compatibility table: the same station and tether against desert, forest, farmland and harbour, each labelled with the airframe it works with.',
                     label: 'Product imagery, motion, and interactive sections',
-                    alt: 'Visual storytelling sections on the ARASTELLE website',
+                    alt: 'The interoperability section on the ARASTELLE website, showing the tethered station in four environments with the supported airframes named',
                   },
                 },
                 'For a highly technical product, visuals are important for helping people understand the technology before they read every detail. I used:',
@@ -231,8 +403,11 @@ export const projects = [
         body: [
           {
             image: {
+              src: '/arastelle/about.jpg',
+              caption:
+                'The About band, where the visual language is easiest to read: an all-caps display line at two weights, a hairline-ruled three-column grid, and one accent colour used only for the way in. Nothing here is decoration — it is what "engineered for reliability" looks like.',
               label: 'The visual language — precision, technology, reliability, mission focus',
-              alt: 'ARASTELLE visual direction across page sections',
+              alt: 'The About section on the ARASTELLE website, showing the typographic hierarchy and the hairline-ruled three-column grid',
             },
           },
           'The visual language was built around the characteristics of the product itself:',
@@ -268,8 +443,11 @@ export const projects = [
         body: [
           {
             image: {
+              src: '/arastelle/responsive.jpg',
+              caption:
+                'The same section at 1440 and at 390. The two-column split becomes one column with the specifications first and the product image beneath it — the order a phone reader needs, because the numbers are the argument and the render is the confirmation.',
               label: 'The responsive build in Webflow',
-              alt: 'The ARASTELLE website built in Webflow',
+              alt: 'The BASTION ISR section on the ARASTELLE website shown side by side at desktop and mobile widths',
             },
           },
           'I designed the experience in Figma and translated the final design into a responsive Webflow website. The implementation included:',
@@ -322,17 +500,22 @@ export const projects = [
     size: 'narrow',
     ratio: 'square',
     drop: 'lg',
-    // A product screenshot is the honest card for a shipped product. `image` is
-    // null, so this renders a labelled slot until the real screen exists.
+    // A product screenshot is the honest card for a shipped product. The card is
+    // square, so it centre-crops a 16:10 screen: `categories.jpg` survives that
+    // because its chart and year-over-year comparison sit in the middle third.
     kind: 'photo',
     fill: 'sky',
     lockup: null,
-    image: null,
-    imageAlt: 'Groshi personal finance app',
-    imageLabel: 'Groshi — accounts overview in the shipped product',
-    cover: null,
-    coverAlt: 'Groshi personal finance app, accounts overview',
-    coverLabel: 'Groshi — the shipped product, accounts and net worth overview',
+    image: '/groshi/categories.jpg',
+    imageAlt: 'The Groshi categories screen, with a category selected and its year-over-year chart',
+    imageLabel: 'Groshi — categories, with a selected category and its trend',
+    // The cover is a 16:9 / 21:9 band, so it takes the widest, busiest screen:
+    // the categories view reads as the product at a glance even once the band
+    // has cropped away its top and bottom.
+    cover: '/groshi/budget.jpg',
+    coverAlt:
+      'The Groshi budget view — planned against actual for income and expenses, with money left to spend',
+    coverLabel: 'Groshi — the shipped product, monthly budget against actual',
     meta: {
       role: 'Product Designer — UX/UI, research, UX audit, information architecture, feature design, design system',
       timeline: 'Ongoing product',
@@ -375,6 +558,16 @@ export const projects = [
         heading: 'Research: understanding what users actually struggle with',
         body: [
           'Rather than relying only on assumptions about personal finance, I collected qualitative feedback from discussions and reviews of finance products. I organized the feedback by feature and sentiment to identify recurring patterns and areas where users were experiencing friction.',
+          {
+            image: {
+              src: '/groshi/research-board.jpg',
+              caption:
+                'The feedback board, grouped by feature and coloured by sentiment. The note text is deliberately small here — what the image shows is the shape of the research: how much of it there was, and how much of it repeated.',
+              label: 'Qualitative feedback grouped by feature and sentiment',
+              alt: 'A board of research notes grouped into rows by sentiment — positive, negative and neutral — across finance app features',
+              ratio: 'aspect-16/9',
+            },
+          },
           'Several themes emerged:',
           {
             sub: {
@@ -454,6 +647,15 @@ export const projects = [
               ],
             },
           },
+          {
+            image: {
+              src: '/groshi/competitors.jpg',
+              caption:
+                'Part of the comparison matrix — market, audience, pricing, bank connectivity, multi-currency and analytics, scored per product. Multi-currency and multi-account support is where Groshi’s closest competitors diverge, and it decided where the architecture had to bend.',
+              label: 'The competitive comparison matrix behind the research',
+              alt: 'A comparison matrix of finance products across market, audience, pricing, bank connectivity, multi-currency support and analytics',
+            },
+          },
           'The goal was not to copy existing solutions. I used competitors to understand how established products solve similar problems, identify familiar interaction patterns, and find opportunities to make the Groshi experience clearer.',
         ],
       },
@@ -462,8 +664,11 @@ export const projects = [
         body: [
           {
             image: {
+              src: '/groshi/ia.jpg',
+              caption:
+                'The architecture map: what each of the four core areas holds, and the flows between them.',
               label: 'Groshi information architecture — accounts, transactions, categories, analytics, budgets',
-              alt: 'Information architecture map for Groshi',
+              alt: 'Information architecture map for Groshi, showing the Dashboard, Accounts, Transactions and New transaction areas and the flows between them',
             },
           },
           'The architecture became the foundation for the rest of the product. I organized the experience around the major objects users need to manage:',
@@ -476,8 +681,11 @@ export const projects = [
         body: [
           {
             image: {
+              src: '/groshi/chart-before-after.jpg',
+              caption:
+                'The original chart above, the redesign below: same twelve months, but the redesign adds inflow, outflow and balance on hover instead of asking the user to read them off the shape.',
               label: 'Redesigned financial chart — selecting a month reveals the exact figures',
-              alt: 'The redesigned Groshi financial chart with contextual month detail',
+              alt: 'The original Groshi income and expenses chart above the redesigned version, which reveals exact figures for the selected month',
             },
           },
           'One of the existing experiences I redesigned was the financial chart. The original chart communicated information primarily through visual elements — columns and a line — but users had limited contextual information when looking at a particular month.',
@@ -491,8 +699,11 @@ export const projects = [
         body: [
           {
             image: {
+              src: '/groshi/categories.jpg',
+              caption:
+                'The categories screen: a nested tree on the left, the selected category’s year-over-year comparison and its transactions on the right. One structure, read the same way everywhere.',
               label: 'Category management — creating, editing, and nesting categories',
-              alt: 'The Groshi category management interface',
+              alt: 'The Groshi category management interface, with a nested category tree beside the selected category’s chart and transactions',
             },
           },
           'Categories initially looked like a relatively simple feature. But once I considered the product as a whole, the challenge became much bigger. Groshi needed categories to work consistently across:',
@@ -517,8 +728,11 @@ export const projects = [
         body: [
           {
             image: {
+              src: '/groshi/budget.jpg',
+              caption:
+                'The budget view as it shipped: planned against actual for every category, and a single figure for how much is left to spend.',
               label: 'Budget creation flow — prototyping in Figma and Lovable',
-              alt: 'The Groshi budget creation flow',
+              alt: 'The Groshi budget view, showing planned against actual for income and expenses with money left to spend',
             },
           },
           'Budgeting was a completely new part of the product. Because Groshi was still developing its MVP, we had to balance research insights with business priorities and move quickly.',
@@ -701,11 +915,21 @@ export const projects = [
     kind: 'photo',
     fill: 'sky',
     lockup: null,
-    image: null,
-    imageAlt: 'The NOXS landing page',
+    // The card is `landscape` (4:3) and centre-crops. It takes the full hero
+    // rather than either variant on its own: the two variants are only 566px
+    // wide, so the card at 673px would have to upscale one, and the side-by-side
+    // comparison has its own slot further down where it belongs.
+    image: '/noxs/hero.jpg',
+    imageAlt:
+      'The NOXS landing page: the AI Delivery Assistant hero, with the product visual beside it and the Confluence, Jira, GitLab and GitHub integrations below',
     imageLabel: 'NOXS — the landing page, direct hero variant',
-    cover: null,
-    coverAlt: 'The NOXS landing page, hero section',
+    // The cover is a 16:9 / 21:9 band out of a 1320×821 hero, so it keeps the
+    // middle band: headline, paragraph, both CTAs and the top of the product
+    // visual. The nav and the integration row fall outside it, which is the
+    // right loss — neither is the argument.
+    cover: '/noxs/hero.jpg',
+    coverAlt:
+      'The NOXS landing page hero — “AI Delivery Assistant” with the product visual, a Book a Demo button and a How it works button',
     coverLabel: 'The NOXS landing page — hero section, variant B',
     meta: {
       role: 'UX/UI and Web Designer',
@@ -724,8 +948,16 @@ export const projects = [
         body: [
           {
             image: {
+              src: '/noxs/stack.jpg',
+              caption:
+                'The integration row and the primary CTA, in one crop. NOXS does not ask the team to move — the four tools they already live in are named under the button that asks for the demo, so the pitch and the proof are the same object.',
               label: 'The tool stack NOXS sits on top of — Slack, Jira, Confluence, Git',
-              alt: 'The existing tool stack that NOXS integrates with',
+              alt: 'The Book a Demo and How it works buttons above the Confluence, Jira, GitLab and GitHub integration logos',
+              // 2:1 rather than the 16:9 default. The crop is 2.2:1 and the gap
+              // between the CTAs and the logo row is real whitespace, not
+              // something to crop into — at 16:9 the cover would clip the left
+              // edge of the Book a Demo button.
+              ratio: 'aspect-2/1',
             },
           },
           'Technical teams already work across many tools: Slack for communication, Jira for tasks, Confluence for documentation, Git for development. NOXS was designed to connect these fragmented sources and provide an additional layer of intelligence without forcing teams to adopt another complicated interface.',
@@ -738,6 +970,12 @@ export const projects = [
         heading: 'From a complex product to a simple story',
         body: [
           {
+            // Left as a placeholder, deliberately. The three supplied images are
+            // the hero, the two hero variants and nothing else — there is no
+            // capture of the sections below the fold, and no way to show a
+            // seven-step narrative with a picture of one of those steps. Putting
+            // the hero here would fill the box and say nothing about the
+            // progression the paragraph underneath is describing.
             image: {
               label: 'The page narrative — problem, product, how it works, features, use cases, outcomes, conversion',
               alt: 'The NOXS landing page narrative structure',
@@ -773,6 +1011,11 @@ export const projects = [
         heading: 'Designing for conversion',
         body: [
           {
+            // Also a placeholder, for the same reason as the narrative slot
+            // above: CTA placement is a claim about the whole page and can only
+            // be shown by the whole page. The pair itself is already shown in
+            // `stack.jpg` at the top of the case study — what is missing here is
+            // the scroll that would show the pattern repeating.
             image: {
               label: 'Primary and secondary CTA placement across the page',
               alt: 'CTA placement across the NOXS landing page',
@@ -788,8 +1031,16 @@ export const projects = [
         body: [
           {
             image: {
+              src: '/noxs/variants.jpg',
+              caption:
+                'The whole test, in one frame. Everything below the headline is identical; what changed is the framing and the second button. A visitor who already knows the category gets “intelligence layer above your tech infrastructure” from A, and everyone else gets “AI Delivery Assistant” from B — and the second one is the one that shipped.',
               label: 'Variant A (conceptual) against variant B (direct) — same page, two hero framings',
-              alt: 'The two hero variants tested for the NOXS landing page',
+              alt: 'The two NOXS hero variants side by side: variant A reading Intelligence layer above your tech infrastructure, variant B reading AI Delivery Assistant',
+              // Close to the image's own 2.8:1. At the 16:9 default this would
+              // scale to fit the height and then crop 720px off the sides, which
+              // is most of both variants — the comparison is the whole point of
+              // the image and cropping either half destroys it.
+              ratio: 'aspect-[2.8/1]',
             },
           },
           'The hero section was particularly important. For a lead-generation landing page, the first screen needs to communicate the product’s value quickly and give visitors a clear next step.',
@@ -838,8 +1089,16 @@ export const projects = [
         body: [
           {
             image: {
+              src: '/noxs/visual.jpg',
+              caption:
+                'The product visual doing the explaining: a gradient field, a release-notes action, a task marked approved and the sprint board it came from. It is the only part of the page that shows the product doing something, and it sits beside the headline rather than below it.',
               label: 'The NOXS visual system — clarity, technology, structure, trust',
-              alt: 'The visual direction across the NOXS landing page',
+              alt: 'The NOXS product visual — a gradient field with a release-notes action, an approved task notification and a sprint board',
+              // 16:10, matching the crop's own 1.63:1. At the 16:9 default the
+              // sides trim ~4%, which is nothing; this is only set so the box
+              // does not crop the notification and the release-notes action out
+              // of frame at narrower widths where the default pulls harder.
+              ratio: 'aspect-16/10',
             },
           },
           'The visual system was designed to communicate the same qualities the product promised:',
@@ -935,7 +1194,7 @@ export const projects = [
 export const testimonials = [
   {
     quote:
-      'Alex turns vague problems into shipped product. Rare combination of craft and follow-through.',
+      'Darya turns vague problems into shipped product. Rare combination of craft and follow-through.',
     name: 'Priya Raman',
     title: 'VP Product, Northwind Labs',
   },
@@ -943,122 +1202,6 @@ export const testimonials = [
     quote: 'The design system work paid for itself in the first quarter.',
     name: 'Jonas Weber',
     title: 'Engineering Lead',
-  },
-]
-
-// §5/§6 "Random-things" collage for the About section. Card sub-types come
-// from the design system (illustration, photo, quote, badge, stat) and no two
-// adjacent cards should be the same type.
-//
-// `pos` is a percentage box, expressed as a share of the collage grid rather
-// than of the page. Cards cluster near the edges and the middle band is left
-// clear so the headline stays legible.
-//
-// This used to be free absolute positioning inside a hardcoded 900px-tall
-// wrapper, which produced a large dead zone under the headline and a card that
-// collided with the section above. It is now a real CSS grid: `pos` is resolved
-// into grid placement, so the collage sizes itself to its content and the
-// percentage boxes describe a proportion rather than a position on an
-// arbitrarily sized canvas. Mobile ignores placement entirely and stacks the
-// cards two-up in array order.
-export const collage = [
-  // Placement is explicit grid coordinates against a 12-column, 4-row grid.
-  // The headline holds columns 1-6 across rows 1-2; the cards fill the rest.
-  //
-  // Every card declares `rowSpan: 1` even where a taller card would look better
-  // spanning two rows. With `auto-rows-min` a two-row span reports its height
-  // to neither row, so the row it shares collapses and the next row's cards
-  // overlap it. Uneven card heights within a row are the intended texture.
-  //
-  // These used to describe Fieldnote, Kern and Pulse, which are no longer case
-  // studies, so they now carry facts from the two that are. All of it is
-  // placeholder — replace freely, nothing here is validated.
-  {
-    type: 'stat',
-    figure: '2 of 3',
-    label: 'users confused by the budgeting entry screen',
-    fill: 'ink',
-    at: { col: 8, row: 1, colSpan: 3 },
-    rotate: -3,
-  },
-  {
-    type: 'illustration',
-    title: 'Doodle: architecture map',
-    caption: 'Accounts → budgets',
-    fill: 'surface',
-    at: { col: 11, row: 1, colSpan: 2 },
-    rotate: 2,
-  },
-  {
-    type: 'badge',
-    label: 'Shipped it',
-    detail: 'Budgeting, from zero',
-    fill: 'accent',
-    at: { col: 8, row: 2, colSpan: 3 },
-    rotate: 3,
-  },
-  {
-    type: 'photo',
-    title: 'Workshop wall',
-    caption: 'Journey map, week 2',
-    fill: 'sky',
-    image: null,
-    // No real photograph yet, so this renders a labelled slot. Drop a file in
-    // public/ and set the path here and it becomes a real image.
-    photoLabel: 'Photo of the research workshop wall',
-    at: { col: 11, row: 2, colSpan: 2 },
-    rotate: -2,
-  },
-  // Full-width band.
-  {
-    type: 'quote',
-    quote: 'Persistent aerial observation.',
-    name: 'ARASTELLE, in one line',
-    fill: 'sand',
-    at: { col: 1, row: 3, colSpan: 4 },
-    rotate: -2,
-  },
-  {
-    type: 'stat',
-    figure: '100 m',
-    label: 'BASTION ISR operating height',
-    fill: 'terracotta',
-    at: { col: 5, row: 3, colSpan: 2 },
-    rotate: 2,
-  },
-  {
-    type: 'badge',
-    label: 'Under NDA',
-    detail: 'Some details withheld',
-    fill: 'sand',
-    at: { col: 7, row: 3, colSpan: 2 },
-    rotate: 3,
-  },
-  {
-    type: 'photo',
-    title: 'BASTION ISR',
-    caption: 'Tethered ISR system',
-    fill: 'sky',
-    image: null,
-    photoLabel: 'Product photo of the BASTION ISR tethered drone system',
-    at: { col: 9, row: 3, colSpan: 4 },
-    rotate: -3,
-  },
-  {
-    type: 'illustration',
-    title: 'Doodle: use-case map',
-    caption: 'Defense → first response',
-    fill: 'surface',
-    at: { col: 1, row: 4, colSpan: 4 },
-    rotate: 2,
-  },
-  {
-    type: 'quote',
-    quote: 'The task worked. The entry point did not.',
-    name: 'Groshi, usability test',
-    fill: 'ink',
-    at: { col: 5, row: 4, colSpan: 8 },
-    rotate: -2,
   },
 ]
 

@@ -1,5 +1,5 @@
-// Resolves a colour reference for data-driven artwork (collage cards, headline
-// chips, project brand fills). Accepts a design system token name, which maps to
+// Resolves a colour reference for data-driven artwork (project brand fills,
+// case-study cover fills). Accepts a design system token name, which maps to
 // the matching CSS variable, or a raw hex/CSS value passed straight through.
 //
 // Token names keep artwork tied to design.md. Raw hex exists because project
@@ -22,7 +22,7 @@ export function color(ref) {
 }
 
 // Tailwind class equivalents, for places where a class is needed rather than an
-// inline value (project card fills, collage card fills).
+// inline value (project card fills, case-study cover fills).
 const classes = {
   bg: 'bg-bg',
   surface: 'bg-surface',

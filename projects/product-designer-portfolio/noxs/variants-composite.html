@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      /* Not shipped. A scratch page that composes the NOXS hero A/B pair into a
+         single comparison image for the case study: variant A (conceptual) beside
+         variant B (direct), both at their native 566px so neither is upscaled.
+
+         The section this serves is "the direct, benefit-led hero won", and a
+         reader cannot see that from one hero. They need both, side by side, at
+         the same size, or the claim is just a sentence. */
+      * { box-sizing: border-box; margin: 0; }
+      body {
+        background: #0a0a0a;
+        width: 1240px;
+        height: 500px;
+        padding: 36px;
+        display: flex;
+        gap: 32px;
+        align-items: flex-start;
+        font-family: -apple-system, system-ui, sans-serif;
+      }
+      figure { display: flex; flex-direction: column; gap: 12px; }
+      img { width: 566px; display: block; border-radius: 6px; }
+      figcaption {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        color: rgb(255 255 255 / 0.55);
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .lost { color: #e84436; }
+      .won { color: rgb(255 255 255 / 0.9); }
+    </style>
+  </head>
+  <body>
+    <figure>
+      <img src="./Variant A.png" alt="" />
+      <figcaption><span class="lost">A</span> Conceptual — strategic positioning</figcaption>
+    </figure>
+    <figure>
+      <img src="./Variant B.png" alt="" />
+      <figcaption><span class="won">B</span> Direct — and the one that shipped</figcaption>
+    </figure>
+  </body>
+</html>

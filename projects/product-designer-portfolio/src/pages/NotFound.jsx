@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router-dom'
-import NavRow from '../components/NavRow.jsx'
 import useDocumentMeta from '../hooks/useDocumentMeta.js'
 
 export default function NotFound() {
@@ -8,8 +7,7 @@ export default function NotFound() {
   useDocumentMeta(pathname)
 
   return (
-    <main className="container-page py-8 sm:py-10">
-      <NavRow className="mb-16 border-b border-hairline pb-6 sm:mb-24" />
+    <main className="container-page nav-offset pb-8 sm:pb-10">
       {/* "404" stays. It is the one place on the site where the status is
           useful to a human, and it is the subject of the page rather than an
           eyebrow above a section headline. */}
