@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
+import RouteFallback from './components/RouteFallback.jsx'
 import SiteFooter from './components/SiteFooter.jsx'
 import Home from './pages/Home.jsx'
 import CaseStudy from './pages/CaseStudy.jsx'
@@ -11,13 +12,17 @@ export default function App() {
   useHashScroll()
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-[100dvh] flex-col">
       <div className="flex-1">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/work/:slug" element={<CaseStudy />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        {/* A render error in any page now resolves to a recoverable state
+            instead of a blank document. */}
+        <RouteFallback>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/work/:slug" element={<CaseStudy />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </RouteFallback>
       </div>
       <SiteFooter />
     </div>

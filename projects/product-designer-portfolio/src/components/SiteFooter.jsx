@@ -3,15 +3,14 @@ import SplitReveal from './SplitReveal.jsx'
 
 export default function SiteFooter() {
   return (
-    <footer
-      id="contact"
-      className="scroll-mt-24 border-t border-hairline bg-ink text-bg"
-    >
+    <footer id="contact" className="scroll-mt-8 border-t border-hairline bg-ink text-bg">
       <div className="container-page py-20 sm:py-28">
-        <p className="label-meta text-bg/60">Contact</p>
+        {/* The "Contact" eyebrow is gone. With the hero and About, the page now
+            carries three uppercase micro-labels, which is the ceiling for a
+            seven-section page. The h2 below states the intent on its own. */}
         <SplitReveal
           as="h2"
-          className="mt-6 max-w-3xl font-display text-display leading-[1.05] tracking-[-0.03em] text-balance"
+          className="max-w-3xl font-display text-display leading-[1.05] tracking-[-0.03em] text-balance"
         >
           Let&rsquo;s make something{' '}
           {/* The accent highlight carries the emphasis; Space Grotesk has no

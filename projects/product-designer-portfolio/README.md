@@ -84,14 +84,21 @@ If any of these should be reverted, `design.md` is the place to record it.
 
 ### The first screen (hero)
 
-The first screen is full-bleed: the nav row, a hero that fills the viewport height below it, and the
-projects grid all run the full width of the page, edge to edge, on the plain design system
-background. There is no canvas wrapper.
+The first screen is full-bleed: the nav row, a hero, and the projects grid all run the full width of
+the page, edge to edge, on the plain design system background. There is no canvas wrapper.
 
 - **Layout.** `NavRow` is a 72px row with page padding (`px-4 sm:px-14 lg:px-16`). The hero is a
-  flex container of `min-h-[calc(100dvh-4.5rem)]` that centres its content, so the first screen is
-  exactly one viewport tall. The grid section carries the same horizontal padding, with the grid
-  itself capped at `max-w-[1200px]` so cards stay readable on very wide displays.
+  flex container of `min-h-[60dvh]` that centres its content. It was originally
+  `min-h-[calc(100dvh-4.5rem)]`, which made the first screen exactly one viewport tall and pushed
+  the entire projects grid below the fold — the grid is the point of the first screen, so you had
+  to scroll to see any of it. At 60% the first project card is visible on arrival at every size
+  tested (360x640 through 1920x1080). `dvh` rather than `vh` so mobile browser chrome does not
+  push the hero past the visible area. The grid section carries the same horizontal padding, with
+  the grid itself capped at `max-w-[1200px]` so cards stay readable on very wide displays.
+- **The hero's internal padding dropped** from `py-14 sm:py-20` to `py-10 sm:py-12` at the same
+  time. At 60dvh the old padding plus the headline overflowed the box on shorter laptop screens,
+  and `items-center` on a box that is too small centres the overflow, pushing the top of the
+  headline up under the nav instead of just growing the block downward.
 - **Nav.** The §5 pill/outline variant: a bare asterisk mark on the left (no wordmark, the link's
   accessible name carries it) and three outlined pills on the right, 12px gap, 1px ink border,
   999px radius, 8px/20px padding. Scrolls with the page, not sticky. The links themselves come
@@ -117,13 +124,23 @@ background. There is no canvas wrapper.
 
   | key | values | effect |
   | --- | --- | --- |
-  | `size` | `wide` (7 cols), `narrow` (5 cols) | 7+5 and 5+7 fill both rows exactly, so nothing leaves a gap |
-  | `ratio` | `wide` (16/10), `landscape` (4/3), `square`, `portrait` (3/4) | the crop, and the main reason the grid does not read as a table of squares |
+  | `size` | `wide` (7 cols), `narrow` (5 cols), `full` (12 cols) | 7+5 and 5+7 fill rows exactly; `full` is for a lone closing card |
+  | `ratio` | `wide` (16/10), `landscape` (4/3), `square`, `portrait` (3/4), `band` (21/9) | the crop, and the main reason the grid does not read as a table of squares |
   | `drop` | `sm`/`md`/`lg`/`xl` (10/16/24/32 units top margin) | staggers a card against its neighbour |
 
-  Current arrangement: Atlas `wide`/`landscape`/no drop, Fieldnote `narrow`/`square`/`lg`,
-  Kern `narrow`/`square`/no drop, Pulse `wide`/`wide`/`md`. So each row has one card hanging lower
-  than the other, and the two rows stagger in opposite directions.
+  Current arrangement: ARASTELLE `wide`/`landscape`/no drop, Groshi `narrow`/`square`/`lg`, NOXS
+  `wide`/`landscape`/`md`. Three cards tile 7+5 then 5+7 — the count that closes exactly, so no
+  card is left over. Each row has one card hanging lower than the other, and the rows stagger in
+  opposite directions.
+
+  `size: 'full'` and `ratio: 'band'` are defined in `WorkGrid.jsx` but currently unused. They exist
+  for an odd count, where cards pair 7+5, 5+7 and the last one needs all 12 columns rather than
+  leaving a five-column hole. `band` (21/9) is the ratio to pair with it: `wide` (16/10) at 12
+  columns is 750px tall on a 1200px grid, taller than the first screen itself.
+
+  Note the grid is a hardcoded 7/5/12 composition, not a layout that adapts to however many
+  projects exist. Going from three to four means re-checking `size` and `ratio` on the existing
+  three so the rows still pair.
 
   `drop` and `size` only apply from `lg` up. Below that the grid is a single full-width column in
   array order, which is the only sane reading order on a phone, and the varied `ratio`s still carry
@@ -238,9 +255,37 @@ Each entry in `projects` needs:
 - `image` — path under `public/` for a photo card. `null` renders a placeholder swatch.
 - `meta` — the sidebar block (role, timeline, team, platform, status). Add or remove keys freely;
   the labels come from `metaLabels` in `src/pages/CaseStudy.jsx`.
-- `intro` and `sections` — the long-form body. `sections` is an array of `{ heading, body }`, where
-  `body` is an array of paragraphs. Order is whatever reads best; nothing is hardcoded.
+- `intro` and `sections` — the long-form body. `sections` is an array of `{ heading, body }`.
+  `body` is a **block array**: either a bare string for a paragraph, or a tagged object. See
+  "Case study body blocks" below. Order is whatever reads best; nothing is hardcoded.
 - `pullquote` / `pullquoteBy` — optional. Set both to `null` to hide the block.
+- `cover` / `coverAlt` / `coverLabel`, `image` / `imageAlt` / `imageLabel` — asset paths plus
+  alt text. Each has a sensible default derived from the title, so only set them when the
+  default would be wrong or vague.
+
+### Case study body blocks
+
+`sections[].body` used to be an array of paragraph strings, and three of the four projects
+still are. So **a bare string is still a paragraph**, and everything richer is a tagged object
+rendered by `src/components/CaseStudyBody.jsx`:
+
+| Block                              | Renders as                                                    |
+| ---------------------------------- | ------------------------------------------------------------- |
+| `'Plain paragraph.'`               | `<p>`                                                          |
+| `{ p: 'Paragraph.' }`              | `<p>`, same thing, tagged                                       |
+| `{ list: ['one', 'two'] }`         | `<ul>` with a small accent tick per item                       |
+| `{ table: { head, rows } }`        | `<table>`, ink rule under the head, hairline rows, first column is a `<th scope="row">`. Add `rowHeader: false` to opt out |
+| `{ sub: { number, heading, body } }` | `<h3>` with the number in a small accent chip, plus its own nested block array |
+| `{ note: 'A principle.' }`         | a callout with an accent left rule and medium weight            |
+| `{ image: { src, alt, label, ratio, caption } }` | a `PhotoSlot`, labelled until `src` is set         |
+
+`sub` takes the same grammar in its own `body`, which is why `CaseStudyBody.jsx` is recursive
+rather than a flat switch. `image` blocks are how the case study carries per-section
+screenshots: drop a file in `public/` and set `src`, and the placeholder becomes the real image
+in the same reserved box. `ratio` defaults to `aspect-16/9`.
+
+`note` is the one to reach for sparingly — it is accent-ruled and medium weight, so two of them
+in a row will read as shouting.
 
 Each entry in `collage` needs `type` (`stat`, `illustration`, `photo`, `quote`, `badge`), a `fill`
 from the same palette, and optionally `pos` (`left`, `top`, `width` as percentages, desktop only)
@@ -261,13 +306,23 @@ top of its first screen. Case studies and the 404 page carry the same row above 
 An unknown `/work/:slug` redirects to `/#work` rather than showing a dead end. The
 `netlify.toml` SPA redirect is what makes these deep links work on refresh in production.
 
+The "More work" block at the foot of a case study scales with the project count, because a fixed
+version of it duplicates its own links:
+
+- **Two projects or fewer** — the block hides entirely. It would consist of the single other
+  project three times over (the card, `prev` and `next` all resolve to it).
+- **Three projects** — the block renders the two cards, but `prev`/`next` are suppressed: they
+  would name the same two destinations again directly above them.
+- **Four or more** — cards and `prev`/`next` both render, since prev/next can then reach projects
+  the two cards do not show.
+
 The nav's links are `/#section` hash links. `useHashScroll` (in `App.jsx`) scrolls to them after
 the route changes, including when navigating in from a case study.
 
 ## Project images
 
 Brand cards render a white logotype and photo cards render a placeholder swatch until real assets
-exist. To add them, drop files in `public/` (e.g. `public/work/atlas.png`) and set `image` on the
+exist. To add them, drop files in `public/` (e.g. `public/work/groshi.png`) and set `image` on the
 project. The same applies to the collage's photo cards (`PhotoCard` in
 `src/components/CollageCard.jsx`) and the hero's photo chip, which takes an `src` in
 `profile.headline`.
@@ -282,7 +337,7 @@ SPA redirect so deep links work.
    `netlify.toml` is detected automatically, so no manual build settings needed.
 3. Deploy. Any push to the connected branch redeploys.
 
-The SPA redirect in `netlify.toml` is required. Without it, reloading `/work/atlas-analytics`
+The SPA redirect in `netlify.toml` is required. Without it, reloading `/work/groshi`
 returns Netlify's 404 page instead of the case study.
 
 For a quick throwaway preview without GitHub, `npx netlify deploy` works too.

@@ -1,7 +1,78 @@
 @import 'tailwindcss';
 
-/* Design tokens. Source of truth is design.md — change them there first, then
-   mirror any new value here. */
+/* Self-hosted variable fonts. These used to come from a Google Fonts <link> in
+   index.html, which cost two render-blocking third-party origins and never
+   requested Geist's italic axis, so the testimonial quotes were rendering a
+   synthesised oblique. Both are fixed by shipping the files ourselves.
+   Space Grotesk has no italic cut at all, which is why display emphasis in this
+   project is carried by the accent highlight and by weight, never by `italic`. */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/space-grotesk-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/space-grotesk-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/geist-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/geist-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Geist';
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/geist-italic-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Geist';
+  font-style: italic;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/geist-italic-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* Deliberate single-theme decision: this portfolio is light mode only and does
+   not follow prefers-color-scheme. Do not "fix" this by adding a dark palette;
+   the accent and the hairlines are tuned against the warm off-white canvas. */
+
+/* Design tokens. design.md is the declared source of truth for the visual
+   system, though it is known to lag the code in places; see README. */
 @theme {
   /* §2 Color */
   --color-bg: #fdfcf8;
@@ -31,8 +102,18 @@
   --text-body: clamp(0.9375rem, 0.9rem + 0.2vw, 1.125rem);
   --text-nav: 0.875rem;
   --text-meta: 0.75rem;
+  /* §3 Statement band. Was a bare clamp() in Home.jsx; display type now has
+     one source. Sized in vw because both lines must stay close to whole at any
+     width, which is what lets the second line bleed off the right edge. */
+  --text-statement: clamp(1.95rem, 7.8vw, 7rem);
 
-  /* §5 Floating collage card */
+  /* §4 Radius system. Two documented values, not a free-for-all:
+       --radius-control  6px   things that read as buttons and controls
+       --radius-card    18px   content surfaces (cards, covers, tag pills)
+     Nav pills and outline buttons are `rounded-full`, which is the third
+     documented member of the system: a pill is always a control, never a
+     surface. Nothing else may introduce a radius. */
+  --radius-control: 6px;
   --radius-card: 18px;
   --shadow-card: 0 8px 24px rgb(0 0 0 / 0.06);
   --shadow-card-hover: 0 14px 34px rgb(0 0 0 / 0.1);
@@ -40,8 +121,9 @@
 
 html {
   scroll-behavior: smooth;
-  /* Nav is a fixed 72px row; keep anchor targets clear of it. */
-  scroll-padding-top: 88px;
+  /* The nav scrolls with the page rather than sticking, so anchors only need
+     enough offset to clear the section's own top padding plus a little air. */
+  scroll-padding-top: 2rem;
 }
 
 body {
@@ -108,9 +190,16 @@ body {
   @apply mx-auto w-full max-w-[1200px] px-6 lg:px-10;
 }
 
-/* §5 Buttons. Solid accent first, outline pill for secondary actions. */
+/* §4 Section rhythm. One value for every banded section, so the vertical
+   cadence is a single decision rather than a per-section guess. */
+@utility pad-section {
+  @apply py-16 sm:py-24 lg:py-32;
+}
+
+/* §5 Buttons. Solid accent first, outline pill for secondary actions. Both are
+   controls, so they sit in the radius system as --radius-control and pill. */
 @utility btn-accent {
-  @apply inline-flex items-center justify-center rounded-[6px] bg-accent px-6 py-3
+  @apply inline-flex items-center justify-center rounded-control bg-accent px-6 py-3
     text-[0.9375rem] font-semibold text-accent-ink transition-colors duration-150
     hover:bg-[#c4f226] focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2
     focus-visible:ring-offset-bg focus-visible:outline-none;
@@ -123,27 +212,11 @@ body {
     focus-visible:ring-offset-bg focus-visible:outline-none;
 }
 
-/* §5 Floating collage card. Consistent radius + shadow on every sub-type is
-   what keeps the random-things grid from reading as messy. */
+/* §4 Floating collage card. Consistent radius + shadow on every sub-type is
+   what keeps the collage from reading as messy. */
 @utility collage-card {
-  @apply rounded-[18px] bg-surface p-5 shadow-card transition-[transform,box-shadow]
+  @apply rounded-card bg-surface p-5 shadow-card transition-[transform,box-shadow]
     duration-200 ease-out;
-}
-
-/* §6 Random-things grid. Mobile is a 2-col masonry, so the card fills its
-   cell; from lg up it is placed on the invisible 12-col grid using the
-   percentage box its data declares. */
-@utility collage-item {
-  @apply collage-card w-full text-left;
-}
-
-@media (min-width: 64rem) {
-  .collage-item {
-    position: absolute;
-    left: var(--pos-left, auto);
-    top: var(--pos-top, auto);
-    width: var(--pos-width, 100%);
-  }
 }
 
 /* §8 Motion. Entrance states start hidden and are released by the Reveal
@@ -161,36 +234,25 @@ body {
   transform: translateY(0) rotate(var(--reveal-rest-rotate, var(--reveal-rotate, 0deg)));
 }
 
-/* Display section shape composition. The geometry lives here rather than in
-   inline styles because inline values cannot be overridden at a breakpoint, and
-   the reference stacks the shapes back into normal flow below 768px. */
-@media (min-width: 48rem) {
-  .hero-shape {
-    position: absolute;
+/* Hero entrance. The hero is the only section above the fold, so it is the only
+   one that should announce itself on arrival rather than wait to be scrolled to.
+   It runs once, on mount, and sets reading order: eyebrow, then headline, then
+   availability. The headline itself is scrubbed by scroll (SplitReveal), so this
+   only fades the block, it does not touch the word animation. */
+@keyframes hero-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
   }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
 
-  .hero-shape-left {
-    top: 0;
-    left: 0;
-    width: 45%;
-  }
-
-  .hero-shape-centre {
-    top: -94px;
-    left: 75px;
-    right: 0;
-    z-index: 1;
-    margin-inline: auto;
-    width: 45%;
-  }
-
-  .hero-shape-right {
-    bottom: 0;
-    left: 0;
-    right: 24px;
-    width: 40%;
-    margin-left: auto;
-  }
+.hero-enter {
+  animation: hero-enter 600ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: var(--hero-delay, 0ms);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -203,5 +265,9 @@ body {
     opacity: 1;
     transform: none;
     transition: none;
+  }
+
+  .hero-enter {
+    animation: none;
   }
 }

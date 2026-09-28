@@ -1,8 +1,11 @@
 // First-screen projects grid: an intentionally uneven 12-column composition.
 //
 // Every project carries three placement keys (see `projects` in data.js):
-//   `size`  — column span. `wide` takes 7, `narrow` takes 5, so the four cards
-//             pair up into two full rows (7+5, 5+7) and nothing leaves a gap.
+//   `size`  — column span. `wide` takes 7 and `narrow` takes 5, so the cards pair
+//             up into full rows (7+5, 5+7) and nothing leaves a gap. `full` takes
+//             all 12 and is a closer: a single card on the last row would
+//             otherwise leave a hole in the grid. Five projects is an odd count,
+//             so they pair as 7+5, 5+7 and then one 12.
 //   `ratio` — the crop. Two different crops on the same row is most of what
 //             makes the grid read as varied rather than as a table of squares.
 //   `drop`  — a top offset applied from `lg` up, so a card can start lower than
@@ -17,6 +20,7 @@
 const SPAN = {
   wide: 'lg:col-span-7',
   narrow: 'lg:col-span-5',
+  full: 'lg:col-span-12',
 }
 
 const RATIO = {
@@ -24,6 +28,10 @@ const RATIO = {
   landscape: 'aspect-[4/3]',
   square: 'aspect-square',
   portrait: 'aspect-[3/4]',
+  // Only for a `full` closer. A 12-column card at 16/10 would be 750px tall on
+  // a 1200px grid, which is taller than the first screen; 21/9 brings it to
+  // roughly 510px, which still reads as a substantial image band.
+  band: 'aspect-[21/9]',
 }
 
 // Stagger steps. Kept to a small set so the offsets read as a rhythm instead of

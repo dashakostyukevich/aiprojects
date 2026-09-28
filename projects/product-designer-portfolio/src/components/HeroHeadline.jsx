@@ -21,11 +21,24 @@ import SplitReveal from './SplitReveal.jsx'
 // The words are wrapped in `SplitReveal`, which masks and slides each one in,
 // scrubbed by scroll (see that component). It is a heading, so it is <h1> via
 // the `as` prop.
+//
+// Measure and size are set together, and both are load-bearing.
+//
+// The previous pairing was max-w-[1000px] at clamp(1.75rem, 4.4vw, 4rem), which
+// put the headline on four lines at 1440px and six at 390px. Two things fixed
+// it. The decorative capsules are gone from the data (see data.js), which
+// recovered roughly two lines on their own. And the measure is now wide enough
+// to hold the sentence in two lines at desktop: measured in the browser, 1200px
+// at 44px breaks to exactly two lines, while 1000px at 44px breaks to three.
+//
+// Uppercase Space Grotesk has a large x-height and wide caps, so it needs more
+// measure and tighter tracking than a normal-case face would. `text-balance`
+// then evens out the rag rather than leaving one orphan word on line two.
 export default function HeroHeadline() {
   return (
     <SplitReveal
       as="h1"
-      className="mx-auto max-w-[1000px] text-center font-display text-[clamp(1.75rem,4.4vw,4rem)] leading-[1.15] tracking-[-0.035em] text-balance uppercase"
+      className="mx-auto max-w-[1200px] text-center font-display text-[clamp(1.75rem,3.05vw,2.75rem)] leading-[1.05] tracking-[-0.04em] text-balance uppercase"
     >
       {profile.headline.map((part, i) =>
         part.chip ? (

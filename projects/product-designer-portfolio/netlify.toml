@@ -2,7 +2,37 @@
   command = "npm run build"
   publish = "dist"
 
+# `npm run build` now also runs scripts/prerender.mjs, which writes a real HTML
+# file per route into dist/ (index.html, work/<slug>/index.html) plus
+# sitemap.xml and robots.txt.
+#
+# This redirect is the SPA fallback for client-side navigation. A request for a
+# path that has a real directory in dist/ is served that file before the
+# fallback is consulted, so crawlers get the prerendered head and the browser
+# still gets a working app on a hard refresh or a deep link.
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+
+# Hashed build assets are immutable. Fonts live in public/ and are not hashed,
+# so they get a long cache with revalidation instead of an immutable one.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/fonts/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Self-hosted fonts mean the site no longer depends on Google Fonts at runtime.
+# These keep the "no third-party requests" property honest rather than
+# aspirational.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

@@ -4,26 +4,48 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Space Grotesk for headings and display type, Geist for body and UI.
-         Both are variable fonts, so the weights below cover the whole range the
-         site uses (400-700) in a single file each. -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400..700&family=Geist:wght@400..700&display=swap"
-      rel="stylesheet"
-    />
+
+    <!-- Fonts are self-hosted (public/fonts, wired up in src/index.css), not
+         loaded from a third-party <link>. That removes two render-blocking
+         origins and, more importantly, lets us request Geist's italic axis: the
+         old link only asked for normal, so the testimonial quotes were
+         rendering a synthesised oblique. -->
+
+    <!-- Per-route title, description, canonical and JSON-LD are injected here
+         at build time by scripts/prerender.mjs, which writes one HTML file per
+         route. The values below are the home page's, and the script overwrites
+         them in the emitted /work/<slug>/index.html files. This is what makes
+         the four case studies indexable: a pure SPA ships one title and one
+         description for all five URLs. -->
+    <title>Alex Morgan — Product Designer</title>
     <meta
       name="description"
-      content="Portfolio of Alex Morgan, a product designer working on calm, useful interfaces for complex products."
-    />
-    <meta property="og:title" content="Alex Morgan — Product Designer" />
-    <meta
-      property="og:description"
       content="I design calm, useful interfaces for complex products."
     />
+    <link rel="canonical" href="https://example.com/" />
+
     <meta property="og:type" content="website" />
-    <title>Alex Morgan — Product Designer</title>
+    <meta property="og:title" content="Alex Morgan — Product Designer" />
+    <meta property="og:description" content="I design calm, useful interfaces for complex products." />
+    <meta property="og:url" content="https://example.com/" />
+    <meta property="og:image" content="/og/home.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="preload" href="/fonts/space-grotesk-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/geist-latin.woff2" as="font" type="font/woff2" crossorigin />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ProfilePage",
+        "mainEntity": {
+          "@type": "Person",
+          "name": "Alex Morgan",
+          "jobTitle": "Product Designer",
+          "url": "https://example.com/"
+        }
+      }
+    </script>
   </head>
   <body>
     <noscript>
