@@ -23,26 +23,38 @@ export default function SiteFooter() {
           .
         </SplitReveal>
 
-        {/* The email button that shared this row is gone. It sat beside
-            "Back to work" as a pair of equal-weight actions, and a `mailto:`
-            button is not an action on a portfolio — it is a wall. The contact
-            route is still one nav hop away, and `RouteFallback` still offers the
-            address in prose, so the address is not lost from the page; it is
-            just no longer the loudest thing in the footer.
+        {/* The closing action. It was a 15px outline "Back to work" pill, which
+            put the page's smallest control directly under its largest line — the
+            "Let's make something clear and calm." above. A `mailto:` button used
+            to sit here too, as an equal-weight pair, and both were removed on the
+            reasoning that a `mailto:` is a wall rather than an action and the
+            contact route is one nav hop away.
 
-            `profile.email` therefore has no reader here any more. It is kept in
-            `data.js` because `RouteFallback.jsx` still renders it, and because
-            it is the one field a real deployment has to fill in. Deleting the
-            button is not a reason to delete the data.
+            What was left was a heading arguing and a link whispering. The
+            resolution is not to resurrect the email button but to give the one
+            action that remains enough presence to be read as the close of the
+            page: `btn-closer`, display scale, solid accent, with the arrow that
+            says "go somewhere" rather than "this is a link".
 
-            One button does not need a flex row, so the wrapper goes too and the
-            link takes the spacing. */}
-        <div className="mt-10">
-          <a
-            href="#work"
-            className="btn-outline border-bg/40 text-bg hover:bg-bg hover:text-ink focus-visible:ring-offset-ink"
-          >
-            Back to work
+            It still points at the work rather than the inbox. That is a
+            deliberate choice, not an oversight — the strongest thing this
+            portfolio can offer someone who has just read three case studies is
+            more of them, and the address is one nav hop away in both directions.
+
+            `profile.email` therefore still has no reader in this file. It stays
+            in `data.js` because `RouteFallback.jsx` renders it, and because it
+            is the one field a real deployment has to fill in. */}
+
+        <div className="mt-12">
+          <a href="#work" className="btn-closer group">
+            See the work
+            {/* `aria-hidden` because the link's accessible name is the label
+                alone. Without it a screen reader announces "See the work right
+                arrow", which is a direction, not a destination. The same reason
+                the card outcome line inside the project grid is `aria-hidden`. */}
+            <span aria-hidden="true" className="btn-closer-arrow">
+              &rarr;
+            </span>
           </a>
         </div>
 

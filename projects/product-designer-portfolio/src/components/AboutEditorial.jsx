@@ -120,6 +120,23 @@ export default function AboutEditorial() {
           // lose. 4/5 is the nearest sensible ratio that keeps the face whole, and
           // the box is narrower to match, so the column stays as tight as it was.
           ratio="aspect-[4/5]"
+          // A degree and a half, anticlockwise, echoing the asterisk above it.
+          //
+          // The rotation is on the frame, not on the two <img>s inside it, so the
+          // cross-fade between the frames stays a pure opacity change — rotating
+          // the images themselves would have to be animated in step or the swap
+          // would visibly jump. The frame is also the only thing that can carry
+          // it, because it is the element with `overflow-hidden`, and that clip
+          // has to travel with the rounded corners.
+          //
+          // 1.5° is the ceiling, not a starting point to push. The frame is 416px
+          // wide and 520px tall, so at 1.5° the long edge swings about 7px past
+          // the figure's box on each side — enough that nothing clips, and not
+          // enough that the portrait stops looking square-on. At 3° it starts to
+          // read as a mistake rather than a gesture, because the photograph is a
+          // wall-mounted portrait of a person standing straight, and there is
+          // nothing in it that implies a tilt.
+          className="-rotate-1"
         />
       </figure>
 

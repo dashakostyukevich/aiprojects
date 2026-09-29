@@ -237,7 +237,7 @@ export const heroVibes = [
   // round: it is the one picture here of the person the page is about, and a 40px
   // sticker of a face is not a portrait. It is now `lg` in the top left, the
   // first thing a reader's eye reaches after the headline's first line.
-  { image: '/hero/star.png', label: 'Hi there, future colleague', x: 7.9, y: 9, size: 'lg', tilt: -4, drift: { scale: 0.24, gain: 0.7, spin: -3 } },
+  { image: '/my images/hero.png', label: 'Hi there, future colleague', x: 7.9, y: 9, size: 'lg', tilt: -4, drift: { scale: 0.24, gain: 0.7, spin: -3 } },
   { image: '/hero/camera.png', label: 'I take too many photos', x: 7.5, y: 47, size: 'lg', tilt: -3, drift: { scale: 0.26, gain: 0.8, spin: -1.5 } },
   { image: '/hero/coffee.png', label: 'I take coffee seriously', x: 11.4, y: 85, size: 'sm', tilt: -6, drift: { scale: 0.2, gain: 1.0, spin: -2 } },
   { image: '/hero/laptop.png', label: 'I make things on screen', x: 91.2, y: 24, size: 'md', tilt: 5, drift: { scale: 0.15, gain: 1.15, spin: 2.5 } },
@@ -262,8 +262,8 @@ export const services = [
 
 export const experience = [
   {
-    company: 'Upwork',
-    role: 'Freelance Product / Web Designer',
+    company: 'Freelance Web Designer',
+    role: 'Product Designer',
     period: 'Nov 2021 – Present',
     notes: 'Designed 100+ web and digital product interfaces for SaaS, FinTech, and data-driven businesses, covering user flows, UX/UI, responsive design, prototyping, and design systems. Collaborated closely with clients and developers throughout the design and implementation process, using Figma and AI-assisted workflows to explore, iterate, and deliver developer-ready solutions.',
   },
@@ -299,6 +299,19 @@ export const projects = [
       'Communicating complex technology through a clear digital experience. A marketing site for tethered drone systems, designed in Figma and built in Webflow.',
     outcome: 'Designed and shipped: Figma to responsive Webflow',
     tags: ['Web design', 'Interaction design', 'Webflow', 'Brand site'],
+    // The two lines that appear at the top of the card on hover: what I
+    // personally did, and what the client's business actually is. `tags` above
+    // mixes both concerns and four items, which is fine for a static list under
+    // the title on a case study page and useless at a glance on a grid card —
+    // there is no time to work out which of four words is a discipline and which
+    // is an industry.
+    //
+    // Two labelled rows instead. Short enough to fit a 5-column card without
+    // wrapping past two lines, which is the constraint that decides the copy.
+    cardFacts: [
+      { label: 'I did', items: ['Web design', 'Interaction design', 'Webflow development'] },
+      { label: 'Business', items: ['Tethered drone systems', 'Defense & public safety'] },
+    ],
     // First grid slot. Takes the 7-column span, so the next project has to be
     // narrow for the row to close. See the note on `size` in the array below.
     size: 'wide',
@@ -552,21 +565,40 @@ export const projects = [
     // put here. This reads as a claim about the work, not a metric.
     outcome: 'Structure before scale: researched, tested, and implemented',
     tags: ['Product design', 'UX research', 'Information architecture', 'Fintech'],
+    cardFacts: [
+      { label: 'I did', items: ['Product architecture', 'UX research', 'Feature & system design'] },
+      { label: 'Business', items: ['Personal finance app', 'Multi-account, multi-currency'] },
+    ],
     // Second grid slot. Narrow, so it pairs with ARASTELLE's 7-column card
     // above it and closes the row. Carries a drop so it hangs lower than
     // ARASTELLE, which is what makes the row read as staggered.
     size: 'narrow',
     ratio: 'square',
     drop: 'lg',
-    // A product screenshot is the honest card for a shipped product. The card is
-    // square, so it centre-crops a 16:10 screen: `categories.jpg` survives that
-    // because its chart and year-over-year comparison sit in the middle third.
+    // A product screenshot is the honest card for a shipped product. This one is
+    // the dashboard, not the categories screen it used to be: the card sits on a
+    // purple field, which no other card has, and the dashboard is the screen
+    // that says "finance product" in one glance.
+    //
+    // The card is square and the source is 2640x1644 (16:10), so the file has to
+    // be pre-cropped to a 1644 square — `object-cover` centre-cropping a 16:10
+    // dashboard loses the greeting and the left column, and `object-position`
+    // would only move which edge gets eaten. The crop is anchored 100px from the
+    // left, not centred. Centred puts the cut between "You earned" and "You
+    // spent" and throws away the greeting; 100px in keeps "Good morning, Alex!"
+    // with the balance card, the spending trend chart and the head of the
+    // transactions table, which is the four things that identify the product.
+    //
+    // 1400px square, quality 82, ~183KB, against 1.7MB for the source PNG. The
+    // card renders at most 460px wide, so 1400 is about 3x and stays sharp at
+    // 2x with room over.
     kind: 'photo',
     fill: 'sky',
     lockup: null,
-    image: '/groshi/categories.jpg',
-    imageAlt: 'The Groshi categories screen, with a category selected and its year-over-year chart',
-    imageLabel: 'Groshi — categories, with a selected category and its trend',
+    image: '/groshi/card.jpg',
+    imageAlt:
+      'The Groshi dashboard — a greeting, the total balance in cash and bank accounts, a month-by-month spending trend chart against last month, and the latest transactions',
+    imageLabel: 'Groshi — the dashboard, balance and spending trend',
     // The cover is a 16:9 / 21:9 band, so it takes the widest, busiest screen:
     // the categories view reads as the product at a glance even once the band
     // has cropped away its top and bottom.
@@ -954,6 +986,10 @@ export const projects = [
     // the work, so it is worth leading with on the card.
     outcome: 'A/B test: the direct, benefit-led hero won',
     tags: ['Web design', 'UX', 'Conversion', 'A/B testing'],
+    cardFacts: [
+      { label: 'I did', items: ['Landing page design', 'UX & conversion', 'A/B testing'] },
+      { label: 'Business', items: ['B2B SaaS', 'AI delivery assistant'] },
+    ],
     // Third grid slot. Wide, pairing with Groshi's 5-column card to close row
     // two, so the three cards tile 7+5 then 5+7.
     size: 'wide',
@@ -962,13 +998,25 @@ export const projects = [
     kind: 'photo',
     fill: 'sky',
     lockup: null,
-    // The card is `landscape` (4:3) and centre-crops. The source is 3165×2466,
-    // which is 1.28 against the card's 1.33, so the crop only trims a sliver off
-    // the sides and keeps the whole hero: headline, paragraph, both CTAs and the
-    // product visual, with the integration row still visible at the bottom.
+    // The card is `landscape` (4:3) and the source is 2332×1751, which is 4:3 to
+    // within a rounding error. So this is a straight resize with no crop at all,
+    // and `object-cover` has nothing to cut — the board reads identically at
+    // every card size.
+    //
+    // The source is the whole landing page as one board rather than a single
+    // screenshot: the hero in a browser frame, with the pricing comparison, the
+    // integrations grid and the "Sprint Pulse & KPIs" section around it. An
+    // earlier version used a hero-only capture, which said "here is a page"; the
+    // board says "here is a page and the thinking around it", which is the more
+    // useful claim on a card that has to earn a click in one glance.
+    //
+    // The neighbours are cut off at the edges by the board's own composition,
+    // not by this crop — the source frame is already tight, so nothing was lost
+    // here. The central hero is the only complete screen in it, and the eye lands
+    // there first.
     image: '/noxs/card.jpg',
     imageAlt:
-      'The NOXS landing page: the AI Delivery Assistant hero, with the product visual beside it and the Confluence, Jira, GitLab and GitHub integrations below',
+      'The NOXS landing page: the AI Delivery Assistant hero in a browser frame, with the pricing comparison, the integrations grid and the Sprint Pulse & KPIs section arranged around it',
     imageLabel: 'NOXS — the landing page, direct hero variant',
     // The cover is a 16:9 / 21:9 band out of a 1320×821 hero, so it keeps the
     // middle band: headline, paragraph, both CTAs and the top of the product

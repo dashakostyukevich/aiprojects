@@ -85,17 +85,61 @@ export default function ProjectCard({ project, ratio = 'aspect-square' }) {
             screenshot this light, and Groshi's own card is the one that fails
             first. */}
         <span aria-hidden="true" className="work-card-veil pointer-events-none absolute inset-0">
-          {/* `h-full` + `justify-end`, not `items-end` on the parent with a
+          {/* `h-full` + `justify-between`, not `items-end` on the parent with a
               content-height child. A wash that only covers the text block leaves
               a hard horizontal edge across the card, which is more distracting
               than the gradient it replaced — the eye reads that edge as a seam
-              in the image rather than as a scrim. */}
-          <span className="flex h-full w-full flex-col justify-end bg-[rgb(10_10_10/0.65)] px-5 pb-5 sm:px-7 sm:pb-7">
+              in the image rather than as a scrim.
+
+              `justify-between` rather than `justify-end` because the block now
+              has content at both ends: the fact rows at the top and the outcome
+              at the bottom, with the gap between them doing the work. Pinned to
+              the bottom, the facts would sit directly above the outcome and the
+              card would read as one undifferentiated paragraph.
+
+              `pt` matches `pb` rather than being smaller. The wash is edge to
+              edge and its top edge coincides with the top of a rounded card, so
+              an unpadded first line has its ascenders sitting directly on the
+              curve, where the corner crop takes the most pixels off the same
+              20-28px band. At 11px the label there is barely legible, and it
+              looks like a clipping bug rather than a tight fit. Symmetric
+              padding is also the only reading that survives the mobile card,
+              whose 1:1 or 4:3 box is short enough that an asymmetric top would
+              visibly shorten the gap above the facts. */}
+          <span className="flex h-full w-full flex-col justify-between bg-[rgb(10_10_10/0.65)] px-5 pt-5 pb-5 sm:px-7 sm:pt-7 sm:pb-7">
+            {/* The two context rows at the top: what I did, and what the
+                client's business is. They answer the two questions a stranger
+                has about a card in the grid — "is this you or a team?" and "what
+                kind of company is this?" — and the label under the card cannot,
+                because it only has the title and the year.
+
+                Label in muted white, items in full white. Both sit on the same
+                65% wash as the outcome, so the same 6.31:1-over-white holds;
+                white/70 on the tag labels still clears 4.5:1 there, and going
+                dimmer than that starts reading as disabled rather than as
+                secondary. */}
+            {project.cardFacts && (
+              <span className="block">
+                {project.cardFacts.map((fact) => (
+                  <span key={fact.label} className="mb-2 block last:mb-0">
+                    <span className="block text-[0.6875rem] font-medium tracking-[0.08em] text-white/70 uppercase">
+                      {fact.label}
+                    </span>
+                    <span className="mt-1 block text-[0.8125rem] leading-snug text-white">
+                      {fact.items.join(' · ')}
+                    </span>
+                  </span>
+                ))}
+              </span>
+            )}
+
+            <span>
             <span className="block font-display text-[0.9375rem] leading-snug font-medium text-white text-balance">
               {project.outcome}
             </span>
             <span className="mt-2 block text-[0.75rem] font-medium tracking-[0.02em] text-white uppercase">
               View case study →
+            </span>
             </span>
           </span>
         </span>
@@ -165,6 +209,19 @@ export default function ProjectCard({ project, ratio = 'aspect-square' }) {
           is a plain paragraph after it, read once, in normal document order. */}
       <p className="work-card-fallback mt-2 hidden text-[0.9375rem] leading-snug text-ink-muted">
         {project.outcome}
+        {/* Same two rows as the top of the veil, on the same parity argument:
+            a finger fires no hover, so without this the "what is it / who did
+            it" facts would exist only inside a pointer-only reveal. */}
+        {project.cardFacts && (
+          <>
+            {project.cardFacts.map((fact) => (
+              <span key={fact.label} className="mt-2 block">
+                <span className="label-meta">{fact.label}</span>
+                <span className="mt-0.5 block">{fact.items.join(' · ')}</span>
+              </span>
+            ))}
+          </>
+        )}
       </p>
     </article>
   )

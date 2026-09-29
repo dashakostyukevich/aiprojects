@@ -324,6 +324,66 @@ body {
     focus-visible:ring-offset-bg focus-visible:outline-none;
 }
 
+/* §5 The closing call. A third button, between a control and a statement.
+
+   The two above are controls: 15px, 6/6 padding, sized to sit in a row with
+   other 15px things. This one exists because a portfolio ends on a dark band
+   with a large "Let's make something clear and calm." and then offers only a
+   15px outline pill, which is the visual volume of a footnote under the
+   loudest line on the page. The action and the argument were the same size, so
+   the argument won and the action disappeared.
+
+   It was first built at `text-h2` and read too loud — a 31px label under a 64px
+   heading made two headlines competing, and the CTA became the second thing the
+   eye hit on the page instead of the close of it. 24px is the size that fixes
+   that: still clearly a statement next to 15px controls, no longer a peer of
+   the line above it.
+
+   24px is also a floor, not a preference. White on accent is 3.95:1, which fails
+   AA for body text and passes only the 3:1 large-text floor — and WCAG defines
+   large text as 24px, or 18.66px bold. This label is 24px at weight 500, so it
+   clears the floor exactly and no further. Going to 18px would drop it into
+   body text at 3.95:1, which is a fail, and §9's remedy applies: darken the
+   accent to about #B8341C rather than dimming the label. If this ever needs to
+   shrink again, that is the change to make — not a lighter label and not
+   `opacity`, which would push it under 3:1.
+
+   Padding follows the label down from 7/4 to 6/3.5, so the pill tightens with
+   the type instead of holding a fixed optical margin that would leave the
+   smaller text swimming inside the old box.
+
+   Solid accent rather than outline, for the same reason the outline exists
+   nowhere down here: on the near-black footer an outline has to be drawn in
+   `bg/40` to stay quiet, and a quiet control at display scale reads as disabled.
+   A filled pill is unambiguous at any size.
+
+   Radius is `rounded-full` like every other control. The reference this follows
+   uses `10vw`, which at a 49px-tall button is ~26px — a visually "softer" pill
+   that is really just a large fixed radius, and it collapses to a lozenge on a
+   short button and to a rectangle on a tall one. `rounded-full` is the same
+   shape and stays a pill at any height.
+
+   Hover darkens to the same `#c83a2e` as `btn-accent` rather than scaling or
+   lifting, per the §5 rule that a control's hover is a fill change and nothing
+   else. The arrow nudges right on its own so the label does not shift with it. */
+@utility btn-closer {
+  @apply inline-flex items-center justify-center gap-2.5 rounded-full bg-accent
+    px-6 py-3.5 font-display text-[1.5rem] font-medium leading-none tracking-[-0.02em]
+    text-accent-ink transition-colors duration-150 hover:bg-[#c83a2e]
+    focus-visible:ring-2 focus-visible:ring-bg focus-visible:ring-offset-2
+    focus-visible:ring-offset-ink focus-visible:outline-none;
+}
+
+/* The arrow inside `btn-closer`. A separate utility because it moves on hover
+   and the label must not — a label that slides 4px reads as a layout shift, not
+   as an affordance. `group` is on the link; `motion-reduce` collapses the travel
+   to nothing rather than to a shorter slide, because the nudge is decoration
+   and the colour change already carries the state. */
+@utility btn-closer-arrow {
+  @apply transition-transform duration-150 group-hover:translate-x-1
+    motion-reduce:transition-none motion-reduce:group-hover:translate-x-0;
+}
+
 /* §5 Content surface. One radius, one fill, for the cards that sit on the page
    background rather than inside a grid of other cards. It was named
    `collage-card` for the scattered-objects section; that section is gone and the
