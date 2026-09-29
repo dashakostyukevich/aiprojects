@@ -68,11 +68,12 @@ The rules that shape the code most:
 - **§5 Project grid.** 4:5 cards, 18px radius, solid colour fill, label beneath in `text-meta`
   with no card chrome.
 - **§5 Data/meta rows.** Experience and case-study meta are plain rows with a hairline divider.
-- **§6 About is one centred column.** Bracketed heading, uppercase copy, black-and-white portrait
-  with the asterisk hanging off its left edge. It was a "random-things" collage with a headline held
-  in columns 1–6, then that collage plus this column, then two separate sections. All three failed
-  the same way — a scattered card grid and a centred editorial column are not the same composition,
-  and neither needed to exist twice. The scattered grid is gone.
+- **§6 About is one centred column.** Bracketed heading, uppercase copy, colour portrait
+  with the asterisk hanging off its left edge. The portrait has a second frame that cross-fades in
+  on hover. It was a "random-things" collage with a headline held in columns 1–6, then that collage
+  plus this column, then two separate sections. All three failed the same way — a scattered card grid
+  and a centred editorial column are not the same composition, and neither needed to exist twice.
+  The scattered grid is gone.
 - **§7 Hero objects.** Six line drawings in `src/components/Doodle.jsx` on a 100×100 grid: one
   stroke weight, one cap style, nothing filled, `currentColor`. Each `heroVibes` entry also accepts
   an `image` path, which swaps the drawing for a real picture one object at a time.
@@ -271,6 +272,14 @@ width of the page, edge to edge, on the plain design system background. There is
   bicycle at 47% read as a row of two across the text no matter how far apart they are horizontally.
   Sort the `y` values and check the gaps between consecutive ones are uneven.
 
+  A fourth thing, found the hard way: **growing an object moves its neighbours' problem, not just its
+  own.** The star was 80px at `y: 90.2` and is now 138px at `y: 7.5` — at `lg` it is 104px wide and
+  about 138px tall including its label, and at the old `y: 11.3` its bottom sat 123px below the
+  camera's top in the 389px box at 1280×600, an 8px overlap. Coordinates are percentages, so they
+  describe a position and say nothing about the space an object needs; the `y` that works for a
+  sticker does not work for a photograph. Measure the tightest box the layout reaches, which is
+  1280×600, rather than trusting a percentage.
+
   The tilt is on the drawing and never on the label. `hero-pop` rotates *into* `--hero-rest-rotate`,
   so each object arrives at its own angle rather than all snapping upright. Labels get a plain fade
   (`hero-enter`) because ±6° reads as hand-placed at 130px and as a bug at 12px.
@@ -437,7 +446,7 @@ then plain rows.
 | 4 | Statement | `StatementBand` | accent field, the line bleeds off the right edge |
 | 5 | Experience | inline in `Home` | full width, `#experience` anchor target |
 | 6 | Services | `Services` | flat cards, high-low-high stagger |
-| 7 | About | `AboutEditorial` | one centred column, `#about` anchor target |
+| 7 | About | `AboutEditorial` | one centred column, `#about` anchor target; the portrait is `AboutPortrait` |
 | 8 | Words from | inline in `Home` | two flat sand cards on one row, matching the §5 service cards, `#references` |
 | 9 | Footer | `SiteFooter` | |
 
@@ -495,9 +504,12 @@ need more than text:
 - **`profile.bio`** is two arrays of segments, one per paragraph. A segment is `{ text }`, or
   `{ text, em: true }` for the accent marker, or `{ text, italic: true }` for a real slanted cut.
   The About section is the only consumer.
-- **`profile.portrait`** is `null`, which renders a labelled slot that already reserves the exact
-  box. Drop a file into `public/`, set the path, and the layout does not move. It renders black and
-  white — remove the `grayscale` in `AboutEditorial.jsx` to keep colour.
+- **`profile.portrait`** is `/about/main.jpg` and **`profile.portraitHover`** is `/about/hover.jpg` —
+  the resting portrait and a second frame that cross-fades in over it on hover. Both are the same
+  1440×1508 source converted to JPEG at a 1200px long edge, quality 82, so ~200KB and ~236KB instead
+  of the 1.9MB and 2.2MB PNGs in `my images/`. Setting either back to `null` drops that half of the
+  behaviour. The pair renders through `src/components/AboutPortrait.jsx`, not `PhotoSlot` — see
+  "The About portrait hover" below.
 
 Each entry in `projects` needs:
 
@@ -574,8 +586,51 @@ the route changes, including when navigating in from a case study.
 
 Brand cards render a white logotype and photo cards render a placeholder swatch until real assets
 exist. To add them, drop files in `public/` (e.g. `public/work/groshi.png`) and set `image` on the
-project. The same applies to the About portrait (`profile.portrait`) and to any hero object you want
-as a picture rather than a drawing (set `image` on the entry instead of a `doodle` name).
+project. The same applies to any hero object you want as a picture rather than a drawing (set
+`image` on the entry instead of a `doodle` name).
+
+### The About portrait
+
+`public/about/` holds two frames converted from the PNGs in `my images/`, both 1440×1508 sources:
+
+| File | Source | Where it appears |
+| --- | --- | --- |
+| `main.jpg` | `about main.png` | the resting portrait |
+| `hover.jpg` | `about on hover.png` | cross-faded in over the first on hover |
+
+Both are JPEG at a 1200px long edge, quality 82 — 200KB and 236KB against 1.9MB and 2.2MB for the
+PNGs, which nothing on the site loads. The box is 416px wide at most, so 1200px is still ~2.9x and
+they stay sharp on a 2x display. The sources stay in `my images/` so the conversion can be redone:
+
+```sh
+sips -s format jpeg -s formatOptions 82 -Z 1200 "my images/about main.png"      --out public/about/main.jpg
+sips -s format jpeg -s formatOptions 82 -Z 1200 "my images/about on hover.png" --out public/about/hover.jpg
+```
+
+`src/components/AboutPortrait.jsx` renders the pair, and four decisions in it are load-bearing:
+
+- **Two stacked `<img>`s, not one `src` swap.** Swapping `src` blanks the frame while the new file
+  decodes, which flashes the sand fill through on a slow connection. Both images are in the DOM from
+  the start, so the reveal is a pure opacity change with nothing to load.
+- **`@media (hover: hover)` wraps the reveal.** A finger produces a `:hover` that latches after the
+  tap and does not clear until something else is touched, so without the guard the second frame
+  would stick on a phone. The resting portrait is the permanent state on a coarse pointer.
+  `focus-within` sits alongside `hover` so a keyboard user is not locked out.
+- **The second image is `aria-hidden`.** A screen reader has no hover, so an `alt` on it would read
+  the same caption twice. It carries `profile.portraitHoverAlt` for the record, currently `null`.
+- **The ratio is 4/5, not the 16/10 the old slot reserved.** Both sources are a little under square,
+  and a 16/10 crop cuts the top of the head and the chin. The figure dropped from `max-w-[30rem]` to
+  `max-w-[26rem]` to match, so at 416×520 the portrait does not outweigh the paragraph above it.
+
+Neither frame carries a filter. They were black and white until there was a real photograph to put
+in the slot, on the design.md §6 rule that the one picture of the person should be the one picture not
+in colour. That rule was written for a placeholder holding a column together; a real portrait at
+416px is a colour photograph either way, and the desaturation was only draining it. It is also what
+makes the hover read correctly — a cross-fade between two colour photographs reads as the same moment
+a second later, where a filtered pair read as the picture warming up. Add `grayscale` to both
+`className`s in `AboutPortrait.jsx` to bring the old treatment back. Reduced motion sets
+`transition: none` rather than removing the hover: a cross-fade between two photographs is a change
+of picture, not movement, so the state is kept and the duration taken to zero.
 
 ### Case study images
 

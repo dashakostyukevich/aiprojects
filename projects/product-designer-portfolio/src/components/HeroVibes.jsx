@@ -14,7 +14,7 @@ import HeroHeadline from './HeroHeadline.jsx'
 // and right, reads as a grid that gave up. What makes it read as *placed*:
 //
 //   1. **Nothing shares a baseline, and nothing mirrors.** The six heights are
-//      11.3 / 21.1 / 42.9 / 55.1 / 79.8 / 90.2 — no two within 10 points of each
+//      7 / 56 / 99 / 4 / 42 / 90 — no two within 10 points of each
 //      other, and no two summing to about 100, which is the second way a scatter
 //      turns back into a grid. The previous set was 14 / 13 / 45 / 45 / 78 / 79
 //      across left-then-right: three rows, each one a near-copy of its partner on
@@ -46,9 +46,8 @@ import HeroHeadline from './HeroHeadline.jsx'
 //      is emergent, so the cap is a threshold, not a preference — measured at
 //      1440px, anything at or below 60% wraps to four lines and anything from
 //      61% up holds three. 62% sits just inside the window, and the nearest
-//      object still clears the text by 66px horizontally (SMILEY DAYS, the only
-//      one that shares a line's vertical band with the headline), so the extra
-//      width costs the composition nothing.
+//      object still clears the text horizontally, so the extra width costs the
+//      composition nothing.
 //
 // The coordinates in `data.js` were re-picked by rejection sampling rather than
 // by eye, because "more random" is not a thing that can be eyeballed into
@@ -184,9 +183,31 @@ function Vibe({ vibe, delay, className = '', style }) {
   const { scale, gain, spin } = vibe.drift ?? {}
 
   return (
-    <li className={className} style={style}>
+    // `w-64` on the <li> is load-bearing and was a real bug for a while. The wide
+    // layout positions each object with `absolute` plus `left`/`top` percentages
+    // and centres it with `-translate-x-1/2`, which means the <li> is an
+    // absolutely positioned box with no width of its own — so its width is
+    // shrink-to-fit against the space between its `left` offset and the right
+    // edge of the composition box. At `x: 94.8` that space is 5.2% of 1200px,
+    // or 62px, and a 183px label wrapped to three lines inside it. The labels on
+    // the right flank were silently three and four lines tall while the identical
+    // labels on the left were one, and the scatter's vertical spacing was being
+    // computed against a height that depended on which side of the page an object
+    // sat on.
+    //
+    // An explicit width fixes it at the source: the <li> is now 256px wide
+    // wherever it is placed, the label centres inside that, and the object's
+    // height depends only on the label and the image. 256 rather than 184 because
+    // the label cap is 184 and the <li> also has to be at least as wide as the
+    // largest image (104px at `lg`) with room to spare.
+    <li className={`w-64 ${className}`} style={style}>
       <div className="hero-drift" data-scale={scale} data-gain={gain} data-spin={spin}>
-        <div className="flex flex-col items-center gap-2.5">
+        {/* `gap-1.5`, down from `gap-2.5`. The labels are two lines each now, so
+            the three objects on the left flank need 3 x (image + 32px of label +
+            this gap) out of a box that is 389px tall at 1280x600. Four pixels per
+            object is twelve pixels back, and the gap between an object and its own
+            caption is the one distance on the page where nobody is measuring. */}
+        <div className="flex flex-col items-center gap-1.5">
           <div
             className="hero-pop"
             style={{
@@ -196,7 +217,40 @@ function Vibe({ vibe, delay, className = '', style }) {
           >
             <VibeArt vibe={vibe} className={SIZES[vibe.size] ?? SIZES.md} />
           </div>
-          <span className="label-meta hero-enter whitespace-nowrap" style={{ '--hero-delay': delay }}>
+          {/* `whitespace-nowrap` was here and had to go. It was correct for the
+              labels this started with — 11 to 15 characters, 117px at the widest —
+              and those were picked to fit on one line under a 104px object. The
+              labels are first-person statements now, 19 to 26 characters, and
+              nowrap put "HI THERE, FUTURE COLLEAGUE" at 183px: 21px off the left
+              edge of the composition box at 1024px, and wide enough that the
+              baking label and the camera label began overlapping on the same
+              flank at 1280x600.
+
+              `max-w-[11.5rem]` is 184px, which is the natural width of the longest
+              label ("HI THERE, FUTURE COLLEAGUE") at 12px — so the cap exists to
+              hold every label to one line rather than to shorten them. That is
+              the whole reason it is this wide and not tighter: **one line is
+              worth 15px of vertical space per object**, and with six objects on
+              two flanks in a 389px box that is 90px back, which is the difference
+              between a scatter whose heights obey the no-two-within-10-points
+              rule and one that has to put two objects at 4% and 7% to fit.
+
+              The cap is allowed to be wider than the flank looks. At 1024px the
+              box is 896px wide and the left objects sit 7.5% in, so a 183px
+              label overhangs the composition box by 24px — but the section's own
+              `lg:px-16` padding puts the box 64px from the viewport edge, so the
+              label still lands 40px inside the screen, and its right edge reaches
+              222px against a headline that does not start until 234px. The box is
+              not the constraint; the headline is. Measured at every width.
+
+              `text-balance` and `leading-[1.3]` are the safety net for a label
+              edited later into something longer than 184px: it wraps to two
+              balanced lines under its own object rather than running into its
+              neighbour. */}
+          <span
+            className="label-meta hero-enter max-w-[11.5rem] text-balance leading-[1.3]"
+            style={{ '--hero-delay': delay }}
+          >
             {vibe.label}
           </span>
         </div>
@@ -206,10 +260,14 @@ function Vibe({ vibe, delay, className = '', style }) {
 }
 
 export default function HeroVibes() {
-  // Three of the six, chosen for silhouette: a curved cup, a boxy camera, a
-  // curved-but-open pair of headphones. Taking the first three entries instead
-  // would have put three shapes from the same part of the scatter side by side.
-  const compact = [heroVibes[0], heroVibes[2], heroVibes[3]]
+  // Three of the six, taken by index: the star, the baking dish and the camera.
+  // Indices rather than labels, because the phone row has to be re-picked every
+  // time an entry moves and a label list is one more thing to forget to update.
+  // The star is in it because it is the only picture of the person on the page
+  // and a phone gets no scatter at all — this row is the entire hero imagery
+  // below `lg`, so leaving the portrait out would mean the small screens are the
+  // only ones that never see her.
+  const compact = [heroVibes[0], heroVibes[1], heroVibes[2]]
 
   // The ref is on the section rather than on the composition box, so the pointer
   // is read from the whole hero. Both layouts drift, including the compact row —
@@ -311,13 +369,27 @@ export default function HeroVibes() {
         </div>
       </div>
 
-      {/* `px-3` is not decoration. The labels are `whitespace-nowrap` and the
-          widest of them is around 117px, so a `justify-between` row inset only
-          by the section's own page padding pushes the last label's right edge
-          onto the viewport edge at 390px. */}
+      {/* The phone row. `max-w-[24rem]` rather than the 22rem this was, and the
+          reason is the labels again: at 12px the widest statement is 183px on one
+          line, and three of those in a 22rem row is 549px of text in 320px of
+          space. The labels now wrap to at most two lines at `max-w-[9.5rem]`, so
+          each column wants about 152px plus the gap between them — 24rem of row
+          for three of those. `justify-between` still does the work: it spaces the
+          three objects to the ends of the row rather than clustering them, which
+          is what keeps a phone from looking like the wide layout with the middle
+          removed.
+
+          `px-3` is still not decoration. It is the inset that keeps the outer two
+          labels' text off the viewport edge at 390px, which is 20px narrower than
+          the row would otherwise need. */}
       <ul
         aria-hidden="true"
-        className="mx-auto flex w-full max-w-[22rem] items-start justify-between px-3 lg:hidden"
+        // `[&>li]:w-auto` cancels the `w-64` each object carries for the wide
+        // layout. There the three are absolutely positioned and need a fixed
+        // width; here they are flex children in a 24rem row, and 3 x 256px is
+        // 768px in 384px of space. The flex row sizes each item to its content
+        // instead, which is what `justify-between` wants.
+        className="mx-auto flex w-full max-w-[24rem] items-start justify-between gap-3 px-3 [&>li]:w-auto lg:hidden"
       >
         {compact.map((vibe, i) => (
           <Vibe key={vibe.label} vibe={vibe} delay={DELAYS[i]} />

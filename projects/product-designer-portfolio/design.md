@@ -162,14 +162,15 @@ About is a single centred measure running top to bottom: a bracketed heading, a 
 
 - **Uppercase at a real size** — 17–24px, not 12px. Small uppercase reads as a legal notice; large uppercase reads as a poster. Keep the measure short enough that the caps stay legible and `text-balance` never opens a river in the rag.
 - **One accent highlight per paragraph, one italic.** The reference this follows ran three different highlight colours in a row; one accent used twice is the version that fits a system with a single accent in it.
-- **The portrait is black and white.** Every other image on the site is in colour, so the one picture of the person is the one that is not. It makes the section feel like a pause. The filter goes on the image, not on the slot — a permanent `grayscale` on the wrapper also desaturates the placeholder's fill.
+- **The portrait is in colour.** Every image on the site is in colour, including this one. It was black and white for as long as it was a placeholder, on the rule that the one picture of the person should be the one picture not in colour — a rule written for a small quiet photograph holding a column together, which is not what a real portrait is. Both hover frames carry no filter, so the swap reads as the same moment a second later rather than as the picture warming up.
+- **The portrait has a second frame.** `about main.png` rests; `about on hover.png` cross-fades in over it on hover, both cropped 4/5. Same person, same wall, same crop, so the swap reads as the same moment a second later rather than as a different picture. It is two stacked images rather than a `src` swap so nothing decodes at hover time, the reveal is behind `@media (hover: hover)` so a finger's latched hover cannot stick it on, and the second image is `aria-hidden` because a screen reader has no hover and would read the caption twice.
 - **The heading is `[.ABOUT.]`**, brackets in `color-text-muted`, word at full ink. The runs are written without whitespace between them: `SplitReveal` emits a literal space for any trailing space inside a run, and `[. About.]` with a gap in the middle is not the mark.
 
 This section was a "random-things" collage with a headline held in columns 1–6, and then for a while it was that collage *plus* this column, and then the collage became a second section below it. Both are gone now. A centred editorial column and a scattered card grid are not the same composition, and once they are forced to share a section neither one can be itself — but neither did the page need both. One centred column, followed by the testimonials, does the whole job.
 
 ## 7. Imagery & Iconography
 
-- **Hero objects:** a set of six line drawings in `src/components/Doodle.jsx`, chosen for silhouette — a cup, a plant, a camera, a book, a bicycle, headphones. They are vector geometry on a 100×100 grid, not sketched illustrations: one stroke weight, one cap style, nothing filled, no shading, `currentColor` so a drawing inherits the ink of whatever it sits on. Every entry in `heroVibes` also accepts an `image` path, which replaces the drawing with a real picture one object at a time.
+- **Hero objects:** six photographs, positioned as a scatter around a centred introduction. One of them is a star-shaped cut-out of the designer and is the largest object in the set, in the top-left corner — the first thing the eye reaches after the headline's first line. The one picture of the person is the one given the most weight, not the least. The scatter is measured, not eyeballed: nothing inside the headline's clear band, no two objects within 10 points of the same height, and no overlap at the tightest viewport the layout reaches (1280×600, where the composition box is 389px). Growing an object invalidates the `y` it was placed at, because the coordinates are percentages of the box and say nothing about the space the object needs.
 - **Case-study/work imagery:** clean product shots or UI screens. The scattered-objects collage is gone, so there is no longer a second place where artwork and photography mix.
 - **Icons:** simple line-weight consistent with the sans typeface's stroke weight
 
@@ -190,7 +191,8 @@ This section was a "random-things" collage with a headline held in columns 1–6
 - Highlighter-style text treatment must still meet contrast on the underlying accent block
 - Secondary text on a coloured card steps down with opacity of the card's own foreground, never grey. `color-text-muted` is tuned for the page background and drops below 4.5:1 on a sand fill.
 - Hero objects are `aria-hidden` and duplicated across the wide and narrow layouts; they are decoration and carry no information
-- The About photo slot is deliberately *not* `aria-hidden`: until a real portrait exists, its label is the only description of that content on the page
+- The About portrait's second frame is `aria-hidden`. A screen reader has no hover, so an `alt` on it would read the same caption as the first portrait twice.
+- An empty photo slot is deliberately *not* `aria-hidden`: while it is a slot rather than a picture, its label is the only description of that content on the page
 
 
 ## 10. Implementation Notes

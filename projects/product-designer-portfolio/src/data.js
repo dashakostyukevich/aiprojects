@@ -77,10 +77,25 @@ export const profile = {
   ],
   // Portrait for the About section. Null renders a labelled slot that already
   // reserves the exact box, so dropping a file in public/ and setting the path
-  // here changes nothing about the layout. It is rendered black and white —
-  // remove the `grayscale` class in AboutEditorial.jsx to keep colour.
-  portrait: null,
-  portraitAlt: null,
+  // here changes nothing about the layout.
+  //
+  // Both files are the same 1440x1508 frame, converted to JPEG at a 1200px long
+  // edge and quality 82 — about 200KB and 236KB against 1.9MB and 2.2MB for the
+  // PNGs in `my images/`. They are displayed at most 480 CSS pixels wide, so
+  // 1200px is still 2.5x and they stay sharp on a 2x display.
+  portrait: '/about/main.jpg',
+  // A second frame, revealed when a pointer is over the portrait. Same size, same
+  // crop, same place on the wall — so the swap reads as the same moment a second
+  // later rather than as a different picture. Null means there is no second
+  // frame and the portrait is a plain photograph.
+  portraitHover: '/about/hover.jpg',
+  portraitAlt:
+    'Darya Kastsiukevich, photographed against a warm pink wall, wearing a cream knit vest over a white top',
+  // The hover frame is the same person in the same room, so it carries no
+  // information the first portrait does not. It is marked decorative in
+  // `AboutPortrait.jsx` rather than given a second alt, because a screen reader
+  // has no hover and would otherwise read the same caption twice.
+  portraitHoverAlt: null,
   // Footer links. One entry, LinkedIn, pointing at the real profile.
   //
   // The `Email` entry that used to be first here was removed earlier: the
@@ -131,14 +146,37 @@ export const nav = [
 // first screen. 480px is still about 3.5x the largest rendered size, so they
 // stay sharp on a 2x display.
 //
-// Order matters and is not alphabetical. Entry 1, 3 and 4 are the three the
-// phone layout picks (`HeroVibes.jsx` takes indices 0, 2, 3), chosen for
-// silhouette: a round cup, a boxy camera, and a wide laptop. The other three
-// are deliberately the awkward shapes — a tall baking dish and a wide diagonal
-// plane — because they are the ones that can take a position no doodle could.
+// Order matters and is not alphabetical, and it is now load-bearing in a way it
+// was not before. Entries 0, 1 and 2 are the three the phone layout picks
+// (`HeroVibes.jsx` takes indices 0, 1, 2) and the left flank, which is why the
+// array is grouped left-then-right rather than kept in any other order.
 //
-// Two of the six are captioned with baking language, at two scales. The labels
-// are not a description of the photographs and are not meant to be read as one.
+// **The left flank is the three tallest blocks; the right is the three shorter
+// ones, and that is not a preference.** Every label is now a first-person
+// statement of 19–26 characters, which wraps to two lines at `max-w-[8rem]` and
+// adds 31px to the bottom of every object. Measured block heights — image, gap,
+// and both lines of label — at the tightest viewport the layout reaches
+// (1280x600, where the box is 389px):
+//
+//   star 147 · camera 134 · baking dish 176 · plane 114 · laptop 112 · coffee 101
+//
+// The baking dish is the tallest thing on the page at 176px, which is a
+// consequence of the photograph rather than of `size` — it is a tall dish
+// photographed from above, so its natural aspect is nothing like the wide
+// objects. Put the dish on the left with the star and the camera and that flank
+// needs 457px of blocks; the usable band is the 389px box plus the section's
+// 48px of padding above and below, which the top and bottom objects already
+// overhang into by design, so 485px. That leaves 28px for two gaps and no
+// freedom in the coordinates at all. Moving the dish right and the coffee left
+// gives the left flank 382px and the right 402px, which clears with ~50px of
+// gap on each side. The coffee is the smallest object on the page and it is the
+// one that can afford the bottom corner.
+//
+// Re-measured at 1024x600/700, 1280x600/700/800, 1366x768, 1440x700/900,
+// 1512x982, 1920x1080 and 2560x1400: no object overlaps another, none overlaps
+// the headline, and none runs off the composition box. The star overhangs the
+// top of the box by 47–48px and the dish the bottom by 47px, both inside the
+// section's 48px padding, so neither reaches the nav or the availability line.
 //
 // The positions were re-picked when these became photographs. They used to be
 // the line drawings' coordinates, and two of them broke: the laptop and the star
@@ -173,20 +211,38 @@ export const nav = [
 // listener was attached. `scale` describes the same spread of characters as a
 // curve parameter rather than a boundary.
 export const heroVibes = [
-  { image: '/hero/coffee.png', label: 'First coffee', x: 7.9, y: 11.3, size: 'sm', tilt: -6, drift: { scale: 0.2, gain: 1.0, spin: -2 } },
-  { image: '/hero/baking.png', label: 'Weekend baking', x: 11.4, y: 79.8, size: 'sm', tilt: 4, drift: { scale: 0.16, gain: 1.35, spin: 3 } },
-  { image: '/hero/camera.png', label: 'Film camera', x: 7.5, y: 42.9, size: 'lg', tilt: -3, drift: { scale: 0.26, gain: 0.8, spin: -1.5 } },
-  // The label reads "Weekdays baking" on a photograph of a laptop, which is
-  // deliberately not a description of the object. Two entries now carry baking
-  // language — this one and "Weekend baking" on the dish below it — so the shelf
-  // says the thing twice at two scales, once as a weekday habit and once as a
-  // weekend project. If that redundancy is not wanted, the label here is the one
-  // to change: the coordinates, size and drift were picked for a wide object in
-  // the top-right corner, and a baking photo needs re-measuring before it could
-  // take this slot.
-  { image: '/hero/laptop.png', label: 'Weekdays baking', x: 91.2, y: 21.1, size: 'md', tilt: 5, drift: { scale: 0.15, gain: 1.15, spin: 2.5 } },
-  { image: '/hero/star.png', label: 'Smiley days', x: 89.4, y: 90.2, size: 'sm', tilt: -4, drift: { scale: 0.24, gain: 0.7, spin: -3 } },
-  { image: '/hero/plane.png', label: 'Red-eye flights', x: 94.8, y: 55.1, size: 'lg', tilt: 3, drift: { scale: 0.13, gain: 1.4, spin: 1.5 } },
+  // Every label is a first-person statement rather than a name for the object
+  // under it. "First coffee" told the reader what they were looking at and
+  // nothing else; "I take coffee seriously" tells them who is writing. Six
+  // objects captioned with what they are, sitting under a headline that is a
+  // claim about the person, was a shelf of objects; this is a person with six
+  // habits. The trade is length: the labels run 19–26 characters against the
+  // old 11–15, which is what forced the label layout and this whole arrangement
+  // to be re-measured — see the flank note above and on `whitespace-nowrap` in
+  // `HeroVibes.jsx`.
+  //
+  // The six are not six facts. They are three registers: what gets made (coffee,
+  // baking, the laptop), what gets consumed or escaped to (photos, flights), and
+  // one line that is simply an introduction — the star's, which is why it is the
+  // largest object and sits in the corner the eye reaches first. It is the only
+  // label addressed to the reader rather than about the writer, and it is
+  // deliberately the one that greets rather than the one that explains.
+  //
+  // The star is `Star 1.png` from `my images/`, downscaled to a 480px long edge.
+  // It is a star-shaped cut-out of a photograph, so the alpha channel is
+  // load-bearing: the irregular edge is what makes it read as a sticker laid on
+  // the page rather than as a rectangle, and it is why this object can sit in the
+  // corner of the box without needing to be clear of anything. It was the
+  // smallest object in the scatter at the bottom right, which was the wrong way
+  // round: it is the one picture here of the person the page is about, and a 40px
+  // sticker of a face is not a portrait. It is now `lg` in the top left, the
+  // first thing a reader's eye reaches after the headline's first line.
+  { image: '/hero/star.png', label: 'Hi there, future colleague', x: 7.9, y: 9, size: 'lg', tilt: -4, drift: { scale: 0.24, gain: 0.7, spin: -3 } },
+  { image: '/hero/camera.png', label: 'I take too many photos', x: 7.5, y: 47, size: 'lg', tilt: -3, drift: { scale: 0.26, gain: 0.8, spin: -1.5 } },
+  { image: '/hero/coffee.png', label: 'I take coffee seriously', x: 11.4, y: 85, size: 'sm', tilt: -6, drift: { scale: 0.2, gain: 1.0, spin: -2 } },
+  { image: '/hero/laptop.png', label: 'I make things on screen', x: 91.2, y: 24, size: 'md', tilt: 5, drift: { scale: 0.15, gain: 1.15, spin: 2.5 } },
+  { image: '/hero/plane.png', label: 'I travel when I can', x: 94.8, y: 50, size: 'lg', tilt: 3, drift: { scale: 0.13, gain: 1.4, spin: 1.5 } },
+  { image: '/hero/baking.png', label: 'Bake when I need a break', x: 89.4, y: 92, size: 'sm', tilt: 4, drift: { scale: 0.16, gain: 1.35, spin: 3 } },
 ]
 
 export const services = [
@@ -256,13 +312,17 @@ export const projects = [
     kind: 'photo',
     fill: 'navy',
     lockup: 'ARASTELLE',
-    // Its own crop, not the section screenshot the case study uses. A 4:3
-    // centre-crop of a 16:9 section catches the seam between the two columns and
-    // a half-cut heading; this is the product frame on its own, which is what
-    // survives the crop and what a 673px card has room to show.
+    // The device mockup rather than a section screenshot: a flat screenshot says
+    // "here is a website", this says "here is a website, running, on hardware",
+    // which is the thing a marketing site is for and a screenshot cannot show.
+    //
+    // The source is 4000×3000 (4:3) and the card is `landscape` (4:3), so this
+    // is a straight resize with no crop at all — the laptop sits centre and
+    // slightly low, and a 4:3 frame holds both the screen and the base.
     image: '/arastelle/card.jpg',
-    imageAlt: 'The BASTION ISR tethered station, the product at the centre of the ARASTELLE site',
-    imageLabel: 'ARASTELLE — BASTION ISR',
+    imageAlt:
+      'A laptop on a concrete ledge showing the ARASTELLE homepage — the tethered station on a rooftop under the headline Unlimited Aerial Surveillance',
+    imageLabel: 'ARASTELLE — the shipped site, running',
     // The cover is the device mockup rather than a screenshot of the page. A
     // flat screenshot says "here is a website"; this says "here is a website,
     // running, on hardware" — which is the thing a marketing site is for and the
@@ -902,11 +962,11 @@ export const projects = [
     kind: 'photo',
     fill: 'sky',
     lockup: null,
-    // The card is `landscape` (4:3) and centre-crops. It takes the full hero
-    // rather than either variant on its own: the two variants are only 566px
-    // wide, so the card at 673px would have to upscale one, and the side-by-side
-    // comparison has its own slot further down where it belongs.
-    image: '/noxs/hero.jpg',
+    // The card is `landscape` (4:3) and centre-crops. The source is 3165×2466,
+    // which is 1.28 against the card's 1.33, so the crop only trims a sliver off
+    // the sides and keeps the whole hero: headline, paragraph, both CTAs and the
+    // product visual, with the integration row still visible at the bottom.
+    image: '/noxs/card.jpg',
     imageAlt:
       'The NOXS landing page: the AI Delivery Assistant hero, with the product visual beside it and the Confluence, Jira, GitLab and GitHub integrations below',
     imageLabel: 'NOXS — the landing page, direct hero variant',

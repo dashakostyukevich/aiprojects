@@ -620,6 +620,43 @@ body {
   }
 }
 
+/* §6 About portrait hover. The second frame is a separate <img> stacked over the
+   first and held at zero opacity; the reveal is one opacity change, so nothing is
+   decoded at hover time and there is no flash of the sand fill.
+
+   Written against the descendant combinator from the <figure> rather than as
+   Tailwind `group-hover:` utilities, for the same reason `.work-card` above uses
+   `card:hover media`: the resting styles and the hover styles have to sit in the
+   same place in the file to be read together, and a media query adds no
+   specificity so a reduced-motion reset written at the group level would lose to
+   a utility on the child.
+
+   `not (hover: hover)` is the load-bearing half. A finger produces a `:hover`
+   that latches after the tap and does not clear until something else is touched,
+   so without this the peace-sign frame would stick on a phone and stay there. The
+   resting portrait is the state a touch device gets, permanently.
+
+   `focus-within` is alongside `hover` so a keyboard user is not locked out of the
+   second frame. The portrait takes no focus of its own — it is not a link — so
+   this only fires if the frame ever grows a control inside it. */
+@media (hover: hover) {
+  [data-portrait]:hover img[data-portrait-hover],
+  [data-portrait]:focus-within img[data-portrait-hover] {
+    opacity: 1;
+  }
+}
+
+/* Reduced motion drops the fade and keeps the swap, for the same reasoning as the
+   work-card veil below: this is a change of picture, not movement, and removing
+   it would leave the hover state doing nothing at all. `transition: none` is a
+   zero-duration swap rather than a 420ms cross-fade, so nothing animates. */
+@media (prefers-reduced-motion: reduce) {
+  img[data-portrait-rest],
+  img[data-portrait-hover] {
+    transition: none;
+  }
+}
+
 /* Browser surfaces. Selection is the one piece of the page the visitor triggers
    by accident, and the default is a saturated system blue that belongs to
    nothing here. Tying it to the accent is the cheapest way to make the page

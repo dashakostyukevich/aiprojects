@@ -1,5 +1,5 @@
 import { profile } from '../data.js'
-import PhotoSlot from './PhotoSlot.jsx'
+import AboutPortrait from './AboutPortrait.jsx'
 import Spark from './Spark.jsx'
 import SplitReveal from './SplitReveal.jsx'
 
@@ -23,9 +23,16 @@ import SplitReveal from './SplitReveal.jsx'
 //     anywhere on the site. The reference this follows ran three different
 //     highlight colours in a row; one accent used twice is the version that
 //     fits a system with a single accent in it.
-//   - **The portrait is black and white.** Every other image on the site is in
-//     colour, so the one picture of the person is the one that is not. Drop
-//     `grayscale` below to opt out.
+//   - **The portrait is in colour.** It was black and white until there was a real
+//     photograph to put in it, on the rule that the one picture of the person
+//     should be the one picture not in colour. That was written for a placeholder
+//     holding a column together; a real portrait at 416px is a colour photograph
+//     either way, and the desaturation was only draining it. `grayscale` in
+//     `AboutPortrait.jsx` brings the old treatment back. That portrait has a
+//     second frame which fades in over it on hover, so it lives in its own
+//     component rather than being a `PhotoSlot` with two more props — `PhotoSlot`
+//     is the "image does not exist yet" marker and is used in five other places on
+//     the site, none of which have a hover state.
 //
 // The copy is the same `profile.bio` the page has always used, reshaped into
 // paragraphs of segments so a phrase can be emphasised without hardcoding markup
@@ -83,7 +90,11 @@ export default function AboutEditorial() {
         <Paragraph parts={profile.bio[0]} />
       </div>
 
-      <figure className="relative mx-auto mt-14 w-full max-w-[30rem] lg:mt-20">
+      {/* 26rem, down from 30rem. The box is now 4/5 rather than 16/10, so at the
+          old width it would have been 480x600px — taller than the paragraph above
+          it, which breaks the "one centred column, every element the same optical
+          weight" idea the section is built on. 416x520 sits between the two. */}
+      <figure className="relative mx-auto mt-14 w-full max-w-[26rem] lg:mt-20">
         {/* The asterisk hangs off the left edge and overlaps the photograph. It
             is filled with the page canvas, so it reads as a shape resting on
             top rather than as a hole punched through the picture. Below `sm` it
@@ -95,17 +106,20 @@ export default function AboutEditorial() {
           strokeWidth={3}
         />
 
-        <PhotoSlot
-          src={profile.portrait ?? null}
+        <AboutPortrait
+          src={profile.portrait}
+          hoverSrc={profile.portraitHover}
           alt={profile.portraitAlt ?? `${profile.name}, product designer`}
-          label={`Portrait of ${profile.name}`}
-          ratio="aspect-[16/10]"
-          // The filter goes on the photograph, not on the slot. PhotoSlot puts
-          // `className` on the frame it wraps *everything* in, so a permanent
-          // `grayscale` also desaturated the placeholder's sand fill and turned
-          // it into a dead grey rectangle. With no portrait there is nothing to
-          // desaturate, so the filter waits for a real file to arrive.
-          className={profile.portrait ? 'grayscale' : undefined}
+          // The second frame is the same person in the same room, so it gets no
+          // alt of its own — a screen reader has no hover and would otherwise
+          // read the same caption twice. See `AboutPortrait.jsx`.
+          hoverAlt={profile.portraitHoverAlt ?? ''}
+          // 4/5 rather than the 16/10 the slot reserved. Both source frames are
+          // 1440x1508 — a little under square — and a 16/10 crop of that cuts the
+          // top of the head and the chin, which is the one thing a portrait cannot
+          // lose. 4/5 is the nearest sensible ratio that keeps the face whole, and
+          // the box is narrower to match, so the column stays as tight as it was.
+          ratio="aspect-[4/5]"
         />
       </figure>
 
