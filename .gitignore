@@ -15,3 +15,6 @@ Icon?
 # Tracked on purpose: AGENTS.md, OpenCode Here.command, and this file.
 # Everything under projects/ is tracked by this repo too — it is the only repo in the workspace.
 # Each project keeps its own .gitignore for node_modules, dist, and similar.
+
+# Local Netlify folder
+.netlify
