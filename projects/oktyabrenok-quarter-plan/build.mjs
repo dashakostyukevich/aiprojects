@@ -15,12 +15,17 @@ const toc = headings
 // --- разметка печатных классов: не разрывать таблицы и списки с чек-листами ---
 let html = marked.parse(md, { gfm: true, breaks: false });
 
+// календарные таблицы (7 колонок = дни недели) печатаем мельче
 html = html
   .replace(/<h2>(.*?)<\/h2>/g, '<h2 class="break-before">$1</h2>')
-  .replace(/<table>/g, '<table class="keep">');
+  .replace(/<table>/g, (m, off, s) =>
+    (s.slice(off, off + 400).match(/<th/g) || []).length >= 6
+      ? '<table class="keep compact">'
+      : '<table class="keep">');
 
 const CSS = `
 @page { size: A4; margin: 18mm 16mm 16mm 16mm; }
+@page :first { margin-top: 14mm; }
 * { box-sizing: border-box; }
 html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 body {
@@ -111,6 +116,9 @@ th {
   border: 1px solid #2f2a25;
 }
 td { padding: 2.2mm 2.6mm; border: 1px solid #d8d2c9; vertical-align: top; }
+table.compact { font-size: 7.4pt; line-height: 1.28; }
+table.compact th, table.compact td { padding: 1.6mm 1.8mm; }
+table.compact th { font-size: 7.4pt; }
 tbody tr:nth-child(even) td { background: #faf7f2; }
 
 /* ---------- цитаты и код ---------- */
@@ -147,13 +155,14 @@ const page = `<!doctype html>
   <div class="flame">&#128293;</div>
   <div class="kicker">Система шефского наставничества &laquo;4 + 1&raquo;</div>
   <h1>Кто такой Октябренок?</h1>
-  <div class="sub">План работы на четверть: ежедневная модель &laquo;Невидимая поддержка&raquo;,
-  еженедельный тематический час, ежемесячный пионерский сбор.</div>
+  <div class="sub">План работы на четверть: тематические дни недели Пн&ndash;Сб,
+  ежедневная модель &laquo;Невидимая поддержка&raquo;, еженедельный Час Огонька,
+  ежемесячный пионерский сбор.</div>
   <div class="meta">
-    <b>Подшефные:</b> 4-й класс, 24&ndash;26 человек, 4 группы<br>
-    <b>Шефы:</b> пара 5&ndash;6 класса (4 человека + запасной)<br>
+    <b>Подшефные:</b> 1-й класс, 24&ndash;28 человек, 4 группы<br>
+    <b>Шефы:</b> 4-й класс, 5 человек + запасной<br>
     <b>Срок:</b> 10 учебных недель, 3 пионерских сбора<br>
-    <b>Куратор:</b> классный руководитель подшефных
+    <b>Куратор:</b> учитель 1-го класса
   </div>
 </section>
 <section class="toc"><h2>Содержание</h2><ol>${toc}</ol></section>
