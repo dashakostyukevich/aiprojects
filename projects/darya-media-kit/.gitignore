@@ -1,0 +1,6 @@
+.DS_Store
+*.local
+.opencode
+
+# Netlify CLI local state — the site id lives here.
+.netlify
