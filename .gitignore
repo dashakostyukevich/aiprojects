@@ -12,9 +12,9 @@ Icon?
 # local to this machine. Fine for a personal container, wrong for a shared clone.
 .gitattributes
 
-# Tracked on purpose: AGENTS.md, OpenCode Here.command, and this file.
+# Tracked on purpose: AGENTS.md, README.md, OpenCode Here.command, and this file.
 # Everything under projects/ is tracked by this repo too — it is the only repo in the workspace.
 # Each project keeps its own .gitignore for node_modules, dist, and similar.
 
-# Local Netlify folder
+# Netlify CLI local state (site links) — per-project .gitignore covers these too.
 .netlify
