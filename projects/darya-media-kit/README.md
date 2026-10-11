@@ -19,6 +19,8 @@ assets/
   photo-*.avif             # UGC photography stills
   about-*.avif             # about-section images
   hero.mp4, footer-banner.mp4
+deploy.sh                  # publishes to Netlify — see Deploying
+netlify.toml               # publish dir + cache headers
 ```
 
 ## Editing content
@@ -89,10 +91,29 @@ Published at **https://darya-media-kit.netlify.app** (site id `bc483233-ab33-4d5
 team: dashakostyukevich’s team). `netlify.toml` holds the config and `.netlify/`
 holds the site link, so there is no build step — the folder *is* the site.
 
+### Deploying by hand
+
+Run the script from this folder:
+
 ```sh
-npm i -g netlify-cli      # once
-netlify deploy --prod --dir .
+./deploy.sh                          # production deploy
+./deploy.sh --draft                  # draft URL, leaves the live site alone
+./deploy.sh --msg "fix pricing copy"  # attach a message to the deploy
+./deploy.sh --help
 ```
+
+One-time setup, if you ever need to redo it on another machine:
+
+```sh
+npm i -g netlify-cli   # the CLI is global, not a project dependency
+netlify login          # opens a browser to approve
+netlify link           # ties this folder to the site
+```
+
+The script fails with a readable message rather than a CLI stack trace if
+`netlify-cli` is missing or the folder is not linked, and it warns when there
+are uncommitted changes in the folder — deploying publishes whatever is on
+disk, not just what is committed.
 
 Any static host works too — drag the folder onto Netlify.
 
