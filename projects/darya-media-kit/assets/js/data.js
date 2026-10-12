@@ -3,6 +3,7 @@ window.WORK = [
   {
     name: "Beauty",
     items: [
+      { brand: "L'oreal Paris", format: "Product Demo", yt: "ayAS3Qbi8KE", cover: "assets/work/l-oreal-paris-8.avif" },
       { brand: "garnier olia", format: "TikTik Style", yt: "e2m9iN1Xj5Y", cover: "assets/work/garnier-olia-1.avif" },
       { brand: "Anua", format: "Product Demo", yt: "GJByFXXU1DQ", cover: "assets/work/anua-2.avif" },
       { brand: "L'oreal Paris", format: "Lifestyle video", yt: "fbmeBgLXkDE", cover: "assets/work/l-oreal-paris-3.avif" },
@@ -10,12 +11,14 @@ window.WORK = [
       { brand: "skin1004", format: "Skincare", yt: "eXUYCZCbIfc", cover: "assets/work/skin1004-5.avif" },
       { brand: "pantene", format: "Product Review", yt: "cw0I3jfakLg", cover: "assets/work/pantene-6.avif" },
       { brand: "cosrx", format: "Product Demo", yt: "U6z4LuALfAI", cover: "assets/work/cosrx-7.avif" },
-      { brand: "L'oreal Paris", format: "Product Demo", yt: "ayAS3Qbi8KE", cover: "assets/work/l-oreal-paris-8.avif" },
     ],
   },
   {
     name: "Fashion",
     items: [
+      { brand: "", format: "GRWM", yt: "-uTGBY7SHNY", cover: "assets/work/selfshot-15.avif" },
+      { brand: "", format: "OGL", yt: "1WuncxXV0PY", cover: "assets/work/selfshot-16.avif" },
+      { brand: "", format: "OGL", yt: "VyKY7-cOVOU", cover: "assets/work/selfshot-17.avif" },
       { brand: "VIVAIA", format: "Product Review", yt: "qnX7V5V2ROo", cover: "assets/work/vivaia-1.webp" },
       { brand: "VIVAIA", format: "TikTok Style", yt: "BCMow_rZXUc", cover: "assets/work/vivaia-2.avif" },
       { brand: "", format: "TikTok Style", yt: "v1TMb1wCx3s", cover: "assets/work/selfshot-3.avif" },
@@ -25,9 +28,6 @@ window.WORK = [
       { brand: "", format: "GRWM", yt: "7HFORJphCYk", cover: "assets/work/selfshot-7.webp" },
       { brand: "", format: "Outfit Check", yt: "Q1v-oSzhA8k", cover: "assets/work/selfshot-8.webp" },
       { brand: "Firmoo", format: "Unpacking", yt: "aIEba6z9jhY", cover: "assets/work/firmoo-9.avif" },
-      { brand: "", format: "GRWM", yt: "-uTGBY7SHNY", cover: "assets/work/selfshot-15.avif" },
-      { brand: "", format: "OGL", yt: "1WuncxXV0PY", cover: "assets/work/selfshot-16.avif" },
-      { brand: "", format: "OGL", yt: "VyKY7-cOVOU", cover: "assets/work/selfshot-17.avif" },
     ],
   },
   {
