@@ -10,10 +10,39 @@
   to = "/index.html"
   status = 200
 
+# Cover images and video assets are content-addressed by name: a new upload is a
+# new file and an old one is never rewritten in place. Safe to cache forever.
 [[headers]]
-  for = "/assets/*"
+  for = "/assets/work/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/photo-*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/about-*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/assets/*.mp4"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# CSS and data.js are edited without renaming anything, so a year-long immutable
+# cache keeps serving the old build to returning visitors. Revalidate instead.
+[[headers]]
+  for = "/assets/css/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/assets/js/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
 
 [[headers]]
   for = "/*.html"
