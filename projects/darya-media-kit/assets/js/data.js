@@ -25,14 +25,19 @@ window.WORK = [
       { brand: "", format: "GRWM", yt: "7HFORJphCYk", cover: "assets/work/selfshot-7.webp" },
       { brand: "", format: "Outfit Check", yt: "Q1v-oSzhA8k", cover: "assets/work/selfshot-8.webp" },
       { brand: "Firmoo", format: "Unpacking", yt: "aIEba6z9jhY", cover: "assets/work/firmoo-9.avif" },
+      { brand: "", format: "GRWM", yt: "-uTGBY7SHNY", cover: "assets/work/selfshot-15.avif" },
+      { brand: "", format: "OGL", yt: "1WuncxXV0PY", cover: "assets/work/selfshot-16.avif" },
+      { brand: "", format: "OGL", yt: "VyKY7-cOVOU", cover: "assets/work/selfshot-17.avif" },
+    ],
+  },
+  {
+    name: "Tech",
+    items: [
       { brand: "RecipeJar", format: "Problem / Solution", yt: "8ESLtf0dhi8", cover: "assets/work/recipejar-10.avif" },
       { brand: "Brighty", format: "App Review", yt: "jeyk0g9vE00", cover: "assets/work/brighty-11.avif" },
       { brand: "Firsty", format: "e-SIM", yt: "ccnz6kliz8Y", cover: "assets/work/firsty-12.avif" },
       { brand: "Firsty", format: "Vlog", yt: "USprNGhqv5o", cover: "assets/work/firsty-13.avif" },
       { brand: "Firsty", format: "Problem / Solution", yt: "l7Sls0usLHw", cover: "assets/work/firsty-14.avif" },
-      { brand: "", format: "GRWM", yt: "-uTGBY7SHNY", cover: "assets/work/selfshot-15.avif" },
-      { brand: "", format: "OGL", yt: "1WuncxXV0PY", cover: "assets/work/selfshot-16.avif" },
-      { brand: "", format: "OGL", yt: "VyKY7-cOVOU", cover: "assets/work/selfshot-17.avif" },
     ],
   },
   {
