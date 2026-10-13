@@ -169,7 +169,7 @@ Fill this in during the build and keep it up to date. Use it in every conversati
 - Worked with brands: yes, a few (paid and possibly unpaid collaborations)
 - Social accounts to show: yes — Instagram and TikTok (ask for the exact links when building the Work or Contact section; link out, never embed)
 - Video formats: hook videos, unboxings, product demos, testimonial-style, voiceovers, tutorials
-- Confirmed style (colours, fonts, mood):
+- Confirmed style (colours, fonts, mood): warm cream/off-white backgrounds, near-black ink, one loud accent colour (butter yellow #F2E14C family, confirmed by user 2026-10-13). Big confident serif or heavy sans headlines, with an italic serif accent on key words. Bright, friendly, fashion-magazine mood. Layout: big photo hero, then rounded video cards with small pill labels saying what each video is, then three offer cards, then a big coloured footer band with the creator's name. Inspiration only — combine ideas, never copy a layout.
 - Sections switched on:
 - Shows prices: yes / no
 - Live address:
