@@ -161,7 +161,7 @@ The first launch happens once, in the setup prompt. These rules are for every up
 
 Fill this in during the build and keep it up to date. Use it in every conversation.
 
-- Name:
+- Name: Darya Kasts
 - Country:
 - Chat language: English
 - Website language: English
@@ -170,7 +170,8 @@ Fill this in during the build and keep it up to date. Use it in every conversati
 - Social accounts to show: yes — Instagram and TikTok (ask for the exact links when building the Work or Contact section; link out, never embed)
 - Video formats: hook videos, unboxings, product demos, testimonial-style, voiceovers, tutorials
 - Confirmed style (colours, fonts, mood): warm cream/off-white backgrounds, near-black ink, one loud accent colour (butter yellow #F2E14C family, confirmed by user 2026-10-13). Big confident serif or heavy sans headlines, with an italic serif accent on key words. Bright, friendly, fashion-magazine mood. Layout: big photo hero, then rounded video cards with small pill labels saying what each video is, then three offer cards, then a big coloured footer band with the creator's name. Inspiration only — combine ideas, never copy a layout.
-- Sections switched on:
+- Contact email: darya.kasts@gmail.com (mailto, always visible as text)
+- Sections switched on: Intro, Work, Proof, About, Services, Contact. Case studies/testimonials/logos only if real paid brand work is supplied later — currently none supplied, so they are OFF.
 - Shows prices: yes / no
 - Live address:
 - Decisions and why:
