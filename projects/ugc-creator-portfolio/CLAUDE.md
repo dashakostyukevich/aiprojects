@@ -177,3 +177,8 @@ Fill this in during the build and keep it up to date. Use it in every conversati
 - Decisions and why:
   - 2026-10-13: Project folder is `~/Documents/aiprojects/projects/ugc-creator-portfolio/`. Chosen over a new Desktop `my-portfolio` folder because this workspace folder already exists and is where all the user's projects live.
   - 2026-10-13: Rules file named `CLAUDE.md` as the user asked, even though the assistant runs in OpenCode rather than Claude.
+  - 2026-10-13: Plain HTML/CSS/JS chosen over React so the folder can be dragged onto Netlify directly (user's decision).
+  - 2026-10-13: Fonts Fraunces (display + italic) and Inter (text), downloaded once and self-hosted in `assets/fonts/`. Never link to Google Fonts.
+  - 2026-10-13: Videos converted with macOS built-in `avconvert` (`PresetAppleM4V720pHD`) because the user declined installing ffmpeg/yt-dlp. Output lands in the 5-10 MB range with correct 720x1280 H.264. `media/outfits.mp4` and `media/vacuum.mp4`. Originals stay in `Portfolio Videos/` which must never be uploaded.
+  - 2026-10-13: The outfits video currently appears twice (hero + work). User chose to fix it later by adding more videos from YouTube — revisit before launch; it must not repeat.
+  - 2026-10-13: Darya supplies her own videos and covers. No stock photos anywhere.
