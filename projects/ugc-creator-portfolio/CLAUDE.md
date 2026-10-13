@@ -164,11 +164,11 @@ Fill this in during the build and keep it up to date. Use it in every conversati
 - Name:
 - Country:
 - Chat language: English
-- Website language:
-- Niche:
-- Worked with brands: yes / no
-- Social accounts to show:
-- Video formats:
+- Website language: English
+- Niche: broad — beauty, fashion, travel, food, fitness, tech, home, pets. Position the site as an all-round creator rather than one category.
+- Worked with brands: yes, a few (paid and possibly unpaid collaborations)
+- Social accounts to show: yes — Instagram and TikTok (ask for the exact links when building the Work or Contact section; link out, never embed)
+- Video formats: hook videos, unboxings, product demos, testimonial-style, voiceovers, tutorials
 - Confirmed style (colours, fonts, mood):
 - Sections switched on:
 - Shows prices: yes / no
