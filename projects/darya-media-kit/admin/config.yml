@@ -1,0 +1,313 @@
+# Decap CMS — the editing screen for this site.
+#
+# Everything on the page lives in one file, content/content.json, so the whole
+# site is edited from a single screen. Saving writes that file, Netlify turns
+# it into a git commit, and the live site rebuilds about a minute later.
+#
+# The groups below mirror the order of the page, so someone editing the site
+# for the first time finds each block where they expect it on screen.
+#
+# Field names match the keys in content/content.json exactly — they are the
+# same names the page reads at runtime. Renaming one here without renaming it
+# there leaves the site showing the old default.
+
+backend:
+  name: git-gateway
+  branch: main
+
+# New images go in their own folder. They are never overwritten, which is what
+# lets the cache rules in netlify.toml treat them as permanent.
+media_folder: assets/uploads
+public_folder: /assets/uploads
+
+site_url: https://darya-media-kit.netlify.app
+display_url: https://darya-media-kit.netlify.app
+logo_url: /assets/Kaleo_Icon.svg
+
+publish_mode: editorial_workflow
+
+collections:
+  - name: content
+    label: "Your site"
+    label_singular: "Your site"
+    description: >
+      Everything on the website is edited here. Save, then click Publish — the
+      live site updates in about a minute.
+    files:
+      - name: content
+        label: "Site"
+        file: content/content.json
+        format: json
+        fields:
+          # ------------------------------------------------------------ you
+          - label: "Your details"
+            name: SITE
+            widget: object
+            groups:
+              - label: "Your details"
+                fields:
+                  - label: "Name on the site"
+                    name: name
+                    widget: string
+                    hint: "Your display name as you want it seen."
+                  - label: "Initials"
+                    name: monogram
+                    widget: string
+                    hint: "One or two letters — shows in the top-left corner."
+                  - label: "Contact email"
+                    name: email
+                    widget: string
+                    hint: "Every 'Let's work' button on the site opens this address."
+                  - label: "Instagram link"
+                    name: instagram
+                    widget: string
+                    required: false
+                    hint: "Full URL, starting with https://"
+                  - label: "TikTok link"
+                    name: tiktok
+                    widget: string
+                    required: false
+                    hint: "Full URL. Leave this empty to hide the link."
+                  - label: "YouTube link"
+                    name: youtube
+                    widget: string
+                    required: false
+                    hint: "Full URL. Leave this empty to hide the link."
+
+              - label: "The top of the page"
+                fields:
+                  - label: "Your name (large)"
+                    name: heroTitle
+                    widget: string
+                  - label: "Word in script style"
+                    name: heroScript
+                    widget: string
+                    hint: "The handwritten word next to your name — 'media kit' by default."
+                  - label: "Curved text around the arc"
+                    name: heroArc
+                    widget: string
+                    hint: "The circle of text under your name. Keep it short."
+                  - label: "Same text, for phones"
+                    name: heroArcFallback
+                    widget: string
+                    hint: "On a phone the arc is too small to read, so this line is shown instead."
+                  - label: "Link label at the bottom"
+                    name: heroBottomLabel
+                    widget: string
+                    hint: "The line that links out to Instagram."
+
+              - label: "Search results"
+                fields:
+                  - label: "Browser tab title"
+                    name: title
+                    widget: string
+                    hint: "What people see in the tab, and in Google."
+                  - label: "Short description"
+                    name: description
+                    widget: text
+                    hint: "One or two sentences. Used by Google and by link previews."
+
+              - label: "About you section"
+                fields:
+                  - label: "Small heading"
+                    name: aboutEyebrow
+                    widget: string
+                  - label: "Main heading"
+                    name: aboutHeading
+                    widget: string
+                  - label: "Second line of the heading"
+                    name: aboutHeadingEm
+                    widget: string
+
+              - label: "Your numbers"
+                fields:
+                  - label: "Instagram followers"
+                    name: statsInstagramFollowers
+                    widget: number
+                    value_type: int
+                    min: 0
+                  - label: "Instagram engagement rate (%)"
+                    name: statsInstagramEngagement
+                    widget: number
+                    value_type: float
+                    step: 0.01
+                    hint: "Type 6.47 — the site adds the % sign for you."
+                  - label: "TikTok followers"
+                    name: statsTiktokFollowers
+                    widget: number
+                    value_type: int
+                    min: 0
+                  - label: "TikTok engagement rate (%)"
+                    name: statsTiktokEngagement
+                    widget: number
+                    value_type: float
+                    step: 0.01
+                    hint: "Type 14.29 — the site adds the % sign for you."
+                  - label: "Audience heading"
+                    name: statsAudienceHeading
+                    widget: string
+                  - label: "Audience breakdown"
+                    name: statsAudienceLines
+                    widget: text
+                    hint: "One line per line. Each line becomes its own row."
+                  - label: "Date shown under the figures"
+                    name: statsUpdated
+                    widget: string
+                    hint: "For example: 'last update: September 2026'"
+                  - label: "Date in the footer"
+                    name: footerNote
+                    widget: string
+                    hint: "For example: 'Stats last updated September 2026'"
+                  - label: "Handwritten note under the stats"
+                    name: statsNote
+                    widget: string
+
+              - label: "Footer"
+                fields:
+                  - label: "Where you're based"
+                    name: basedIn
+                    widget: string
+                  - label: "Languages"
+                    name: languages
+                    widget: string
+                  - label: "Name in the copyright line"
+                    name: footerCopyright
+                    widget: string
+
+          # ----------------------------------------------------------- work
+          - label: "Your videos"
+            name: WORK
+            widget: list
+            label_singular: "Category"
+            summary: "{{fields.name}}"
+            types:
+              - name: category
+                label: "Category"
+                fields:
+                  - label: "Category name"
+                    name: name
+                    widget: string
+                    hint: "For example: Beauty, Fashion, Tech."
+                  - label: "Videos in this category"
+                    name: items
+                    widget: list
+                    label_singular: "Video"
+                    summary: "{{fields.brand}} {{fields.format}}"
+                    types:
+                      - name: video
+                        label: "Video"
+                        fields:
+                          - label: "Brand"
+                            name: brand
+                            widget: string
+                            required: false
+                            hint: "Leave this empty for a self-shot video with no brand."
+                          - label: "Format"
+                            name: format
+                            widget: string
+                            hint: "For example: Product Demo, GRWM, Unboxing."
+                          - label: "YouTube link or ID"
+                            name: yt
+                            widget: string
+                            hint: "Paste the whole YouTube URL, or just the ID (the part after watch?v=)."
+                          - label: "Cover image"
+                            name: cover
+                            widget: image
+
+          # ------------------------------------------------------ photos
+          - label: "Photography"
+            name: PHOTOS
+            widget: list
+            label_singular: "Photo"
+            summary: "{{fields.tag}}"
+            types:
+              - name: photo
+                label: "Photo"
+                fields:
+                  - { label: "Image", name: src, widget: image }
+                  - label: "Category"
+                    name: cat
+                    widget: string
+                    hint: "Photos are filtered by this. For example: Beauty & Product."
+                  - label: "Short caption"
+                    name: tag
+                    widget: string
+
+          # ------------------------------------------------------ brands
+          - label: "Brands"
+            name: BRANDS
+            widget: list
+            label_singular: "Brand"
+            summary: "{{fields.name}}"
+            types:
+              - name: brand
+                label: "Brand"
+                fields:
+                  - label: "Brand name"
+                    name: name
+                    widget: string
+                  - label: "Category"
+                    name: cat
+                    widget: string
+                    hint: "For example: Beauty & Hair, Fashion, Tech & Apps."
+
+          # ---------------------------------------------------- packages
+          - label: "Packages"
+            name: PACKAGES
+            widget: list
+            label_singular: "Package"
+            summary: "{{fields.name}}"
+            types:
+              - name: package
+                label: "Package"
+                fields:
+                  - label: "Name"
+                    name: name
+                    widget: string
+                    hint: "For example: Single video, Retainer."
+                  - label: "Price"
+                    name: amount
+                    widget: string
+                    required: false
+                    hint: "The figure itself, without a $ sign. For example: 100"
+                  - label: "If a package has no price"
+                    name: amountLabel
+                    widget: string
+                    required: false
+                    hint: "For example: Barter. Shown instead of a figure, and only used when the price above is empty."
+                  - label: "What the price is for"
+                    name: unit
+                    widget: string
+                    required: false
+                    hint: "For example: per video, 3 videos, per month."
+                  - label: "Description"
+                    name: desc
+                    widget: text
+                  - label: "What's included"
+                    name: features
+                    widget: list
+                    required: false
+                    label_singular: "Line"
+                    default: ""
+                  - label: "Button text"
+                    name: cta
+                    widget: string
+                    hint: "For example: Book a single."
+
+          # ------------------------------------------------------ addons
+          - label: "Add-ons"
+            name: ADDONS
+            widget: list
+            label_singular: "Add-on"
+            summary: "{{fields.label}}"
+            types:
+              - name: addon
+                label: "Add-on"
+                fields:
+                  - label: "What it is"
+                    name: label
+                    widget: string
+                  - label: "Price"
+                    name: price
+                    widget: string
+                    hint: "Anything you like: +$12, +6%, or 'Free'."

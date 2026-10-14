@@ -4,6 +4,21 @@
   publish = "."
   command = ""
 
+# The catch-all below rewrites every unmatched path to the homepage. Netlify
+# serves real files before it applies redirects, so /content/content.json and
+# /admin/ already resolve on their own — these rules only make that explicit and
+# stop the two paths from ever depending on that behaviour. They must stay above
+# the catch-all, since the first matching rule wins.
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/content/*"
+  to = "/content/:splat"
+  status = 200
+
 # Force .html on directory requests so /index.html links resolve.
 [[redirects]]
   from = "/*"
@@ -32,7 +47,7 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
-# CSS and data.js are edited without renaming anything, so a year-long immutable
+# CSS and JS are edited without renaming anything, so a year-long immutable
 # cache keeps serving the old build to returning visitors. Revalidate instead.
 [[headers]]
   for = "/assets/css/*"
@@ -46,5 +61,20 @@
 
 [[headers]]
   for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# The editing screen must never be cached either, or a fix to it does not reach
+# anyone who visited /admin before.
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# content/content.json is what every edit writes to. It is replaced in place
+# under a fixed name, so it needs the same revalidate rule — otherwise a
+# published change keeps serving the previous file to returning visitors.
+[[headers]]
+  for = "/content/*"
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"

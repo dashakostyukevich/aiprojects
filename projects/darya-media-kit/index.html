@@ -3,16 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Daryas.diary — Media Kit</title>
+    <!-- Titles and descriptions are set from content.json at runtime; the text
+         here is what a crawler or a failed fetch falls back to. -->
+    <title data-site="title">Daryas.diary — Media Kit</title>
     <meta
       name="description"
+      data-site="description"
       content="Media kit for Darya K. — UGC creator producing video and photography for beauty, fashion, tech and lifestyle brands."
     />
     <meta name="theme-color" content="#efe5d7" />
-    <meta property="og:title" content="Daryas.diary — Media Kit" />
+    <meta property="og:title" data-site="title" content="Daryas.diary — Media Kit" />
     <meta
       property="og:description"
-      content="UGC video and photography for beauty, fashion, tech and lifestyle brands."
+      data-site="description"
+      content="Media kit for Darya K. — UGC creator producing video and photography for beauty, fashion, tech and lifestyle brands."
     />
     <link rel="preload" href="assets/CabinetGrotesk-Variable.ttf" as="font" type="font/ttf" crossorigin />
     <link rel="stylesheet" href="assets/css/style.css" />
@@ -28,7 +32,7 @@
       <header class="nav nav--overlay" id="nav">
         <div class="container pad">
           <div class="nav__inner">
-            <a href="#top" class="nav__brand">DK</a>
+            <a href="#top" class="nav__brand" data-site="monogram">DK</a>
 
             <nav class="nav__links" aria-label="Primary">
               <a class="nav__link" href="#me">Why me</a>
@@ -39,7 +43,7 @@
               <a class="nav__link" href="#contacts">Contact</a>
             </nav>
 
-            <a href="mailto:darya.ksts@gmail.com" class="btn nav__cta">
+            <a href="mailto:darya.ksts@gmail.com" class="btn nav__cta" data-site-email>
               Let&rsquo;s work
               <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path
@@ -71,7 +75,7 @@
             <a href="#brands">Brands</a>
             <a href="#services">Packages</a>
             <a href="#contacts">Contact</a>
-            <a href="mailto:darya.ksts@gmail.com" class="btn mobile-menu__cta">
+            <a href="mailto:darya.ksts@gmail.com" class="btn mobile-menu__cta" data-site-email>
               Let&rsquo;s work
             </a>
           </div>
@@ -98,8 +102,8 @@
             <img src="assets/Kaleo_Icon.svg" alt="" width="32" height="32" />
 
             <h1 class="hero__title">
-              darya k.
-              <span class="script hero__script">media kit</span>
+              <span data-site="heroTitle">darya k.</span>
+              <span class="script hero__script" data-site="heroScript">media kit</span>
             </h1>
 
             <!-- 853x75 matches the original's arc, with the curved text redrawn
@@ -111,18 +115,18 @@
               </defs>
               <text>
                 <textPath href="#heroArc" startOffset="50%" text-anchor="middle"
-                  >FREELANCE LIFESTYLE ✦ TRAVEL CONTENT CREATOR ✦ UGC</textPath
+                  ><tspan data-site="heroArc">FREELANCE LIFESTYLE ✦ TRAVEL CONTENT CREATOR ✦ UGC</tspan></textPath
                 >
               </text>
             </svg>
 
-            <p class="hero__arc-fallback">
+            <p class="hero__arc-fallback" data-site="heroArcFallback">
               Freelance lifestyle · travel · content creator · UGC
             </p>
 
             <p class="hero__bottom">
-              <a href="https://www.instagram.com/daryas.diary/" target="_blank" rel="noopener">
-                blog: @daryas.diary
+              <a href="https://www.instagram.com/daryas.diary/" target="_blank" rel="noopener" data-site-link="instagram">
+                <span data-site="heroBottomLabel">blog: @daryas.diary</span>
               </a>
             </p>
           </div>
@@ -133,11 +137,11 @@
           <div class="about__track" data-about-track>
             <div class="about__sticky">
               <div class="about__head">
-                <p class="about__eyebrow">Why me?</p>
+                <p class="about__eyebrow" data-site="aboutEyebrow">Why me?</p>
                 <h2 class="h-section">
-                  I create the kind of content
+                  <span data-site="aboutHeading">I create the kind of content</span>
                   <span class="spark" aria-hidden="true">&#10024;</span>
-                  i&rsquo;d love to watch myself
+                  <span data-site="aboutHeadingEm">i&rsquo;d love to watch myself</span>
                 </h2>
               </div>
 
@@ -222,15 +226,18 @@
           <div class="container pad">
             <div class="stats">
               <div class="stats__card reveal">
+                <!-- The four figures come from content.json. data-count is written
+                     at runtime so the counter animation always counts to the edited
+                     value; the text inside is the no-JS fallback. -->
                 <div class="stats__platform">
                   <h3 class="stats__name">Instagram</h3>
                   <div class="stats__figures">
                     <div class="stats__figure">
-                      <span class="stats__num" data-count="1385">1385</span>
+                      <span class="stats__num" data-stat="statsInstagramFollowers" data-decimals="0">1385</span>
                       <span class="stats__unit">followers</span>
                     </div>
                     <div class="stats__figure">
-                      <span class="stats__num" data-count="6.47" data-decimals="2" data-suffix="%">6.47%</span>
+                      <span class="stats__num" data-stat="statsInstagramEngagement" data-decimals="2" data-suffix="%">6.47%</span>
                       <span class="stats__unit">engagement rate</span>
                     </div>
                   </div>
@@ -240,25 +247,27 @@
                   <h3 class="stats__name">TikTok</h3>
                   <div class="stats__figures">
                     <div class="stats__figure">
-                      <span class="stats__num" data-count="443">443</span>
+                      <span class="stats__num" data-stat="statsTiktokFollowers" data-decimals="0">443</span>
                       <span class="stats__unit">followers</span>
                     </div>
                     <div class="stats__figure">
-                      <span class="stats__num" data-count="14.29" data-decimals="2" data-suffix="%">14.29%</span>
+                      <span class="stats__num" data-stat="statsTiktokEngagement" data-decimals="2" data-suffix="%">14.29%</span>
                       <span class="stats__unit">engagement rate</span>
                     </div>
                   </div>
                 </div>
 
-                <p class="stats__stamp">last update: September 2026</p>
+                <p class="stats__stamp" data-site="statsUpdated">last update: September 2026</p>
               </div>
 
               <div class="reveal">
                 <h2 class="stats__headline">Stats &amp;<br />Demographics</h2>
 
                 <div class="stats__audience">
-                  <h3>Audience</h3>
-                  <p>
+                  <h3 data-site="statsAudienceHeading">Audience</h3>
+                  <!-- One line per line in the CMS field; the renderer turns the
+                       newlines into <br> so the block stays editable as plain text. -->
+                  <p data-site-lines="statsAudienceLines">
                     73% Female<br />
                     50% Ages 25&ndash;34 and 28% ages 18&ndash;24<br />
                     17.3% Poland, 13% USA, 8% UK, 5% Canada
@@ -267,7 +276,7 @@
               </div>
             </div>
 
-            <p class="script stats__note reveal">
+            <p class="script stats__note reveal" data-site="statsNote">
               I&rsquo;m just getting started — but my audience already listens
             </p>
           </div>
@@ -392,7 +401,7 @@
                 evenings at home, small discoveries of living abroad. Back then I didn&rsquo;t know
                 that this authentic perspective was exactly what brands were missing.
               </p>
-              <a href="mailto:darya.ksts@gmail.com" class="btn">Start a project</a>
+              <a href="mailto:darya.ksts@gmail.com" class="btn" data-site-email>Start a project</a>
             </div>
           </div>
         </section>
@@ -404,7 +413,12 @@
           <div class="footer__grid">
             <div>
               <p class="footer__title">E-mail</p>
-              <a href="mailto:darya.ksts@gmail.com" style="font-size: 1.25rem; font-weight: 500">
+              <a
+                href="mailto:darya.ksts@gmail.com"
+                data-site-email
+                data-site-email-text
+                style="font-size: 1.25rem; font-weight: 500"
+              >
                 darya.ksts@gmail.com
               </a>
             </div>
@@ -412,22 +426,22 @@
             <div>
               <p class="footer__title">Socials</p>
               <div class="footer__list">
-                <a href="https://www.instagram.com/daryas.diary/" target="_blank" rel="noopener">Instagram</a>
-                <a href="https://www.tiktok.com/@daryas.diary" target="_blank" rel="noopener">TikTok</a>
-                <a href="https://www.youtube.com/@daryas.diary" target="_blank" rel="noopener">YouTube</a>
+                <a href="https://www.instagram.com/daryas.diary/" target="_blank" rel="noopener" data-site-link="instagram">Instagram</a>
+                <a href="https://www.tiktok.com/@daryas.diary" target="_blank" rel="noopener" data-site-link="tiktok">TikTok</a>
+                <a href="https://www.youtube.com/@daryas.diary" target="_blank" rel="noopener" data-site-link="youtube">YouTube</a>
               </div>
             </div>
 
             <div>
               <p class="footer__title">Based in</p>
-              <p class="small">Poland &mdash; shooting worldwide, remote or on location.</p>
-              <p class="small" style="margin-top: 0.5rem">Languages: EN / PL / RU</p>
+              <p class="small" data-site="basedIn">Poland &mdash; shooting worldwide, remote or on location.</p>
+              <p class="small" style="margin-top: 0.5rem" data-site="languages">Languages: EN / PL / RU</p>
             </div>
           </div>
 
           <div class="footer__bottom">
-            <span>&copy; <span id="year"></span> Darya&rsquo;s Diary</span>
-            <span>Stats last updated September 2026</span>
+            <span>&copy; <span id="year"></span> <span data-site="footerCopyright">Darya&rsquo;s Diary</span></span>
+            <span data-site="footerNote">Stats last updated September 2026</span>
           </div>
         </div>
       </footer>

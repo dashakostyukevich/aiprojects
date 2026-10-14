@@ -1,4 +1,45 @@
-// Auto-extracted from the original Webflow build. Order preserved.
+/* ==========================================================================
+   Shipped default content — the fallback.
+   The editable copy lives in content/content.json and is what the CMS writes.
+   This file only loads if that fetch fails, so the site never renders empty:
+   a fresh clone, a broken path or a failed request still shows a full page.
+   Keep it in sync with content.json when you edit content by hand.
+   ========================================================================== */
+
+window.SITE = {
+  name: "Daryas.diary",
+  monogram: "DK",
+  title: "Daryas.diary — Media Kit",
+  description:
+    "Media kit for Darya K. — UGC creator producing video and photography for beauty, fashion, tech and lifestyle brands.",
+  email: "darya.ksts@gmail.com",
+  instagram: "https://www.instagram.com/daryas.diary/",
+  tiktok: "https://www.tiktok.com/@daryas.diary",
+  youtube: "https://www.youtube.com/@daryas.diary",
+  heroTitle: "darya k.",
+  heroScript: "media kit",
+  heroArc: "FREELANCE LIFESTYLE ✦ TRAVEL CONTENT CREATOR ✦ UGC",
+  heroArcFallback: "Freelance lifestyle · travel · content creator · UGC",
+  heroBottomLabel: "blog: @daryas.diary",
+  aboutEyebrow: "Why me?",
+  aboutHeading: "I create the kind of content",
+  aboutHeadingEm: "i’d love to watch myself",
+  statsUpdated: "last update: September 2026",
+  statsInstagramFollowers: "1385",
+  statsInstagramEngagement: "6.47",
+  statsTiktokFollowers: "443",
+  statsTiktokEngagement: "14.29",
+  statsAudienceHeading: "Audience",
+  statsAudienceLines:
+    "73% Female\n50% Ages 25–34 and 28% ages 18–24\n17.3% Poland, 13% USA, 8% UK, 5% Canada",
+  statsNote: "I’m just getting started — but my audience already listens",
+  basedIn: "Poland — shooting worldwide, remote or on location.",
+  languages: "Languages: EN / PL / RU",
+  footerNote: "Stats last updated September 2026",
+  footerCopyright: "Darya’s Diary",
+};
+
+// --- UGC video, grouped into the categories the filters read ---------------
 window.WORK = [
   {
     name: "Beauty",
@@ -60,7 +101,7 @@ window.WORK = [
   {
     name: "Places",
     items: [
-      { brand: "ancymon cafe", format: "Caf\u00e9 review", yt: "Y_zs1X8mHLc", cover: "assets/work/ancymon-cafe-1.webp" },
+      { brand: "ancymon cafe", format: "Café review", yt: "Y_zs1X8mHLc", cover: "assets/work/ancymon-cafe-1.webp" },
       { brand: "Moja Gruzja", format: "Khinkali Cooking Class", yt: "UJYYO8M3WzQ", cover: "assets/work/moja-gruzja-2.avif" },
     ],
   },

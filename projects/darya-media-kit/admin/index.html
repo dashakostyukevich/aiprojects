@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Edit your site</title>
+    <!--
+      The editing screen. Only the site owner ever reaches it, so it is kept out
+      of search engines and shows no public chrome.
+
+      Identity (the login) and the CMS itself both load from a CDN. That is what
+      keeps this site free of any build step — nothing here is compiled, and
+      there is nothing to install.
+
+      When you publish, Netlify turns the save into a git commit and rebuilds,
+      so the live page updates about a minute later.
+    -->
+    <script>
+      // If Identity is switched off, Netlify's widget never initialises and the
+      // CMS is left showing an error that only the site owner can act on. This
+      // replaces it with the two dashboard switches that fix it.
+      (function () {
+        var shown = false;
+
+        function help() {
+          if (shown) return;
+          shown = true;
+
+          var box = document.createElement("div");
+          box.setAttribute("role", "alert");
+          box.style.cssText =
+            "max-width:34rem;margin:4rem auto;padding:1.5rem 1.75rem;" +
+            "font:16px/1.6 -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;" +
+            "color:#2b2520;background:#fdf6ec;border:1px solid #e0cdb4;" +
+            "border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,.06)";
+
+          box.innerHTML =
+            "<h1 style='font-size:1.3rem;margin:0 0 .75rem'>Editing isn't switched on yet</h1>" +
+            "<p style='margin:0 0 1rem'>This is a one-time setup, about a minute. " +
+            "Open your Netlify site settings and turn on two things:</p>" +
+            "<ol style='margin:0 0 1rem;padding-left:1.25rem'>" +
+            "<li style='margin-bottom:.6rem'><strong>Identity</strong><br>" +
+            "<em>Site configuration &rarr; Identity &amp; Access &rarr; Identity</em>, " +
+            "then switch <strong>Enable identity</strong> on.</li>" +
+            "<li><strong>Git Gateway</strong><br>" +
+            "The same page, under <em>Services &rarr; Git Gateway</em>, then switch it on. " +
+            "This is what carries your saves to the site.</li>" +
+            "</ol>" +
+            "<p style='margin:0'>Then reload this page. If something else is wrong, " +
+            "email <a href='mailto:darya.ksts@gmail.com' style='color:#a6171b'>" +
+            "darya.ksts@gmail.com</a> and say what you see.</p>";
+
+          var mount = document.getElementById("setup-help") || document.getElementById("nc-root") || document.body;
+          mount.replaceWith ? mount.replaceWith(box) : mount.appendChild(box);
+        }
+
+        // The widget sets itself up almost immediately. If it has not by the
+        // time the CMS has had a chance to render, Identity is off.
+        function check() {
+          if (window.netlifyIdentity && window.netlifyIdentity.currentUser !== undefined) return;
+          var err = document.querySelector(".nc-alarm-wrapper, .error, [class*='_ERRORS_']");
+          if (err) help();
+          else setTimeout(check, 500);
+        }
+
+        setTimeout(check, 1500);
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Decap mounts here. -->
+    <div id="nc-root"></div>
+
+    <!-- Both scripts sit at the end of the body on purpose: Decap mounts into
+         #nc-root as soon as it loads, so it has to run after that element
+         exists. Identity likewise initialises against the live document.
+
+         decap-cms.js is the full build, not decap-cms-app — the app build
+         fails to mount from a plain CDN script tag. Pinned to the 3.x line. -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+  </body>
+</html>
