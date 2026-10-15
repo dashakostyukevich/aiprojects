@@ -45,51 +45,60 @@
           "brand": "L'oreal Paris",
           "format": "Product Demo",
           "yt": "ayAS3Qbi8KE",
-          "cover": "assets/work/l-oreal-paris-8.avif"
+          "cover": "assets/work/l-oreal-paris-8.avif",
+          "type": "video"
         },
         {
           "brand": "garnier olia",
           "format": "TikTik Style",
           "yt": "e2m9iN1Xj5Y",
-          "cover": "assets/work/garnier-olia-1.avif"
+          "cover": "assets/work/garnier-olia-1.avif",
+          "type": "video"
         },
         {
           "brand": "Anua",
           "format": "Product Demo",
           "yt": "GJByFXXU1DQ",
-          "cover": "assets/work/anua-2.avif"
+          "cover": "assets/work/anua-2.avif",
+          "type": "video"
         },
         {
           "brand": "L'oreal Paris",
           "format": "Lifestyle video",
           "yt": "fbmeBgLXkDE",
-          "cover": "assets/work/l-oreal-paris-3.avif"
+          "cover": "assets/work/l-oreal-paris-3.avif",
+          "type": "video"
         },
         {
           "brand": "COSRX",
           "format": "Skincare",
           "yt": "67pEMqKIQdg",
-          "cover": "assets/work/cosrx-4.avif"
+          "cover": "assets/work/cosrx-4.avif",
+          "type": "video"
         },
         {
           "brand": "skin1004",
           "format": "Skincare",
           "yt": "eXUYCZCbIfc",
-          "cover": "assets/work/skin1004-5.avif"
+          "cover": "assets/work/skin1004-5.avif",
+          "type": "video"
         },
         {
           "brand": "pantene",
           "format": "Product Review",
           "yt": "cw0I3jfakLg",
-          "cover": "assets/work/pantene-6.avif"
+          "cover": "assets/work/pantene-6.avif",
+          "type": "video"
         },
         {
           "brand": "cosrx",
           "format": "Product Demo",
           "yt": "U6z4LuALfAI",
-          "cover": "assets/work/cosrx-7.avif"
+          "cover": "assets/work/cosrx-7.avif",
+          "type": "video"
         }
-      ]
+      ],
+      "type": "category"
     },
     {
       "name": "Fashion",
@@ -98,75 +107,88 @@
           "brand": "",
           "format": "GRWM",
           "yt": "-uTGBY7SHNY",
-          "cover": "assets/work/selfshot-15.avif"
+          "cover": "assets/work/selfshot-15.avif",
+          "type": "video"
         },
         {
           "brand": "",
           "format": "OGL",
           "yt": "1WuncxXV0PY",
-          "cover": "assets/work/selfshot-16.avif"
+          "cover": "assets/work/selfshot-16.avif",
+          "type": "video"
         },
         {
           "brand": "",
           "format": "OGL",
           "yt": "VyKY7-cOVOU",
-          "cover": "assets/work/selfshot-17.avif"
+          "cover": "assets/work/selfshot-17.avif",
+          "type": "video"
         },
         {
           "brand": "VIVAIA",
           "format": "Product Review",
           "yt": "qnX7V5V2ROo",
-          "cover": "assets/work/vivaia-1.webp"
+          "cover": "assets/work/vivaia-1.webp",
+          "type": "video"
         },
         {
           "brand": "VIVAIA",
           "format": "TikTok Style",
           "yt": "BCMow_rZXUc",
-          "cover": "assets/work/vivaia-2.avif"
+          "cover": "assets/work/vivaia-2.avif",
+          "type": "video"
         },
         {
           "brand": "",
           "format": "TikTok Style",
           "yt": "v1TMb1wCx3s",
-          "cover": "assets/work/selfshot-3.avif"
+          "cover": "assets/work/selfshot-3.avif",
+          "type": "video"
         },
         {
           "brand": "",
           "format": "Outfit Chek",
           "yt": "nAaPoIahd_4",
-          "cover": "assets/work/selfshot-4.avif"
+          "cover": "assets/work/selfshot-4.avif",
+          "type": "video"
         },
         {
           "brand": "",
           "format": "TikTok Style",
           "yt": "h-8Be515Rf8",
-          "cover": "assets/work/selfshot-5.avif"
+          "cover": "assets/work/selfshot-5.avif",
+          "type": "video"
         },
         {
           "brand": "Adidas",
           "format": "Unpacking",
           "yt": "NjgG7KV0tCE",
-          "cover": "assets/work/adidas-6.avif"
+          "cover": "assets/work/adidas-6.avif",
+          "type": "video"
         },
         {
           "brand": "",
           "format": "GRWM",
           "yt": "7HFORJphCYk",
-          "cover": "assets/work/selfshot-7.webp"
+          "cover": "assets/work/selfshot-7.webp",
+          "type": "video"
         },
         {
           "brand": "",
           "format": "Outfit Check",
           "yt": "Q1v-oSzhA8k",
-          "cover": "assets/work/selfshot-8.webp"
+          "cover": "assets/work/selfshot-8.webp",
+          "type": "video"
         },
         {
           "brand": "Firmoo",
           "format": "Unpacking",
           "yt": "aIEba6z9jhY",
-          "cover": "assets/work/firmoo-9.avif"
+          "cover": "assets/work/firmoo-9.avif",
+          "type": "video"
         }
-      ]
+      ],
+      "type": "category"
     },
     {
       "name": "Tech",
@@ -175,33 +197,39 @@
           "brand": "RecipeJar",
           "format": "Problem / Solution",
           "yt": "8ESLtf0dhi8",
-          "cover": "assets/work/recipejar-10.avif"
+          "cover": "assets/work/recipejar-10.avif",
+          "type": "video"
         },
         {
           "brand": "Brighty",
           "format": "App Review",
           "yt": "jeyk0g9vE00",
-          "cover": "assets/work/brighty-11.avif"
+          "cover": "assets/work/brighty-11.avif",
+          "type": "video"
         },
         {
           "brand": "Firsty",
           "format": "e-SIM",
           "yt": "ccnz6kliz8Y",
-          "cover": "assets/work/firsty-12.avif"
+          "cover": "assets/work/firsty-12.avif",
+          "type": "video"
         },
         {
           "brand": "Firsty",
           "format": "Vlog",
           "yt": "USprNGhqv5o",
-          "cover": "assets/work/firsty-13.avif"
+          "cover": "assets/work/firsty-13.avif",
+          "type": "video"
         },
         {
           "brand": "Firsty",
           "format": "Problem / Solution",
           "yt": "l7Sls0usLHw",
-          "cover": "assets/work/firsty-14.avif"
+          "cover": "assets/work/firsty-14.avif",
+          "type": "video"
         }
-      ]
+      ],
+      "type": "category"
     },
     {
       "name": "Food & Beverage",
@@ -210,21 +238,25 @@
           "brand": "Sourdough bread",
           "format": "Tik-Tok Style",
           "yt": "5aCb-TyclGY",
-          "cover": "assets/work/sourdough-bread-1.avif"
+          "cover": "assets/work/sourdough-bread-1.avif",
+          "type": "video"
         },
         {
           "brand": "Intro roasters",
           "format": "CONCEPT VIDEOGRAPHY",
           "yt": "Xz2bcaaeZD4",
-          "cover": "assets/work/intro-roasters-2.avif"
+          "cover": "assets/work/intro-roasters-2.avif",
+          "type": "video"
         },
         {
           "brand": "coffee plant",
           "format": "CONCEPT VIDEOGRAPHY",
           "yt": "1zWd116pqJc",
-          "cover": "assets/work/coffee-plant-3.avif"
+          "cover": "assets/work/coffee-plant-3.avif",
+          "type": "video"
         }
-      ]
+      ],
+      "type": "category"
     },
     {
       "name": "Hotels & Airbnb",
@@ -233,27 +265,32 @@
           "brand": "",
           "format": "Airbnb Example",
           "yt": "qBSH_JEuVnE",
-          "cover": "assets/work/selfshot-1.avif"
+          "cover": "assets/work/selfshot-1.avif",
+          "type": "video"
         },
         {
           "brand": "Mozart Hotel milan",
           "format": "Hotel Review",
           "yt": "itt1_Tfd5HU",
-          "cover": "assets/work/mozart-hotel-milan-2.avif"
+          "cover": "assets/work/mozart-hotel-milan-2.avif",
+          "type": "video"
         },
         {
           "brand": "",
           "format": "Glamping Tago",
           "yt": "Wiq5EQJJmcU",
-          "cover": "assets/work/glamping-tago-3.webp"
+          "cover": "assets/work/glamping-tago-3.webp",
+          "type": "video"
         },
         {
           "brand": "Unite Hostel Barcelona",
           "format": "Hostel Review",
           "yt": "3ZsDo9otLgY",
-          "cover": "assets/work/unite-hostel-barcelona-4.avif"
+          "cover": "assets/work/unite-hostel-barcelona-4.avif",
+          "type": "video"
         }
-      ]
+      ],
+      "type": "category"
     },
     {
       "name": "Places",
@@ -262,15 +299,18 @@
           "brand": "ancymon cafe",
           "format": "Café review",
           "yt": "Y_zs1X8mHLc",
-          "cover": "assets/work/ancymon-cafe-1.webp"
+          "cover": "assets/work/ancymon-cafe-1.webp",
+          "type": "video"
         },
         {
           "brand": "Moja Gruzja",
           "format": "Khinkali Cooking Class",
           "yt": "UJYYO8M3WzQ",
-          "cover": "assets/work/moja-gruzja-2.avif"
+          "cover": "assets/work/moja-gruzja-2.avif",
+          "type": "video"
         }
-      ]
+      ],
+      "type": "category"
     },
     {
       "name": "Home / Interior",
@@ -279,164 +319,199 @@
           "brand": "Musso",
           "format": "Concept Videography",
           "yt": "pDU1pWVKNBc",
-          "cover": "assets/work/musso-1.avif"
+          "cover": "assets/work/musso-1.avif",
+          "type": "video"
         },
         {
           "brand": "scretch map",
           "format": "Product Demo",
           "yt": "zwY9lrEmcfQ",
-          "cover": "assets/work/scretch-map-2.avif"
+          "cover": "assets/work/scretch-map-2.avif",
+          "type": "video"
         },
         {
           "brand": "lenor",
           "format": "Product Demo",
           "yt": "_VnInyNPe5c",
-          "cover": "assets/work/lenor-3.avif"
+          "cover": "assets/work/lenor-3.avif",
+          "type": "video"
         }
-      ]
+      ],
+      "type": "category"
     }
   ],
   "PHOTOS": [
     {
       "src": "assets/photo-04.avif",
       "cat": "Beauty & Product",
-      "tag": "Skincare set"
+      "tag": "Skincare set",
+      "type": "photo"
     },
     {
       "src": "assets/photo-12.avif",
       "cat": "Beauty & Product",
-      "tag": "SPF flat lay"
+      "tag": "SPF flat lay",
+      "type": "photo"
     },
     {
       "src": "assets/photo-10.avif",
       "cat": "Beauty & Product",
-      "tag": "Sheet mask"
+      "tag": "Sheet mask",
+      "type": "photo"
     },
     {
       "src": "assets/photo-09.avif",
       "cat": "Beauty & Product",
-      "tag": "Nails & detail"
+      "tag": "Nails & detail",
+      "type": "photo"
     },
     {
       "src": "assets/photo-06.webp",
       "cat": "Beauty & Product",
-      "tag": "Accessories"
+      "tag": "Accessories",
+      "type": "photo"
     },
     {
       "src": "assets/photo-01.avif",
       "cat": "Tech & Objects",
-      "tag": "Audio flat lay"
+      "tag": "Audio flat lay",
+      "type": "photo"
     },
     {
       "src": "assets/photo-03.avif",
       "cat": "Tech & Objects",
-      "tag": "Light study"
+      "tag": "Light study",
+      "type": "photo"
     },
     {
       "src": "assets/photo-05.avif",
       "cat": "Food & Still Life",
-      "tag": "Breakfast"
+      "tag": "Breakfast",
+      "type": "photo"
     },
     {
       "src": "assets/photo-07.avif",
       "cat": "Food & Still Life",
-      "tag": "Coffee gear"
+      "tag": "Coffee gear",
+      "type": "photo"
     },
     {
       "src": "assets/photo-02.avif",
       "cat": "Lifestyle & Places",
-      "tag": "On location"
+      "tag": "On location",
+      "type": "photo"
     },
     {
       "src": "assets/photo-08.avif",
       "cat": "Lifestyle & Places",
-      "tag": "Interior"
+      "tag": "Interior",
+      "type": "photo"
     },
     {
       "src": "assets/photo-11.avif",
       "cat": "Lifestyle & Places",
-      "tag": "Golden hour"
+      "tag": "Golden hour",
+      "type": "photo"
     },
     {
       "src": "assets/photo-14.avif",
       "cat": "Lifestyle & Places",
-      "tag": "Hospitality"
+      "tag": "Hospitality",
+      "type": "photo"
     },
     {
       "src": "assets/photo-15.avif",
       "cat": "Lifestyle & Places",
-      "tag": "Interiors"
+      "tag": "Interiors",
+      "type": "photo"
     },
     {
       "src": "assets/photo-13.avif",
       "cat": "Lifestyle & Places",
-      "tag": "Texture"
+      "tag": "Texture",
+      "type": "photo"
     }
   ],
   "BRANDS": [
     {
       "name": "Garnier",
-      "cat": "Beauty & Hair"
+      "cat": "Beauty & Hair",
+      "type": "brand"
     },
     {
       "name": "Anua",
-      "cat": "Beauty & Hair"
+      "cat": "Beauty & Hair",
+      "type": "brand"
     },
     {
       "name": "L'Oréal Paris",
-      "cat": "Beauty & Hair"
+      "cat": "Beauty & Hair",
+      "type": "brand"
     },
     {
       "name": "COSRX",
-      "cat": "Beauty & Hair"
+      "cat": "Beauty & Hair",
+      "type": "brand"
     },
     {
       "name": "skin1004",
-      "cat": "Beauty & Hair"
+      "cat": "Beauty & Hair",
+      "type": "brand"
     },
     {
       "name": "Pantene",
-      "cat": "Beauty & Hair"
+      "cat": "Beauty & Hair",
+      "type": "brand"
     },
     {
       "name": "Lenor",
-      "cat": "Beauty & Hair"
+      "cat": "Beauty & Hair",
+      "type": "brand"
     },
     {
       "name": "Adidas",
-      "cat": "Fashion"
+      "cat": "Fashion",
+      "type": "brand"
     },
     {
       "name": "VIVAIA",
-      "cat": "Fashion"
+      "cat": "Fashion",
+      "type": "brand"
     },
     {
       "name": "Firmoo",
-      "cat": "Fashion"
+      "cat": "Fashion",
+      "type": "brand"
     },
     {
       "name": "Brighty",
-      "cat": "Tech & Apps"
+      "cat": "Tech & Apps",
+      "type": "brand"
     },
     {
       "name": "Firsty",
-      "cat": "Tech & Apps"
+      "cat": "Tech & Apps",
+      "type": "brand"
     },
     {
       "name": "RecipeJar",
-      "cat": "Tech & Apps"
+      "cat": "Tech & Apps",
+      "type": "brand"
     },
     {
       "name": "Kärcher",
-      "cat": "Tech & Apps"
+      "cat": "Tech & Apps",
+      "type": "brand"
     },
     {
       "name": "Musso",
-      "cat": "Tech & Apps"
+      "cat": "Tech & Apps",
+      "type": "brand"
     },
     {
       "name": "Scratch Map",
-      "cat": "Tech & Apps"
+      "cat": "Tech & Apps",
+      "type": "brand"
     }
   ],
   "PACKAGES": [
@@ -452,7 +527,8 @@
         "30-day usage rights",
         "Delivery in 5 days"
       ],
-      "cta": "Book a single"
+      "cta": "Book a single",
+      "type": "package"
     },
     {
       "name": "Bundle",
@@ -467,7 +543,8 @@
         "Whitelisting-ready files",
         "Delivery in 7 days"
       ],
-      "cta": "Book a bundle"
+      "cta": "Book a bundle",
+      "type": "package"
     },
     {
       "name": "Retainer",
@@ -482,7 +559,8 @@
         "Dedicated Slack channel",
         "One spot per month open for commission work"
       ],
-      "cta": "Talk about a retainer"
+      "cta": "Talk about a retainer",
+      "type": "package"
     },
     {
       "name": "Barter collab",
@@ -496,49 +574,60 @@
         "30-day usage rights",
         "One revision round"
       ],
-      "cta": "Propose a collab"
+      "cta": "Propose a collab",
+      "type": "package"
     }
   ],
   "ADDONS": [
     {
       "label": "Extra revision round",
-      "price": "+$12"
+      "price": "+$12",
+      "type": "addon"
     },
     {
       "label": "Script writing (per video)",
-      "price": "+$20"
+      "price": "+$20",
+      "type": "addon"
     },
     {
       "label": "Voice-over / script read",
-      "price": "+$16"
+      "price": "+$16",
+      "type": "addon"
     },
     {
       "label": "Product / UGC photography (10 shots)",
-      "price": "+$48"
+      "price": "+$48",
+      "type": "addon"
     },
     {
       "label": "Additional hook variants",
-      "price": "+$8"
+      "price": "+$8",
+      "type": "addon"
     },
     {
       "label": "Raw footage",
-      "price": "+$16"
+      "price": "+$16",
+      "type": "addon"
     },
     {
       "label": "Crossposting / collab post",
-      "price": "+$24"
+      "price": "+$24",
+      "type": "addon"
     },
     {
       "label": "Whitelisting setup",
-      "price": "+$20"
+      "price": "+$20",
+      "type": "addon"
     },
     {
       "label": "Extended usage (per month)",
-      "price": "+6%"
+      "price": "+6%",
+      "type": "addon"
     },
     {
       "label": "Rush delivery (48h)",
-      "price": "+12%"
+      "price": "+12%",
+      "type": "addon"
     }
   ]
 }
