@@ -27,34 +27,48 @@
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]
     );
 
-  // Every scalar the CMS edits sits at the top level of content.json, beside
-  // the lists. The page reads the scalars off a `site` object, so they are
-  // gathered from the top level here rather than being nested in the file.
-  const SCALARS = [
-    "name", "monogram", "title", "description", "email",
-    "instagram", "tiktok", "youtube",
-    "heroTitle", "heroScript", "heroArc", "heroArcFallback", "heroBottomLabel",
-    "aboutEyebrow", "aboutHeading", "aboutHeadingEm",
-    "statsInstagramFollowers", "statsInstagramEngagement",
-    "statsTiktokFollowers", "statsTiktokEngagement",
-    "statsAudienceHeading", "statsAudienceLines", "statsUpdated", "statsNote",
-    "basedIn", "languages", "footerNote", "footerCopyright",
+  // The CMS groups the identity fields into objects so the form reads in
+  // sections. The page wants them flat, so the groups are named here and their
+  // contents merged into one object. Adding a group to config.yml means adding
+  // it here too, otherwise its fields are ignored.
+  const GROUPS = [
+    "SITE",
+    "SITE_HERO",
+    "SITE_SEO",
+    "SITE_ABOUT",
+    "SITE_STATS",
   ];
 
   const LISTS = ["WORK", "PHOTOS", "BRANDS", "PACKAGES", "ADDONS"];
 
+  // Flat names of every editable scalar, in the order they appear in the file.
+  // The shipped defaults in data.js use exactly these, which is what lets the
+  // fallback read them directly.
+  const SCALARS = [
+    "name", "monogram", "email", "instagram", "tiktok", "youtube",
+    "basedIn", "languages", "footerCopyright",
+    "heroTitle", "heroScript", "heroArc", "heroArcFallback", "heroBottomLabel",
+    "title", "description",
+    "aboutEyebrow", "aboutHeading", "aboutHeadingEm",
+    "statsInstagramFollowers", "statsInstagramEngagement",
+    "statsTiktokFollowers", "statsTiktokEngagement",
+    "statsAudienceHeading", "statsAudienceLines", "statsUpdated",
+    "footerNote", "statsNote",
+  ];
+
   /**
-   * Pulls the scalar fields out of a content object, keeping the defaults for
-   * any that are absent. The shipped defaults live on `window` under the same
-   * names, so this is the whole fallback mechanism: one function, both shapes.
+   * Flattens the content file into what the renderers take: the nested groups
+   * merged into one `site` object, and the five lists passed through. Any field
+   * the file omits or leaves blank falls back to the shipped default on
+   * `window`, so a partial file still renders as much as it can.
    */
   function splitContent(raw) {
     const site = {};
-    for (const key of SCALARS) {
-      if (raw[key] !== undefined && raw[key] !== null && raw[key] !== "") {
-        site[key] = raw[key];
-      } else if (window[key] !== undefined) {
-        site[key] = window[key];
+    for (const group of GROUPS) {
+      const source = raw[group];
+      if (!source || typeof source !== "object") continue;
+      for (const [key, value] of Object.entries(source)) {
+        if (value !== undefined && value !== null && value !== "") site[key] = value;
       }
     }
     const lists = {};
@@ -64,7 +78,19 @@
     return { site, lists };
   }
 
-  const DEFAULTS = splitContent(window);
+  // The defaults are flat on `window`, unlike the grouped file, so they are
+  // read by name rather than through splitContent.
+  function defaultContent() {
+    const site = {};
+    for (const key of SCALARS) {
+      if (window[key] !== undefined) site[key] = window[key];
+    }
+    const lists = {};
+    for (const key of LISTS) lists[key] = window[key] || [];
+    return { site, lists };
+  }
+
+  const DEFAULTS = defaultContent();
 
   /**
    * Fetches the editable content file. Any failure — offline, 404, malformed
@@ -213,12 +239,18 @@
       if (site.email) el.textContent = site.email;
     });
 
-    // Social links. A field cleared to empty hides the link rather than
-    // leaving a dead anchor behind.
+    // Social links. A field cleared to empty hides the link rather than leaving
+    // a dead anchor behind.
+    //
+    // Only the anchor itself is removed. An earlier version did
+    // `el.closest("li, div")?.remove()`, which is wrong twice over: the closest
+    // div is the footer's own column, so clearing a link deleted the whole
+    // section — and when the content file was missing every link was empty, so
+    // it took the h1 with it. Remove the element that was asked for.
     $$("[data-site-link]").forEach((el) => {
       const url = site[el.dataset.siteLink];
       if (url) el.setAttribute("href", url);
-      else el.closest("li, div")?.remove?.() ?? el.remove();
+      else el.remove();
     });
   }
 

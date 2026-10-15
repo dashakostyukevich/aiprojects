@@ -4,12 +4,19 @@
 # site is edited from a single screen. Saving writes that file, Netlify turns
 # it into a git commit, and the live site rebuilds about a minute later.
 #
-# The groups below mirror the order of the page, so someone editing the site
-# for the first time finds each block where they expect it on screen.
+# Field order mirrors the order of the page, so someone editing the site for the
+# first time finds each block where they expect it on screen.
 #
-# Field names match the keys in content/content.json exactly — they are the
-# same names the page reads at runtime. Renaming one here without renaming it
-# there leaves the site showing the old default.
+# Field names match the keys in content/content.json exactly — they are the same
+# names the page reads at runtime. Renaming one here without renaming it there
+# leaves the site showing the old default.
+#
+# Structure notes, both learned the hard way:
+#   - A file entry needs a `fields` list. Decap's schema rejects `groups` here
+#     outright with "must have required property 'fields'".
+#   - `groups` inside an object widget renders as "No field(s) defined for this
+#     widget", because the widget reads `fields` and finds nothing. So the
+#     identity fields are a plain object with a flat `fields` list.
 
 backend:
   name: git-gateway
@@ -40,13 +47,12 @@ collections:
         label: "Site"
         file: projects/darya-media-kit/content/content.json
         format: json
-        # Every field lives inside a group. Decap only renders groups when all
-        # fields are in them — a stray top-level field is ignored, and an
-        # object widget left without a `fields` list renders as the bare
-        # "No field(s) defined for this widget" error.
-        groups:
+        fields:
           # ------------------------------------------------------- details
           - label: "Your details"
+            name: SITE
+            widget: object
+            description: "Your name, how people reach you, and your social links."
             fields:
               - label: "Name on the site"
                 name: name
@@ -75,8 +81,20 @@ collections:
                 widget: string
                 required: false
                 hint: "Full URL. Leave this empty to hide the link."
+              - label: "Where you're based"
+                name: basedIn
+                widget: string
+              - label: "Languages"
+                name: languages
+                widget: string
+              - label: "Name in the copyright line"
+                name: footerCopyright
+                widget: string
 
+          # ------------------------------------------------------ the top
           - label: "The top of the page"
+            name: SITE_HERO
+            widget: object
             fields:
               - label: "Your name (large)"
                 name: heroTitle
@@ -98,18 +116,24 @@ collections:
                 widget: string
                 hint: "The line that links out to Instagram."
 
+          # ------------------------------------------------ search results
           - label: "Search results"
+            name: SITE_SEO
+            widget: object
+            description: "What people see in the tab, and in Google."
             fields:
               - label: "Browser tab title"
                 name: title
                 widget: string
-                hint: "What people see in the tab, and in Google."
               - label: "Short description"
                 name: description
                 widget: text
-                hint: "One or two sentences. Used by Google and by link previews."
+                hint: "One or two sentences."
 
+          # --------------------------------------------------------- about
           - label: "About you section"
+            name: SITE_ABOUT
+            widget: object
             fields:
               - label: "Small heading"
                 name: aboutEyebrow
@@ -123,6 +147,8 @@ collections:
 
           # --------------------------------------------------------- stats
           - label: "Your numbers"
+            name: SITE_STATS
+            widget: object
             description: >
               Brands look at these first. Update them when your following or
               engagement changes, and change the date so it stays honest.
@@ -168,164 +194,142 @@ collections:
                 name: statsNote
                 widget: string
 
-          - label: "Footer"
-            fields:
-              - label: "Where you're based"
-                name: basedIn
-                widget: string
-              - label: "Languages"
-                name: languages
-                widget: string
-              - label: "Name in the copyright line"
-                name: footerCopyright
-                widget: string
-
           # ---------------------------------------------------------- work
           - label: "Your videos"
-            fields:
-              - label: "Videos"
-                name: WORK
-                widget: list
-                label_singular: "Category"
-                summary: "{{fields.name}}"
-                types:
-                  - name: category
-                    label: "Category"
-                    fields:
-                      - label: "Category name"
-                        name: name
-                        widget: string
-                        hint: "For example: Beauty, Fashion, Tech."
-                      - label: "Videos in this category"
-                        name: items
-                        widget: list
-                        label_singular: "Video"
-                        summary: "{{fields.brand}} {{fields.format}}"
-                        types:
-                          - name: video
-                            label: "Video"
-                            fields:
-                              - label: "Brand"
-                                name: brand
-                                widget: string
-                                required: false
-                                hint: "Leave this empty for a self-shot video with no brand."
-                              - label: "Format"
-                                name: format
-                                widget: string
-                                hint: "For example: Product Demo, GRWM, Unboxing."
-                              - label: "YouTube link or ID"
-                                name: yt
-                                widget: string
-                                hint: "Paste the whole YouTube URL, or just the ID (the part after watch?v=)."
-                              - label: "Cover image"
-                                name: cover
-                                widget: image
+            name: WORK
+            widget: list
+            label_singular: "Category"
+            summary: "{{fields.name}}"
+            types:
+              - name: category
+                label: "Category"
+                fields:
+                  - label: "Category name"
+                    name: name
+                    widget: string
+                    hint: "For example: Beauty, Fashion, Tech."
+                  - label: "Videos in this category"
+                    name: items
+                    widget: list
+                    label_singular: "Video"
+                    summary: "{{fields.brand}} {{fields.format}}"
+                    types:
+                      - name: video
+                        label: "Video"
+                        fields:
+                          - label: "Brand"
+                            name: brand
+                            widget: string
+                            required: false
+                            hint: "Leave this empty for a self-shot video with no brand."
+                          - label: "Format"
+                            name: format
+                            widget: string
+                            hint: "For example: Product Demo, GRWM, Unboxing."
+                          - label: "YouTube link or ID"
+                            name: yt
+                            widget: string
+                            hint: "Paste the whole YouTube URL, or just the ID (the part after watch?v=)."
+                          - label: "Cover image"
+                            name: cover
+                            widget: image
 
           # ------------------------------------------------------- photos
           - label: "Photography"
-            fields:
-              - label: "Photos"
-                name: PHOTOS
-                widget: list
-                label_singular: "Photo"
-                summary: "{{fields.tag}}"
-                types:
-                  - name: photo
-                    label: "Photo"
-                    fields:
-                      - label: "Image"
-                        name: src
-                        widget: image
-                      - label: "Category"
-                        name: cat
-                        widget: string
-                        hint: "Photos are filtered by this. For example: Beauty & Product."
-                      - label: "Short caption"
-                        name: tag
-                        widget: string
+            name: PHOTOS
+            widget: list
+            label_singular: "Photo"
+            summary: "{{fields.tag}}"
+            types:
+              - name: photo
+                label: "Photo"
+                fields:
+                  - label: "Image"
+                    name: src
+                    widget: image
+                  - label: "Category"
+                    name: cat
+                    widget: string
+                    hint: "Photos are filtered by this. For example: Beauty & Product."
+                  - label: "Short caption"
+                    name: tag
+                    widget: string
 
           # ------------------------------------------------------- brands
           - label: "Brands"
-            fields:
-              - label: "Brands"
-                name: BRANDS
-                widget: list
-                label_singular: "Brand"
-                summary: "{{fields.name}}"
-                types:
-                  - name: brand
-                    label: "Brand"
-                    fields:
-                      - label: "Brand name"
-                        name: name
-                        widget: string
-                      - label: "Category"
-                        name: cat
-                        widget: string
-                        hint: "For example: Beauty & Hair, Fashion, Tech & Apps."
+            name: BRANDS
+            widget: list
+            label_singular: "Brand"
+            summary: "{{fields.name}}"
+            types:
+              - name: brand
+                label: "Brand"
+                fields:
+                  - label: "Brand name"
+                    name: name
+                    widget: string
+                  - label: "Category"
+                    name: cat
+                    widget: string
+                    hint: "For example: Beauty & Hair, Fashion, Tech & Apps."
 
           # ----------------------------------------------------- packages
           - label: "Packages"
-            fields:
-              - label: "Packages"
-                name: PACKAGES
-                widget: list
-                label_singular: "Package"
-                summary: "{{fields.name}}"
-                types:
-                  - name: package
-                    label: "Package"
-                    fields:
-                      - label: "Name"
-                        name: name
-                        widget: string
-                        hint: "For example: Single video, Retainer."
-                      - label: "Price"
-                        name: amount
-                        widget: string
-                        required: false
-                        hint: "The figure itself, without a $ sign. For example: 100"
-                      - label: "If a package has no price"
-                        name: amountLabel
-                        widget: string
-                        required: false
-                        hint: "For example: Barter. Shown instead of a figure, and only used when the price above is empty."
-                      - label: "What the price is for"
-                        name: unit
-                        widget: string
-                        required: false
-                        hint: "For example: per video, 3 videos, per month."
-                      - label: "Description"
-                        name: desc
-                        widget: text
-                      - label: "What's included"
-                        name: features
-                        widget: list
-                        required: false
-                        label_singular: "Line"
-                        default: ""
-                      - label: "Button text"
-                        name: cta
-                        widget: string
-                        hint: "For example: Book a single."
+            name: PACKAGES
+            widget: list
+            label_singular: "Package"
+            summary: "{{fields.name}}"
+            types:
+              - name: package
+                label: "Package"
+                fields:
+                  - label: "Name"
+                    name: name
+                    widget: string
+                    hint: "For example: Single video, Retainer."
+                  - label: "Price"
+                    name: amount
+                    widget: string
+                    required: false
+                    hint: "The figure itself, without a $ sign. For example: 100"
+                  - label: "If a package has no price"
+                    name: amountLabel
+                    widget: string
+                    required: false
+                    hint: "For example: Barter. Shown instead of a figure, and only used when the price above is empty."
+                  - label: "What the price is for"
+                    name: unit
+                    widget: string
+                    required: false
+                    hint: "For example: per video, 3 videos, per month."
+                  - label: "Description"
+                    name: desc
+                    widget: text
+                  - label: "What's included"
+                    name: features
+                    widget: list
+                    required: false
+                    label_singular: "Line"
+                    default: ""
+                  - label: "Button text"
+                    name: cta
+                    widget: string
+                    hint: "For example: Book a single."
 
           # -------------------------------------------------------- addons
           - label: "Add-ons"
-            fields:
-              - label: "Add-ons"
-                name: ADDONS
-                widget: list
-                label_singular: "Add-on"
-                summary: "{{fields.label}}"
-                types:
-                  - name: addon
-                    label: "Add-on"
-                    fields:
-                      - label: "What it is"
-                        name: label
-                        widget: string
-                      - label: "Price"
-                        name: price
-                        widget: string
-                        hint: "Anything you like: +$12, +6%, or 'Free'."
+            name: ADDONS
+            widget: list
+            label_singular: "Add-on"
+            summary: "{{fields.label}}"
+            types:
+              - name: addon
+                label: "Add-on"
+                fields:
+                  - label: "What it is"
+                    name: label
+                    widget: string
+                  - label: "Price"
+                    name: price
+                    widget: string
+                    hint: "Anything you like: +$12, +6%, or 'Free'."

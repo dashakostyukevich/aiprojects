@@ -6,9 +6,9 @@
    Keep it in sync with content.json when you edit content by hand.
    ========================================================================== */
 
-// The scalar fields sit on `window` under their own names, matching the keys in
-// content/content.json — main.js gathers them with the same SCALARS list it
-// reads from the file, so this file and the JSON have identical shapes.
+// The scalar fields sit on `window` flat under their own names. main.js reads
+// them from here when content/content.json is missing, so they cover the same
+// names the nested groups in the JSON hold.
 window.name = "Daryas.diary";
 window.monogram = "DK";
 window.title = "Daryas.diary — Media Kit";
@@ -18,15 +18,20 @@ window.email = "darya.ksts@gmail.com";
 window.instagram = "https://www.instagram.com/daryas.diary/";
 window.tiktok = "https://www.tiktok.com/@daryas.diary";
 window.youtube = "https://www.youtube.com/@daryas.diary";
+window.basedIn = "Poland — shooting worldwide, remote or on location.";
+window.languages = "Languages: EN / PL / RU";
+window.footerCopyright = "Darya’s Diary";
+
 window.heroTitle = "darya k.";
 window.heroScript = "media kit";
 window.heroArc = "FREELANCE LIFESTYLE ✦ TRAVEL CONTENT CREATOR ✦ UGC";
 window.heroArcFallback = "Freelance lifestyle · travel · content creator · UGC";
 window.heroBottomLabel = "blog: @daryas.diary";
+
 window.aboutEyebrow = "Why me?";
 window.aboutHeading = "I create the kind of content";
 window.aboutHeadingEm = "i’d love to watch myself";
-window.statsUpdated = "last update: September 2026";
+
 window.statsInstagramFollowers = "1385";
 window.statsInstagramEngagement = "6.47";
 window.statsTiktokFollowers = "443";
@@ -34,11 +39,9 @@ window.statsTiktokEngagement = "14.29";
 window.statsAudienceHeading = "Audience";
 window.statsAudienceLines =
   "73% Female\n50% Ages 25–34 and 28% ages 18–24\n17.3% Poland, 13% USA, 8% UK, 5% Canada";
-window.statsNote = "I’m just getting started — but my audience already listens";
-window.basedIn = "Poland — shooting worldwide, remote or on location.";
-window.languages = "Languages: EN / PL / RU";
+window.statsUpdated = "last update: September 2026";
 window.footerNote = "Stats last updated September 2026";
-window.footerCopyright = "Darya’s Diary";
+window.statsNote = "I’m just getting started — but my audience already listens";
 
 // --- UGC video, grouped into the categories the filters read ---------------
 window.WORK = [
