@@ -27,33 +27,55 @@
       ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]
     );
 
-  const DEFAULTS = {
-    SITE: window.SITE || {},
-    WORK: window.WORK || [],
-    PHOTOS: window.PHOTOS || [],
-    BRANDS: window.BRANDS || [],
-    PACKAGES: window.PACKAGES || [],
-    ADDONS: window.ADDONS || [],
-  };
+  // Every scalar the CMS edits sits at the top level of content.json, beside
+  // the lists. The page reads the scalars off a `site` object, so they are
+  // gathered from the top level here rather than being nested in the file.
+  const SCALARS = [
+    "name", "monogram", "title", "description", "email",
+    "instagram", "tiktok", "youtube",
+    "heroTitle", "heroScript", "heroArc", "heroArcFallback", "heroBottomLabel",
+    "aboutEyebrow", "aboutHeading", "aboutHeadingEm",
+    "statsInstagramFollowers", "statsInstagramEngagement",
+    "statsTiktokFollowers", "statsTiktokEngagement",
+    "statsAudienceHeading", "statsAudienceLines", "statsUpdated", "statsNote",
+    "basedIn", "languages", "footerNote", "footerCopyright",
+  ];
+
+  const LISTS = ["WORK", "PHOTOS", "BRANDS", "PACKAGES", "ADDONS"];
+
+  /**
+   * Pulls the scalar fields out of a content object, keeping the defaults for
+   * any that are absent. The shipped defaults live on `window` under the same
+   * names, so this is the whole fallback mechanism: one function, both shapes.
+   */
+  function splitContent(raw) {
+    const site = {};
+    for (const key of SCALARS) {
+      if (raw[key] !== undefined && raw[key] !== null && raw[key] !== "") {
+        site[key] = raw[key];
+      } else if (window[key] !== undefined) {
+        site[key] = window[key];
+      }
+    }
+    const lists = {};
+    for (const key of LISTS) {
+      lists[key] = Array.isArray(raw[key]) ? raw[key] : window[key] || [];
+    }
+    return { site, lists };
+  }
+
+  const DEFAULTS = splitContent(window);
 
   /**
    * Fetches the editable content file. Any failure — offline, 404, malformed
-   * JSON, or a missing key — falls back to the shipped defaults key by key,
-   * so a partially broken file still renders as much as it can.
+   * JSON, or a missing key — falls back to the shipped defaults, so a partially
+   * broken file still renders as much as it can.
    */
   async function loadContent() {
     try {
       const res = await fetch("content/content.json", { cache: "no-cache" });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      return {
-        SITE: { ...DEFAULTS.SITE, ...(data.SITE || {}) },
-        WORK: Array.isArray(data.WORK) ? data.WORK : DEFAULTS.WORK,
-        PHOTOS: Array.isArray(data.PHOTOS) ? data.PHOTOS : DEFAULTS.PHOTOS,
-        BRANDS: Array.isArray(data.BRANDS) ? data.BRANDS : DEFAULTS.BRANDS,
-        PACKAGES: Array.isArray(data.PACKAGES) ? data.PACKAGES : DEFAULTS.PACKAGES,
-        ADDONS: Array.isArray(data.ADDONS) ? data.ADDONS : DEFAULTS.ADDONS,
-      };
+      return splitContent(await res.json());
     } catch (err) {
       console.warn("content/content.json not loaded, using built-in defaults:", err);
       return DEFAULTS;
@@ -140,17 +162,17 @@
 
   /* ---------------------------------------------------------------- render */
 
-  function render(data) {
-    applySite(data.SITE);
-    renderWork(data.WORK);
-    renderPhotos(data.PHOTOS);
-    renderBrands(data.BRANDS);
-    renderPackages(data.PACKAGES, data.SITE.email);
-    renderAddons(data.ADDONS);
+  function render({ site, lists }) {
+    applySite(site);
+    renderWork(lists.WORK);
+    renderPhotos(lists.PHOTOS);
+    renderBrands(lists.BRANDS);
+    renderPackages(lists.PACKAGES, site.email);
+    renderAddons(lists.ADDONS);
     wireLightbox();
     setupAboutPhotos();
     initReveal();
-    initCountUp(data.SITE);
+    initCountUp(site);
     $("#year").textContent = new Date().getFullYear();
   }
 

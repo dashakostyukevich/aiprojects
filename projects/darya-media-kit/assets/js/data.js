@@ -6,38 +6,39 @@
    Keep it in sync with content.json when you edit content by hand.
    ========================================================================== */
 
-window.SITE = {
-  name: "Daryas.diary",
-  monogram: "DK",
-  title: "Daryas.diary — Media Kit",
-  description:
-    "Media kit for Darya K. — UGC creator producing video and photography for beauty, fashion, tech and lifestyle brands.",
-  email: "darya.ksts@gmail.com",
-  instagram: "https://www.instagram.com/daryas.diary/",
-  tiktok: "https://www.tiktok.com/@daryas.diary",
-  youtube: "https://www.youtube.com/@daryas.diary",
-  heroTitle: "darya k.",
-  heroScript: "media kit",
-  heroArc: "FREELANCE LIFESTYLE ✦ TRAVEL CONTENT CREATOR ✦ UGC",
-  heroArcFallback: "Freelance lifestyle · travel · content creator · UGC",
-  heroBottomLabel: "blog: @daryas.diary",
-  aboutEyebrow: "Why me?",
-  aboutHeading: "I create the kind of content",
-  aboutHeadingEm: "i’d love to watch myself",
-  statsUpdated: "last update: September 2026",
-  statsInstagramFollowers: "1385",
-  statsInstagramEngagement: "6.47",
-  statsTiktokFollowers: "443",
-  statsTiktokEngagement: "14.29",
-  statsAudienceHeading: "Audience",
-  statsAudienceLines:
-    "73% Female\n50% Ages 25–34 and 28% ages 18–24\n17.3% Poland, 13% USA, 8% UK, 5% Canada",
-  statsNote: "I’m just getting started — but my audience already listens",
-  basedIn: "Poland — shooting worldwide, remote or on location.",
-  languages: "Languages: EN / PL / RU",
-  footerNote: "Stats last updated September 2026",
-  footerCopyright: "Darya’s Diary",
-};
+// The scalar fields sit on `window` under their own names, matching the keys in
+// content/content.json — main.js gathers them with the same SCALARS list it
+// reads from the file, so this file and the JSON have identical shapes.
+window.name = "Daryas.diary";
+window.monogram = "DK";
+window.title = "Daryas.diary — Media Kit";
+window.description =
+  "Media kit for Darya K. — UGC creator producing video and photography for beauty, fashion, tech and lifestyle brands.";
+window.email = "darya.ksts@gmail.com";
+window.instagram = "https://www.instagram.com/daryas.diary/";
+window.tiktok = "https://www.tiktok.com/@daryas.diary";
+window.youtube = "https://www.youtube.com/@daryas.diary";
+window.heroTitle = "darya k.";
+window.heroScript = "media kit";
+window.heroArc = "FREELANCE LIFESTYLE ✦ TRAVEL CONTENT CREATOR ✦ UGC";
+window.heroArcFallback = "Freelance lifestyle · travel · content creator · UGC";
+window.heroBottomLabel = "blog: @daryas.diary";
+window.aboutEyebrow = "Why me?";
+window.aboutHeading = "I create the kind of content";
+window.aboutHeadingEm = "i’d love to watch myself";
+window.statsUpdated = "last update: September 2026";
+window.statsInstagramFollowers = "1385";
+window.statsInstagramEngagement = "6.47";
+window.statsTiktokFollowers = "443";
+window.statsTiktokEngagement = "14.29";
+window.statsAudienceHeading = "Audience";
+window.statsAudienceLines =
+  "73% Female\n50% Ages 25–34 and 28% ages 18–24\n17.3% Poland, 13% USA, 8% UK, 5% Canada";
+window.statsNote = "I’m just getting started — but my audience already listens";
+window.basedIn = "Poland — shooting worldwide, remote or on location.";
+window.languages = "Languages: EN / PL / RU";
+window.footerNote = "Stats last updated September 2026";
+window.footerCopyright = "Darya’s Diary";
 
 // --- UGC video, grouped into the categories the filters read ---------------
 window.WORK = [
