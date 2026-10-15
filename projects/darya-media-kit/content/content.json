@@ -485,6 +485,19 @@
           "cover": "assets/work/lenor-3.avif"
         }
       ]
+    },
+    {
+      "type": "category",
+      "name": "Beauty",
+      "items": [
+        {
+          "type": "video",
+          "brand": "L'Oreal Paris",
+          "format": "Product Demo",
+          "yt": "https://www.youtube.com/shorts/ayAS3Qbi8KE",
+          "cover": "https://www.youtube.com/shorts/ayAS3Qbi8KE"
+        }
+      ]
     }
   ],
   "SITE_HERO": {
