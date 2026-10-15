@@ -15,9 +15,11 @@ backend:
   name: git-gateway
   branch: main
 
-# New images go in their own folder. They are never overwritten, which is what
-# lets the cache rules in netlify.toml treat them as permanent.
-media_folder: assets/uploads
+# Paths are resolved from the ROOT of the git repository, not from the folder
+# this config lives in — the site is published from projects/darya-media-kit,
+# but Git Gateway commits to the repo. Getting this wrong writes a second
+# content file at the repo root and the live site never changes.
+media_folder: projects/darya-media-kit/assets/uploads
 public_folder: /assets/uploads
 
 site_url: https://darya-media-kit.netlify.app
@@ -36,7 +38,7 @@ collections:
     files:
       - name: content
         label: "Site"
-        file: content/content.json
+        file: projects/darya-media-kit/content/content.json
         format: json
         # Every field lives inside a group. Decap only renders groups when all
         # fields are in them — a stray top-level field is ignored, and an
