@@ -1,0 +1,17 @@
+# Netlify config for the whole aiprojects repo.
+#
+# This repo holds several independent projects, so Netlify needs to be told
+# which one it is publishing. Without this file it would serve the repo root,
+# which is not a website.
+#
+# Only the media kit is connected to a repo at the moment. The other projects
+# are deployed by hand with the Netlify CLI, which reads the netlify.toml inside
+# each project folder and ignores this one.
+#
+# When a second project is connected to a repo, give it its own Netlify site
+# and set its base directory in the Netlify UI rather than trying to serve two
+# sites from one deploy.
+
+[build]
+  publish = "projects/darya-media-kit"
+  command = ""
