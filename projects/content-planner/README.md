@@ -4,7 +4,33 @@ A content planning app. Client-side only: no backend, no database, no
 authentication, no external APIs. Everything will live in `localStorage` in the
 browser.
 
-Status: **project setup only.** No features built yet.
+Status: **static UI only.** The interface is built and rendered from
+hardcoded sample data in `src/data.ts`. Nothing is saved, nothing is clickable
+yet — no localStorage, no API calls, no backend.
+
+## Layout
+
+```
+src/
+  main.tsx              entry point — leave alone
+  App.tsx               the page layout, and where the sample posts are passed down
+  index.css             Tailwind import + the warm colour palette
+  types.ts              what a Post looks like
+  data.ts               10 example posts, written by hand
+  styles.ts             colour classes for each status, platform and content type
+  components/
+    Sidebar.tsx         navigation: Overview, Content Calendar, Ideas
+    Header.tsx          page title, subtitle, "+ New post" button
+    SummaryCards.tsx    the four count cards
+    WeeklySchedule.tsx  seven columns, Monday first
+    PostList.tsx        the list of posts, one row each
+    StatusPill.tsx      the small coloured status label
+```
+
+Design notes: cream page (`paper`), lighter cards (`card`), hairline borders
+(`line`), serif headings via `font-display`, and four muted status colours —
+sage for published, honey for scheduled, clay for draft, stone for idea. Change
+a value in `src/index.css` and the whole app follows.
 
 ## Stack
 
@@ -44,14 +70,8 @@ content-planner/
   .oxlintrc.json        Lint rules
   Dev.command           Finder launcher for the dev server
   public/               Static files copied verbatim into dist/ (favicon)
-  src/
-    main.tsx            React root: mounts <App /> into #root, imports index.css
-    App.tsx             App shell. Currently just a placeholder heading
-    index.css           Tailwind entry point (@import "tailwindcss")
+See the layout section above for `src/`.
 ```
-
-New code goes in `src/`. When the planner starts, the natural additions are
-`src/types.ts`, `src/storage/localStore.ts`, and `src/components/`.
 
 ## Constraints to keep
 

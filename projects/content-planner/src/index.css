@@ -1,1 +1,35 @@
 @import "tailwindcss";
+
+/*
+  One warm palette for the whole app. Each colour is given a name so the
+  classes read as plain English: class="bg-paper" instead of an odd hex code.
+  Change a value here and every card, border and shadow follows.
+*/
+@theme {
+  /* Surfaces, from furthest back to closest */
+  --color-paper: #faf7f2; /* the page background: warm cream */
+  --color-card: #fffdf9; /* cards and panels, a touch lighter than the page */
+  --color-line: #ece5d9; /* borders and dividers */
+
+  /* Text */
+  --color-ink: #2b2723; /* headings and primary text */
+  --color-ink-soft: #6b6259; /* secondary text, labels */
+  --color-ink-faint: #a39a8d; /* placeholders, counts */
+
+  /* Status colours, all muted so nothing shouts */
+  --color-sage: #7d9070; /* published — done */
+  --color-honey: #c99a4e; /* scheduled — waiting its turn */
+  --color-clay: #b5796a; /* draft — in progress */
+  --color-stone: #9a9186; /* idea — not started */
+
+  /* Type */
+  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
+    serif;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
