@@ -26,4 +26,5 @@ export const typeStyles: Record<ContentType, string> = {
   Carousel: "text-honey",
   Story: "text-sage",
   Text: "text-ink-soft",
+  "Blog post": "text-ink-soft",
 }

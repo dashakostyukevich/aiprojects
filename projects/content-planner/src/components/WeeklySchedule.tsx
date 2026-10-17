@@ -1,4 +1,5 @@
-import { posts, weekDates, weekDays } from "../data"
+import type { Post } from "../types"
+import { weekDates, weekDays } from "../data"
 import { platformDots, typeStyles } from "../styles"
 
 /*
@@ -6,8 +7,11 @@ import { platformDots, typeStyles } from "../styles"
 
   On a phone the columns are narrower than the screen, so the row scrolls
   sideways rather than squashing everything into unreadable slivers.
+
+  Like the list, this takes posts as a prop so a newly saved post shows up in
+  the right column straight away.
 */
-export default function WeeklySchedule() {
+export default function WeeklySchedule({ posts }: { posts: Post[] }) {
   return (
     <section className="rounded-2xl border border-line bg-card">
       <div

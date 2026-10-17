@@ -8,7 +8,7 @@ export type Status = "Idea" | "Draft" | "Scheduled" | "Published"
 
 export type Platform = "Instagram" | "Threads" | "TikTok" | "Blog"
 
-export type ContentType = "Reel" | "Carousel" | "Story" | "Text"
+export type ContentType = "Reel" | "Carousel" | "Story" | "Text" | "Blog post"
 
 export interface Post {
   id: number
@@ -19,6 +19,9 @@ export interface Post {
       only ever shows it, it never does date maths. */
   date: string
   status: Status
-  /** Which day of the weekly schedule it appears in. 0 = Monday. */
+  /** Which day of the weekly schedule it appears in. 0 = Monday.
+      -1 means "not on this week's board". */
   day: number
+  /** Private scribbles. Optional, and not shown in the list. */
+  notes?: string
 }

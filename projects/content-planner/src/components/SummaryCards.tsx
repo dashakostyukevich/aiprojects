@@ -1,5 +1,5 @@
 import type { Status } from "../types"
-import { posts } from "../data"
+import type { Post } from "../types"
 
 const cards: { label: string; status: Status | null; tone: string }[] = [
   { label: "Total posts", status: null, tone: "text-ink" },
@@ -11,11 +11,10 @@ const cards: { label: string; status: Status | null; tone: string }[] = [
 /*
   Four numbers, in a row on desktop and two-by-two on a phone.
 
-  Counting with .filter() is real code, but it's not "functionality" — it's
-  just arithmetic over the sample data so the numbers stay honest if you edit
-  data.ts.
+  The posts arrive as a prop, so the counts are recomputed every time App's
+  posts state changes — including right after a new post is saved.
 */
-export default function SummaryCards() {
+export default function SummaryCards({ posts }: { posts: Post[] }) {
   const counts = cards.map((card) =>
     card.status === null
       ? posts.length

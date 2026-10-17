@@ -1,5 +1,10 @@
-/* The top of the page: title, one line of context, and the primary button. */
-export default function Header() {
+/*
+  The top of the page: title, one line of context, and the primary button.
+
+  onNewPost is a function passed down from App. This component doesn't know
+  what happens when the button is clicked — it just reports that it happened.
+*/
+export default function Header({ onNewPost }: { onNewPost: () => void }) {
   return (
     <header className="border-b border-line">
       <div
@@ -15,6 +20,7 @@ export default function Header() {
 
         <button
           type="button"
+          onClick={onNewPost}
           className="w-full rounded-full bg-ink px-5 py-2.5 text-sm
             font-medium text-paper transition-opacity hover:opacity-90
             sm:w-auto"
