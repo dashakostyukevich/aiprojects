@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Sidebar from "./components/Sidebar"
 import Header from "./components/Header"
 import SummaryCards from "./components/SummaryCards"
@@ -8,6 +8,7 @@ import NewPostModal from "./components/NewPostModal"
 import type { DraftPost } from "./components/NewPostModal"
 import { posts as examplePosts } from "./data"
 import { toReadableDate, toWeekDay } from "./dates"
+import { loadPosts, savePosts } from "./storage"
 import type { Post } from "./types"
 
 /*
@@ -26,15 +27,25 @@ type Modal = { mode: "create" } | { mode: "edit"; post: Post } | null
   update the instant a post is saved or deleted.
 
   Two pieces of state:
-    posts   the real list, starting as the example data
+    posts   the real list, read from the browser on startup
     modal   what the dialog is doing, or null when it's closed
 
-  Still React state only — a refresh brings the example data back, because
-  nothing is written to the browser yet.
+  Posts are kept in localStorage. Creating, editing and deleting only ever call
+  setPosts; the effect below does the saving, so no handler has to remember to.
 */
 function App() {
-  const [posts, setPosts] = useState<Post[]>(examplePosts)
+  // The function form of useState runs once, on the first render, which is
+  // what we want for reading storage. Passing the array directly would run it
+  // on every render.
+  const [posts, setPosts] = useState<Post[]>(() => loadPosts() ?? examplePosts)
   const [modal, setModal] = useState<Modal>(null)
+
+  // Runs after every render where `posts` is a different array. Create, edit
+  // and delete all produce a new array, so all three get saved without any of
+  // them knowing localStorage exists.
+  useEffect(() => {
+    savePosts(posts)
+  }, [posts])
 
   function closeModal() {
     setModal(null)

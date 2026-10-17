@@ -4,9 +4,8 @@ A content planning app. Client-side only: no backend, no database, no
 authentication, no external APIs. Everything will live in `localStorage` in the
 browser.
 
-Status: **static UI only.** The interface is built and rendered from
-hardcoded sample data in `src/data.ts`. Nothing is saved, nothing is clickable
-yet — no localStorage, no API calls, no backend.
+Status: **working app.** Create, edit and delete posts, saved to the browser's
+localStorage. Still no backend, database, authentication or API.
 
 ## Layout
 
@@ -25,6 +24,9 @@ src/
     WeeklySchedule.tsx  seven columns, Monday first
     PostList.tsx        the list of posts, one row each
     StatusPill.tsx      the small coloured status label
+    NewPostModal.tsx    the create/edit dialog
+  storage.ts            the only file that touches localStorage
+  dates.ts              date helpers for the week board
 ```
 
 Design notes: cream page (`paper`), lighter cards (`card`), hairline borders
@@ -41,9 +43,35 @@ a value in `src/index.css` and the whole app follows.
 | Styling | Tailwind CSS 4 via `@tailwindcss/vite` | no config file, no PostCSS, no runtime |
 | Lint | oxlint | fast, single binary, no config beyond rules |
 
-State will be plain React (`useState`/`useReducer`) plus a thin
-`src/storage/localStore.ts` wrapper over `localStorage`. No state library, no
-router, no data-fetching library — none of them are needed until they are.
+State is plain React (`useState`) plus a thin `src/storage.ts` wrapper over
+`localStorage`. No state library, no router, no data-fetching library — none of
+them are needed.
+
+## How data is stored
+
+Everything lives in the browser's `localStorage` under one key,
+`content-planner:posts`, holding a JSON array. No server, no account, no
+network call anywhere in the app.
+
+`src/storage.ts` is the only file that touches `localStorage`:
+
+- `loadPosts()` — reads and parses the key. Returns `null` if nothing is saved
+  or the data can't be trusted, and `App` then falls back to the example posts.
+- `savePosts(posts)` — writes the array. Never throws, so a full or blocked
+  store can't break the app.
+
+`App` loads once with a lazy `useState` initializer, then saves from a
+`useEffect` watching `posts`. Create, edit and delete only call `setPosts` —
+they never save directly, so no handler can forget to.
+
+Storage is per-origin, so `localhost:5173` (dev) and `localhost:4173`
+(preview) keep separate copies. To wipe saved data and start from the examples
+again, run `localStorage.clear()` in the browser console.
+
+Bad saved data is filtered rather than trusted: anything that isn't a
+well-formed post is dropped, and if nothing survives the app falls back to the
+examples. An empty array is respected as a real state — it means every post was
+deleted.
 
 ## Commands
 
