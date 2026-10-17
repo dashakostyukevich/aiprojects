@@ -3,11 +3,11 @@ import Sidebar from "./components/Sidebar"
 import Header from "./components/Header"
 import SummaryCards from "./components/SummaryCards"
 import PostList from "./components/PostList"
-import WeeklySchedule from "./components/WeeklySchedule"
+import Calendar from "./components/Calendar"
 import NewPostModal from "./components/NewPostModal"
 import type { DraftPost } from "./components/NewPostModal"
 import { posts as examplePosts } from "./data"
-import { toReadableDate, toWeekDay } from "./dates"
+import { addMonths, isValidISO, parseISO, todayISO } from "./dates"
 import { loadPosts, savePosts } from "./storage"
 import type { Post } from "./types"
 
@@ -23,15 +23,13 @@ type Modal = { mode: "create" } | { mode: "edit"; post: Post } | null
 
 /*
   App owns the posts. Everything below it receives posts as a prop and
-  re-renders when they change, which is why the list and the four count cards
-  update the instant a post is saved or deleted.
+  re-renders when they change, which is why the list, the count cards and the
+  calendar all update together.
 
-  Two pieces of state:
-    posts   the real list, read from the browser on startup
-    modal   what the dialog is doing, or null when it's closed
-
-  Posts are kept in localStorage. Creating, editing and deleting only ever call
-  setPosts; the effect below does the saving, so no handler has to remember to.
+  Three pieces of state:
+    posts    read from the browser on startup
+    modal    what the dialog is doing, or null when it's closed
+    month    the year and month the calendar is showing
 */
 function App() {
   // The function form of useState runs once, on the first render, which is
@@ -39,6 +37,12 @@ function App() {
   // on every render.
   const [posts, setPosts] = useState<Post[]>(() => loadPosts() ?? examplePosts)
   const [modal, setModal] = useState<Modal>(null)
+
+  // The calendar opens on the current month, read from the real clock.
+  const [month, setMonth] = useState(() => {
+    const today = parseISO(todayISO())!
+    return { year: today.year, month: today.month }
+  })
 
   // Runs after every render where `posts` is a different array. Create, edit
   // and delete all produce a new array, so all three get saved without any of
@@ -51,18 +55,17 @@ function App() {
     setModal(null)
   }
 
-  /** Turns the form values into the fields a Post stores. */
+  /** Turns the form values into a post. */
   function postFromDraft(draft: DraftPost, id: number): Post {
     return {
       id,
       title: draft.title,
       platform: draft.platform,
       type: draft.type,
-      date: draft.dateInput ? toReadableDate(draft.dateInput) : "Unscheduled",
+      // The date input already speaks "YYYY-MM-DD", so it is stored as-is.
+      // No date at all means null, which keeps the post off the calendar.
+      date: draft.dateInput === "" ? null : draft.dateInput,
       status: draft.status,
-      // The weekly board only shows 17–23 March. Anything outside it, or with
-      // no date at all, gets -1 and simply doesn't appear there.
-      day: toWeekDay(draft.dateInput),
       notes: draft.notes,
     }
   }
@@ -96,6 +99,23 @@ function App() {
     setPosts((current) => current.filter((p) => p.id !== post.id))
   }
 
+  /** Steps the calendar back or forward, keeping the year in step. */
+  function stepMonth(amount: number) {
+    setMonth((current) => addMonths(current.year, current.month, amount))
+  }
+
+  function goToToday() {
+    const today = parseISO(todayISO())!
+    setMonth({ year: today.year, month: today.month })
+  }
+
+  /** Opens a post's date in the editor. */
+  function jumpToPost(post: Post) {
+    if (post.date === null || !isValidISO(post.date)) return
+    const parts = parseISO(post.date)!
+    setMonth({ year: parts.year, month: parts.month })
+  }
+
   return (
     <div className="flex min-h-screen flex-col md:flex-row">
       <Sidebar />
@@ -108,11 +128,21 @@ function App() {
             md:px-8 md:py-8"
         >
           <SummaryCards posts={posts} />
-          <WeeklySchedule posts={posts} />
+
+          <Calendar
+            month={month}
+            posts={posts}
+            onPrevious={() => stepMonth(-1)}
+            onNext={() => stepMonth(1)}
+            onToday={goToToday}
+            onSelectPost={(post) => setModal({ mode: "edit", post })}
+          />
+
           <PostList
             posts={posts}
             onEdit={(post) => setModal({ mode: "edit", post })}
             onDelete={handleDelete}
+            onShowInCalendar={jumpToPost}
           />
         </main>
       </div>

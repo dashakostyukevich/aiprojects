@@ -1,14 +1,19 @@
 import type { Post } from "./types"
+import { addDays, todayISO } from "./dates"
 
 /*
-  Example content, written by hand. Nothing here is saved anywhere — closing
-  the tab throws it away, which is fine for now. Later this file gets
-  replaced by data loaded from the browser's localStorage.
+  Example content, written by hand. On a first run these are copied into
+  localStorage; after that they're ignored and the browser's copy is used.
 
-  The `day` number says which column of the weekly schedule a post appears in:
-  0 = Monday, 1 = Tuesday ... 6 = Sunday. A day of -1 means "not on this
-  week's board" — used by posts that already went out in an earlier week.
+  The dates are generated relative to today rather than typed in, so the
+  calendar always opens on a month with something in it. `-5` means five days
+  ago, `+9` means nine days from now.
 */
+const today = todayISO()
+
+function day(offset: number): string {
+  return addDays(today, offset)
+}
 
 export const posts: Post[] = [
   {
@@ -16,102 +21,97 @@ export const posts: Post[] = [
     title: "A slow week in Lisbon: five cafés worth the detour",
     platform: "Blog",
     type: "Carousel",
-    date: "Mar 18",
+    date: day(-5),
     status: "Scheduled",
-    day: 1,
+    notes: "Photos are in the shared album. Needs a pull quote.",
   },
   {
     id: 2,
     title: "What I learned billing hourly as a freelance designer",
     platform: "Threads",
     type: "Text",
-    date: "Mar 19",
+    date: day(-1),
     status: "Draft",
-    day: 2,
   },
   {
     id: 3,
     title: "Packing for two weeks in Vietnam with one carry-on",
     platform: "Instagram",
     type: "Reel",
-    date: "Mar 20",
-    status: "Published",
-    day: 3,
+    date: day(2),
+    status: "Scheduled",
   },
   {
     id: 4,
     title: "Morning routine that survived a remote-work winter",
     platform: "TikTok",
     type: "Reel",
-    date: "Mar 21",
-    status: "Scheduled",
-    day: 4,
+    date: day(6),
+    status: "Idea",
   },
   {
     id: 5,
     title: "The design tools I actually kept after a year",
     platform: "Blog",
     type: "Text",
-    date: "Mar 23",
+    date: day(13),
     status: "Idea",
-    day: 6,
   },
   {
     id: 6,
     title: "Ten minutes at the train station café, no phone",
     platform: "Instagram",
     type: "Story",
-    date: "Mar 17",
+    date: day(3),
     status: "Draft",
-    day: 0,
   },
   {
     id: 7,
     title: "Why my blog stopped growing and what I changed",
     platform: "Blog",
     type: "Text",
-    date: "Mar 10",
+    date: day(-12),
     status: "Published",
-    day: -1,
   },
   {
     id: 8,
     title: "Three questions to ask before taking any freelance job",
     platform: "Threads",
     type: "Carousel",
-    date: "Mar 12",
+    date: day(-9),
     status: "Published",
-    day: -1,
   },
   {
     id: 9,
     title: "A rainy week in the Scottish Highlands, in photos",
     platform: "Instagram",
     type: "Carousel",
-    date: "Mar 22",
+    date: day(9),
     status: "Idea",
-    day: 5,
   },
   {
     id: 10,
     title: "The cost of a month of slow travel, itemised",
     platform: "Blog",
     type: "Text",
-    date: "Mar 19",
+    date: day(-3),
+    status: "Published",
+  },
+  {
+    id: 11,
+    title: "Notes toward a piece on designing in public",
+    platform: "Threads",
+    type: "Text",
+    // No date yet: an idea worth keeping, not something committed to a day.
+    date: null,
     status: "Idea",
-    day: 2,
+  },
+  {
+    id: 12,
+    title: "Six typography mistakes I made for two years",
+    platform: "Blog",
+    type: "Text",
+    date: null,
+    status: "Draft",
   },
 ]
-
-/** The seven columns of the weekly schedule, Monday first. */
-export const weekDays = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-]
-
-export const weekDates = ["17", "18", "19", "20", "21", "22", "23"]

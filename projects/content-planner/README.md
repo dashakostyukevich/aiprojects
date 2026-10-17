@@ -15,19 +15,42 @@ src/
   App.tsx               the page layout, and where the sample posts are passed down
   index.css             Tailwind import + the warm colour palette
   types.ts              what a Post looks like
-  data.ts               10 example posts, written by hand
+  data.ts               12 example posts, dated relative to today
   styles.ts             colour classes for each status, platform and content type
+  dates.ts              all date maths: ISO parsing, the month grid, month stepping
+  storage.ts            the only file that touches localStorage
   components/
     Sidebar.tsx         navigation: Overview, Content Calendar, Ideas
     Header.tsx          page title, subtitle, "+ New post" button
     SummaryCards.tsx    the four count cards
-    WeeklySchedule.tsx  seven columns, Monday first
+    Calendar.tsx        the month grid and its Previous / Today / Next buttons
     PostList.tsx        the list of posts, one row each
     StatusPill.tsx      the small coloured status label
     NewPostModal.tsx    the create/edit dialog
-  storage.ts            the only file that touches localStorage
-  dates.ts              date helpers for the week board
 ```
+
+## Dates
+
+A post's date is stored as the string `"2026-03-18"`, or `null` when it has no
+date. Strings, not `Date` objects, because a calendar day has no timezone and
+shouldn't be able to drift by one.
+
+`src/dates.ts` builds and reads every date with `Date.UTC` and `getUTC*`, so the
+same input gives the same result in every timezone. The one exception is
+`todayISO()`, which uses local time on purpose — "today" should mean today where
+you are.
+
+Two bugs this avoids, both of which show up as a post landing on the wrong day:
+
+- `new Date("2026-03-18")` is parsed as UTC midnight but read back with
+  `getDate()` in local time, so in Pacific/Midway it returns March 17.
+- Mixing the local constructor `new Date(y, m, d)` with `getUTC*`.
+
+`parseISO` also rejects impossible days like `2026-02-31`, and `storage.ts`
+drops any saved post whose date doesn't parse, so bad data can't reach the grid.
+
+To try a different month, use the Previous / Next buttons. Clicking a date in the
+post list jumps the calendar to that month.
 
 Design notes: cream page (`paper`), lighter cards (`card`), hairline borders
 (`line`), serif headings via `font-display`, and four muted status colours —

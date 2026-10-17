@@ -1,6 +1,5 @@
 import { useState } from "react"
 import type { ContentType, Platform, Post, Status } from "../types"
-import { toInputDate } from "../dates"
 
 /** What the modal hands back to App when Save is pressed. */
 export interface DraftPost {
@@ -77,7 +76,9 @@ function draftFromPost(post: Post): DraftPost {
     title: post.title,
     platform: post.platform,
     type: post.type,
-    dateInput: toInputDate(post.date),
+    // Posts store the same "YYYY-MM-DD" the date input uses, so it goes
+    // straight back in. No conversion needed either way.
+    dateInput: post.date ?? "",
     status: post.status,
     notes: post.notes ?? "",
   }

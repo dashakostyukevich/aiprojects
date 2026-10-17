@@ -1,5 +1,5 @@
 import type { Post } from "../types"
-import { platformDots, typeStyles } from "../styles"
+import { platformDots, toReadableDate, typeStyles } from "../styles"
 import StatusPill from "./StatusPill"
 
 /* One row of the content list. */
@@ -7,10 +7,12 @@ function PostRow({
   post,
   onEdit,
   onDelete,
+  onShowInCalendar,
 }: {
   post: Post
   onEdit: (post: Post) => void
   onDelete: (post: Post) => void
+  onShowInCalendar: (post: Post) => void
 }) {
   return (
     <li
@@ -29,8 +31,22 @@ function PostRow({
         {post.title}
       </p>
 
-      <div className="flex items-center justify-between gap-4 sm:justify-end">
-        <span className="text-sm tabular-nums text-ink-soft">{post.date}</span>
+      <div className="flex flex-wrap items-center justify-between gap-4 sm:justify-end">
+        {post.date === null ? (
+          // Undated posts stay in this list and never reach the calendar.
+          <span className="text-sm italic text-ink-faint">No date</span>
+        ) : (
+          <button
+            type="button"
+            onClick={() => onShowInCalendar(post)}
+            title="Show this date in the calendar"
+            className="text-sm tabular-nums text-ink-soft transition-colors
+              hover:text-ink hover:underline"
+          >
+            {toReadableDate(post.date)}
+          </button>
+        )}
+
         <StatusPill status={post.status} />
 
         {/* Row actions. Quiet by default, stronger on hover. */}
@@ -62,17 +78,19 @@ function PostRow({
 /*
   The main list of posts, one PostRow each.
 
-  It doesn't edit or delete anything itself — it just passes the two
-  functions it was given down to each row. App owns the posts.
+  It doesn't edit, delete or navigate itself — it just passes the functions it
+  was given down to each row. App owns the posts.
 */
 export default function PostList({
   posts,
   onEdit,
   onDelete,
+  onShowInCalendar,
 }: {
   posts: Post[]
   onEdit: (post: Post) => void
   onDelete: (post: Post) => void
+  onShowInCalendar: (post: Post) => void
 }) {
   return (
     <section className="overflow-hidden rounded-2xl border border-line bg-card">
@@ -80,7 +98,7 @@ export default function PostList({
         className="flex items-baseline justify-between border-b
           border-line px-5 py-4"
       >
-        <h2 className="font-display text-xl">Content</h2>
+        <h2 className="font-display text-xl">All posts</h2>
         <span className="text-sm text-ink-faint">{posts.length} posts</span>
       </div>
 
@@ -91,6 +109,7 @@ export default function PostList({
             post={post}
             onEdit={onEdit}
             onDelete={onDelete}
+            onShowInCalendar={onShowInCalendar}
           />
         ))}
       </ul>

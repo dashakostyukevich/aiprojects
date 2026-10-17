@@ -1,4 +1,5 @@
 import type { ContentType, Platform, Post, Status } from "./types"
+import { isValidISO } from "./dates"
 
 /*
   All localStorage talking happens in this file. Nothing else in the app
@@ -33,14 +34,19 @@ function isPost(value: unknown): value is Post {
 
   const post = value as Record<string, unknown>
 
+  // The date is either null (no date yet) or a real "YYYY-MM-DD" day. An
+  // impossible day such as 2026-02-31 is rejected so it can't reach the grid.
+  const hasValidDate =
+    post.date === null || (typeof post.date === "string" && isValidISO(post.date))
+
   return (
     typeof post.id === "number" &&
     typeof post.title === "string" &&
+    post.title.trim() !== "" &&
     platforms.includes(post.platform as Platform) &&
     contentTypes.includes(post.type as ContentType) &&
-    typeof post.date === "string" &&
-    statuses.includes(post.status as Status) &&
-    typeof post.day === "number"
+    hasValidDate &&
+    statuses.includes(post.status as Status)
   )
 }
 

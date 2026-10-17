@@ -43,9 +43,9 @@ export default function Sidebar() {
 
       <p
         className="mx-5 mt-auto hidden border-t border-line py-4 text-xs
-          text-ink-faint md:block"
+          leading-relaxed text-ink-faint md:block"
       >
-        Week of 17 March
+        Saved in this browser
       </p>
     </aside>
   )
