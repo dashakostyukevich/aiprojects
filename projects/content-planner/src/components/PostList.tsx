@@ -3,7 +3,15 @@ import { platformDots, typeStyles } from "../styles"
 import StatusPill from "./StatusPill"
 
 /* One row of the content list. */
-function PostRow({ post }: { post: Post }) {
+function PostRow({
+  post,
+  onEdit,
+  onDelete,
+}: {
+  post: Post
+  onEdit: (post: Post) => void
+  onDelete: (post: Post) => void
+}) {
   return (
     <li
       className="flex flex-col gap-3 px-5 py-4 transition-colors
@@ -24,15 +32,48 @@ function PostRow({ post }: { post: Post }) {
       <div className="flex items-center justify-between gap-4 sm:justify-end">
         <span className="text-sm tabular-nums text-ink-soft">{post.date}</span>
         <StatusPill status={post.status} />
+
+        {/* Row actions. Quiet by default, stronger on hover. */}
+        <div className="flex shrink-0 items-center gap-1">
+          <button
+            type="button"
+            onClick={() => onEdit(post)}
+            aria-label={`Edit ${post.title}`}
+            className="rounded-full px-3 py-1 text-sm text-ink-soft
+              transition-colors hover:bg-ink/5 hover:text-ink"
+          >
+            Edit
+          </button>
+          <button
+            type="button"
+            onClick={() => onDelete(post)}
+            aria-label={`Delete ${post.title}`}
+            className="rounded-full px-3 py-1 text-sm text-ink-faint
+              transition-colors hover:bg-clay/10 hover:text-clay"
+          >
+            Delete
+          </button>
+        </div>
       </div>
     </li>
   )
 }
 
 /*
-  The main list of posts. Renders one PostRow per post in data.ts.
+  The main list of posts, one PostRow each.
+
+  It doesn't edit or delete anything itself — it just passes the two
+  functions it was given down to each row. App owns the posts.
 */
-export default function PostList({ posts }: { posts: Post[] }) {
+export default function PostList({
+  posts,
+  onEdit,
+  onDelete,
+}: {
+  posts: Post[]
+  onEdit: (post: Post) => void
+  onDelete: (post: Post) => void
+}) {
   return (
     <section className="overflow-hidden rounded-2xl border border-line bg-card">
       <div
@@ -45,7 +86,12 @@ export default function PostList({ posts }: { posts: Post[] }) {
 
       <ul className="divide-y divide-line">
         {posts.map((post) => (
-          <PostRow key={post.id} post={post} />
+          <PostRow
+            key={post.id}
+            post={post}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
         ))}
       </ul>
     </section>

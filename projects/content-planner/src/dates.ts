@@ -56,3 +56,22 @@ export function toWeekDay(value: string): number {
 
   return isThisWeek ? day - WEEK_START_DATE : -1
 }
+
+/**
+ * The other direction: turn a stored "Mar 18" back into "2026-03-18" so the
+ * edit form can pre-fill the date input.
+ * Returns "" for "Unscheduled" or anything unrecognised, which leaves the
+ * date field empty.
+ */
+export function toInputDate(label: string): string {
+  const parts = label.split(" ")
+  if (parts.length !== 2) return ""
+
+  const monthIndex = MONTHS.indexOf(parts[0])
+  const day = Number(parts[1])
+  if (monthIndex === -1 || Number.isNaN(day)) return ""
+
+  // "03" and "18" — both need two digits.
+  const month = String(monthIndex + 1).padStart(2, "0")
+  return `2026-${month}-${String(day).padStart(2, "0")}`
+}

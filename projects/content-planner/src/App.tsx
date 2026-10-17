@@ -11,44 +11,78 @@ import { toReadableDate, toWeekDay } from "./dates"
 import type { Post } from "./types"
 
 /*
+  What the dialog is currently doing. One state instead of a separate
+  "is open" flag and "which post" value, so the two can never disagree.
+
+    null        the dialog is closed
+    { create }  adding a brand new post
+    { edit, post }  changing a post that already exists
+*/
+type Modal = { mode: "create" } | { mode: "edit"; post: Post } | null
+
+/*
   App owns the posts. Everything below it receives posts as a prop and
   re-renders when they change, which is why the list and the four count cards
-  update the instant a post is saved.
+  update the instant a post is saved or deleted.
 
   Two pieces of state:
     posts   the real list, starting as the example data
-    isOpen  whether the modal is on screen
+    modal   what the dialog is doing, or null when it's closed
 
   Still React state only — a refresh brings the example data back, because
   nothing is written to the browser yet.
 */
 function App() {
   const [posts, setPosts] = useState<Post[]>(examplePosts)
-  const [isOpen, setIsOpen] = useState(false)
+  const [modal, setModal] = useState<Modal>(null)
 
-  /** Builds a Post from the form values and prepends it to the list. */
-  function handleSave(draft: DraftPost) {
-    // The highest existing id, plus one. Good enough while ids are just numbers.
-    const nextId = Math.max(...posts.map((post) => post.id)) + 1
+  function closeModal() {
+    setModal(null)
+  }
 
-    // The weekly board only shows 17–23 March. Anything outside it, or with no
-    // date at all, gets -1 and simply doesn't appear there.
-    const day = toWeekDay(draft.dateInput)
-
-    const newPost: Post = {
-      id: nextId,
+  /** Turns the form values into the fields a Post stores. */
+  function postFromDraft(draft: DraftPost, id: number): Post {
+    return {
+      id,
       title: draft.title,
       platform: draft.platform,
       type: draft.type,
-      // The modal already turned the raw input into "Mar 18" for us.
       date: draft.dateInput ? toReadableDate(draft.dateInput) : "Unscheduled",
       status: draft.status,
-      day,
+      // The weekly board only shows 17–23 March. Anything outside it, or with
+      // no date at all, gets -1 and simply doesn't appear there.
+      day: toWeekDay(draft.dateInput),
       notes: draft.notes,
     }
+  }
 
-    setPosts((current) => [newPost, ...current])
-    setIsOpen(false)
+  /**
+   * One save handler for both modes. The `modal` state says which it is:
+   * editing swaps the post with the same id, creating adds a new one.
+   */
+  function handleSave(draft: DraftPost) {
+    if (modal?.mode === "edit") {
+      const updated = postFromDraft(draft, modal.post.id)
+      setPosts((current) =>
+        current.map((post) => (post.id === updated.id ? updated : post)),
+      )
+    } else {
+      // The highest existing id, plus one.
+      const nextId = Math.max(...posts.map((post) => post.id)) + 1
+      setPosts((current) => [postFromDraft(draft, nextId), ...current])
+    }
+
+    closeModal()
+  }
+
+  /** Removes one post, after asking first. */
+  function handleDelete(post: Post) {
+    const confirmed = window.confirm(
+      `Delete "${post.title}"?\n\nThis cannot be undone.`,
+    )
+    if (!confirmed) return
+
+    setPosts((current) => current.filter((p) => p.id !== post.id))
   }
 
   return (
@@ -56,7 +90,7 @@ function App() {
       <Sidebar />
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <Header onNewPost={() => setIsOpen(true)} />
+        <Header onNewPost={() => setModal({ mode: "create" })} />
 
         <main
           className="flex flex-1 flex-col gap-4 px-5 py-6 md:gap-6
@@ -64,14 +98,20 @@ function App() {
         >
           <SummaryCards posts={posts} />
           <WeeklySchedule posts={posts} />
-          <PostList posts={posts} />
+          <PostList
+            posts={posts}
+            onEdit={(post) => setModal({ mode: "edit", post })}
+            onDelete={handleDelete}
+          />
         </main>
       </div>
 
-      {isOpen && (
+      {modal && (
         <NewPostModal
+          // Passing the post is what puts the form into edit mode.
+          post={modal.mode === "edit" ? modal.post : undefined}
           onSave={handleSave}
-          onCancel={() => setIsOpen(false)}
+          onCancel={closeModal}
         />
       )}
     </div>

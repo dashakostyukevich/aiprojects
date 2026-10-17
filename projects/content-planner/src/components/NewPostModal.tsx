@@ -1,5 +1,6 @@
 import { useState } from "react"
-import type { ContentType, Platform, Status } from "../types"
+import type { ContentType, Platform, Post, Status } from "../types"
+import { toInputDate } from "../dates"
 
 /** What the modal hands back to App when Save is pressed. */
 export interface DraftPost {
@@ -67,25 +68,54 @@ function Select<T extends string>({
   )
 }
 
+/**
+ * Turns an existing post into a draft the form understands. The only fiddly
+ * part is the date: posts store "Mar 18", the date input wants "2026-03-18".
+ */
+function draftFromPost(post: Post): DraftPost {
+  return {
+    title: post.title,
+    platform: post.platform,
+    type: post.type,
+    dateInput: toInputDate(post.date),
+    status: post.status,
+    notes: post.notes ?? "",
+  }
+}
+
 /*
-  The "New post" dialog.
+  The post dialog, used for both creating and editing.
 
   All seven fields live in one piece of state called `draft`. Typing calls
   setDraft with a new object that copies the old one and changes one field —
   that's why nothing else on screen reacts to an edit.
 
+  `post` is the difference between the two modes:
+    undefined  creating — the form starts blank
+    a Post     editing  — the form starts filled in with that post
+
   Cancel closes without saving. Save checks the title, then hands the draft
   back up to App and clears itself for next time.
 */
 export default function NewPostModal({
+  post,
   onSave,
   onCancel,
 }: {
+  /** The post being edited, or undefined when creating a new one. */
+  post?: Post
   onSave: (draft: DraftPost) => void
   onCancel: () => void
 }) {
-  const [draft, setDraft] = useState<DraftPost>(emptyDraft)
+  // The initial value is only read on the first render, which is exactly what
+  // we want: pre-filled when editing, blank when creating. App remounts the
+  // modal by unmounting it on close, so each open starts fresh.
+  const [draft, setDraft] = useState<DraftPost>(
+    post ? draftFromPost(post) : emptyDraft,
+  )
   const [titleError, setTitleError] = useState(false)
+
+  const isEditing = post !== undefined
 
   /** Update one field and leave the rest alone. */
   function update<K extends keyof DraftPost>(field: K, value: DraftPost[K]) {
@@ -102,7 +132,7 @@ export default function NewPostModal({
     // formatted by App, which owns how dates are stored.
     onSave({ ...draft, title: draft.title.trim() })
 
-    setDraft(emptyDraft)
+    setDraft(post ? draftFromPost(post) : emptyDraft)
     setTitleError(false)
   }
 
@@ -122,7 +152,7 @@ export default function NewPostModal({
       >
         <div className="mb-5 flex items-start justify-between gap-4">
           <h2 id="new-post-heading" className="font-display text-2xl">
-            New post
+            {isEditing ? "Edit post" : "New post"}
           </h2>
           <button
             type="button"
@@ -231,7 +261,7 @@ export default function NewPostModal({
               className="rounded-full bg-ink px-5 py-2 text-sm font-medium
                 text-paper transition-opacity hover:opacity-90"
             >
-              Save post
+              {isEditing ? "Save changes" : "Save post"}
             </button>
           </div>
         </form>
