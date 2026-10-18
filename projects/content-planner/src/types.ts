@@ -21,3 +21,18 @@ export interface Post {
   /** Private scribbles. Optional, and not shown in the list. */
   notes?: string
 }
+
+/**
+ * What the reader has asked the list to show. Each dropdown is either a real
+ * value or "all", which is why every field is a union with the string "all".
+ *
+ * Filters change what is displayed and nothing else — the posts themselves are
+ * never rewritten to match one.
+ */
+export interface ListFilters {
+  /** Matched against the title, ignoring case. */
+  search: string
+  platform: Platform | "all"
+  status: Status | "all"
+  type: ContentType | "all"
+}

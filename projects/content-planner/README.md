@@ -24,7 +24,8 @@ src/
     Header.tsx          page title, subtitle, "+ New post" button
     SummaryCards.tsx    the four count cards
     Calendar.tsx        the month grid and its Previous / Today / Next buttons
-    PostList.tsx        the list of posts, one row each
+    FilterBar.tsx       the search box and the three filter dropdowns
+    PostList.tsx        the list of posts, plus the filter state
     StatusPill.tsx      the small coloured status label
     NewPostModal.tsx    the create/edit dialog
 ```
@@ -69,6 +70,22 @@ a value in `src/index.css` and the whole app follows.
 State is plain React (`useState`) plus a thin `src/storage.ts` wrapper over
 `localStorage`. No state library, no router, no data-fetching library — none of
 them are needed.
+
+## Searching and filtering
+
+The post list has a title search and three dropdowns: platform, status and
+content type. They combine, so choosing Instagram *and* Scheduled narrows to
+posts that are both.
+
+Filters live as state inside `PostList`, not in `App`, because they only affect
+that list. They never rewrite the posts — `posts.filter(matches)` produces a new
+array to render and leaves the original untouched, which is why the summary
+cards and calendar always show every post, and why editing a post so it stops
+matching simply makes it disappear from the filtered view while the filter stays
+put.
+
+Filters are deliberately not saved to `localStorage`: they are a way of looking
+at the list, not data about it. A reload starts unfiltered.
 
 ## How data is stored
 
