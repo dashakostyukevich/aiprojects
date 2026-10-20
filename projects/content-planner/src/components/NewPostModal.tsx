@@ -6,8 +6,7 @@ export interface DraftPost {
   title: string
   platform: Platform
   type: ContentType
-  /** The raw "2026-03-18" from the date input, kept so App can work out
-      which column of the weekly board the post belongs in. */
+  /** The raw "2026-03-18" from the date input. "" means no date at all. */
   dateInput: string
   status: Status
   notes: string
@@ -68,8 +67,9 @@ function Select<T extends string>({
 }
 
 /**
- * Turns an existing post into a draft the form understands. The only fiddly
- * part is the date: posts store "Mar 18", the date input wants "2026-03-18".
+ * Turns an existing post into a draft the form understands. Every field maps
+ * straight across; the only conversion is the date, where "no date at all"
+ * becomes the empty string the date input uses for the same thing.
  */
 function draftFromPost(post: Post): DraftPost {
   return {
@@ -95,28 +95,48 @@ function draftFromPost(post: Post): DraftPost {
     undefined  creating — the form starts blank
     a Post     editing  — the form starts filled in with that post
 
+  `preset` only applies while creating, and it overwrites parts of the blank
+  form. The Ideas page passes `{ status: "Idea" }` so a post made there lands
+  on the right page without this component knowing Ideas exists.
+
   Cancel closes without saving. Save checks the title, then hands the draft
   back up to App and clears itself for next time.
 */
 export default function NewPostModal({
   post,
+  preset,
+  createHeading,
   onSave,
   onCancel,
 }: {
   /** The post being edited, or undefined when creating a new one. */
   post?: Post
+  /** Starting values for a brand new post. Ignored when editing. */
+  preset?: Partial<DraftPost>
+  /** What the dialog is called when creating, e.g. "New idea". */
+  createHeading?: string
   onSave: (draft: DraftPost) => void
   onCancel: () => void
 }) {
+  // The blank form, with any preset layered on top of it. `{...emptyDraft,
+  // ...preset}` copies every field of emptyDraft and then overwrites the ones
+  // the preset mentions — so passing only `status` leaves the rest empty.
+  const blankDraft: DraftPost = { ...emptyDraft, ...preset }
+
   // The initial value is only read on the first render, which is exactly what
   // we want: pre-filled when editing, blank when creating. App remounts the
   // modal by unmounting it on close, so each open starts fresh.
   const [draft, setDraft] = useState<DraftPost>(
-    post ? draftFromPost(post) : emptyDraft,
+    post ? draftFromPost(post) : blankDraft,
   )
   const [titleError, setTitleError] = useState(false)
 
   const isEditing = post !== undefined
+  const heading = isEditing ? "Edit post" : (createHeading ?? "New post")
+  // "New post" saves as "Save post", "New idea" as "Save idea".
+  const saveLabel = isEditing
+    ? "Save changes"
+    : `Save ${heading.replace(/^New\s+/i, "").toLowerCase()}`
 
   /** Update one field and leave the rest alone. */
   function update<K extends keyof DraftPost>(field: K, value: DraftPost[K]) {
@@ -133,7 +153,7 @@ export default function NewPostModal({
     // formatted by App, which owns how dates are stored.
     onSave({ ...draft, title: draft.title.trim() })
 
-    setDraft(post ? draftFromPost(post) : emptyDraft)
+    setDraft(post ? draftFromPost(post) : blankDraft)
     setTitleError(false)
   }
 
@@ -153,7 +173,7 @@ export default function NewPostModal({
       >
         <div className="mb-5 flex items-start justify-between gap-4">
           <h2 id="new-post-heading" className="font-display text-2xl">
-            {isEditing ? "Edit post" : "New post"}
+            {heading}
           </h2>
           <button
             type="button"
@@ -262,7 +282,7 @@ export default function NewPostModal({
               className="rounded-full bg-ink px-5 py-2 text-sm font-medium
                 text-paper transition-opacity hover:opacity-90"
             >
-              {isEditing ? "Save changes" : "Save post"}
+              {saveLabel}
             </button>
           </div>
         </form>

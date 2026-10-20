@@ -23,6 +23,14 @@ export interface Post {
 }
 
 /**
+ * Which page is on screen.
+ *
+ * There is no router in this app, and it doesn't need one. App holds this in
+ * state and renders one view or the other — that is all two pages require.
+ */
+export type View = "overview" | "ideas"
+
+/**
  * What the reader has asked the list to show. Each dropdown is either a real
  * value or "all", which is why every field is a union with the string "all".
  *

@@ -1,14 +1,26 @@
-const links = [
-  { label: "Overview", current: true },
-  { label: "Content Calendar", current: false },
-  { label: "Ideas", current: false },
-]
+import type { View } from "../types"
 
 /*
   The navigation column. On desktop it sits on the left as a fixed sidebar.
   On small screens the whole thing collapses into a bar above the content.
+
+  These were `<a href="#">` links that went nowhere. They are buttons now,
+  because they don't open a URL — they tell App which view to render. Sidebar
+  doesn't decide that itself; it just reports the click, the same way every
+  other button here does.
 */
-export default function Sidebar() {
+const links: { label: string; view: View }[] = [
+  { label: "Overview", view: "overview" },
+  { label: "Ideas", view: "ideas" },
+]
+
+export default function Sidebar({
+  view,
+  onNavigate,
+}: {
+  view: View
+  onNavigate: (view: View) => void
+}) {
   return (
     <aside
       className="flex w-full shrink-0 flex-col border-b border-line
@@ -25,20 +37,25 @@ export default function Sidebar() {
       </div>
 
       <nav className="flex gap-1 overflow-x-auto px-3 pb-3 md:flex-col md:pb-0">
-        {links.map((link) => (
-          <a
-            key={link.label}
-            href="#"
-            aria-current={link.current ? "page" : undefined}
-            className={`whitespace-nowrap rounded-lg px-3 py-2 text-sm transition-colors ${
-              link.current
-                ? "bg-ink/5 font-medium text-ink"
-                : "text-ink-soft hover:bg-ink/5 hover:text-ink"
-            }`}
-          >
-            {link.label}
-          </a>
-        ))}
+        {links.map((link) => {
+          const isActive = link.view === view
+          return (
+            <button
+              key={link.view}
+              type="button"
+              onClick={() => onNavigate(link.view)}
+              aria-current={isActive ? "page" : undefined}
+              className={`whitespace-nowrap rounded-lg px-3 py-2 text-left
+                text-sm transition-colors ${
+                  isActive
+                    ? "bg-ink/5 font-medium text-ink"
+                    : "text-ink-soft hover:bg-ink/5 hover:text-ink"
+                }`}
+            >
+              {link.label}
+            </button>
+          )
+        })}
       </nav>
 
       <p

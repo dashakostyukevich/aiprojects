@@ -5,14 +5,15 @@ authentication, no external APIs. Everything will live in `localStorage` in the
 browser.
 
 Status: **working app.** Create, edit and delete posts, saved to the browser's
-localStorage. Still no backend, database, authentication or API.
+localStorage, on two pages — an Overview with the calendar and post list, and an
+Ideas page. Still no backend, database, authentication or API.
 
 ## Layout
 
 ```
 src/
   main.tsx              entry point — leave alone
-  App.tsx               the page layout, and where the sample posts are passed down
+  App.tsx               the two views, the posts, and which page is on screen
   index.css             Tailwind import + the warm colour palette
   types.ts              what a Post looks like
   data.ts               12 example posts, dated relative to today
@@ -20,14 +21,15 @@ src/
   dates.ts              all date maths: ISO parsing, the month grid, month stepping
   storage.ts            the only file that touches localStorage
   components/
-    Sidebar.tsx         navigation: Overview, Content Calendar, Ideas
+    Sidebar.tsx         navigation between the two views: Overview and Ideas
     Header.tsx          page title, subtitle, "+ New post" button
     SummaryCards.tsx    the four count cards
     Calendar.tsx        the month grid and its Previous / Today / Next buttons
     FilterBar.tsx       the search box and the three filter dropdowns
     PostList.tsx        the list of posts, plus the filter state
+    Ideas.tsx           the Ideas page: a card grid of posts with status "Idea"
     StatusPill.tsx      the small coloured status label
-    NewPostModal.tsx    the create/edit dialog
+    NewPostModal.tsx    the create/edit dialog, shared by every page
 ```
 
 ## Dates
@@ -71,6 +73,46 @@ State is plain React (`useState`) plus a thin `src/storage.ts` wrapper over
 `localStorage`. No state library, no router, no data-fetching library — none of
 them are needed.
 
+## Two views, one list of posts
+
+The app has two pages — Overview and Ideas — and no router. `App` holds a
+`View` in state and renders one or the other; the sidebar buttons report which
+was clicked. That is genuinely all two pages need, and adding a third is one
+more branch in the same place.
+
+The sidebar links used to be `<a href="#">` anchors that went nowhere. They are
+buttons now, because they don't open a URL — they change what is rendered. The
+"Content Calendar" entry is gone: the calendar is part of Overview, and a nav
+item pointing at a section inside another page needs scroll-spy to feel right,
+which is more machinery than this app wants.
+
+## The Ideas page
+
+An idea is not a separate kind of thing. It is a post whose `status` is
+`"Idea"`, so `Ideas.tsx` takes the same `posts` array as everything else and
+does this one line of work:
+
+```tsx
+const ideas = posts.filter((post) => post.status === "Idea")
+```
+
+Nothing is copied and there is no second data structure to keep in sync. The
+"Move to Draft" button maps over the posts and replaces one — the post keeps its
+id, date and notes, and simply stops being an idea on the next render.
+
+Everything else is reused:
+
+- **Create** opens the same modal, with `preset: { status: "Idea" }` so the form
+  already has the right status, and `createHeading: "New idea"` so the dialog
+  says what it is. A preset is only a few fields layered over the blank form,
+  which is why the rest still starts empty.
+- **Edit** and **delete** are the exact handlers Overview uses.
+- **Storage** is the same single `localStorage` key. There is no ideas-specific
+  persistence anywhere.
+
+The current view is not saved. A reload opens Overview, which is the page you
+want first.
+
 ## Searching and filtering
 
 The post list has a title search and three dropdowns: platform, status and
@@ -101,8 +143,12 @@ network call anywhere in the app.
   store can't break the app.
 
 `App` loads once with a lazy `useState` initializer, then saves from a
-`useEffect` watching `posts`. Create, edit and delete only call `setPosts` —
-they never save directly, so no handler can forget to.
+`useEffect` watching `posts`. Create, edit, delete and moving an idea to Draft
+only call `setPosts` — they never save directly, so no handler can forget to.
+
+New ids come from the highest existing id plus one, computed with `reduce`
+starting at 0. `Math.max(...posts.map(...))` looks equivalent but returns
+`-Infinity` on an empty list, which JSON turns into `null`.
 
 Storage is per-origin, so `localhost:5173` (dev) and `localhost:4173`
 (preview) keep separate copies. To wipe saved data and start from the examples
