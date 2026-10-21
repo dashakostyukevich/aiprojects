@@ -19,7 +19,34 @@
       content="Media kit for Darya K. — UGC creator producing video and photography for beauty, fashion, tech and lifestyle brands."
     />
     <link rel="preload" href="assets/CabinetGrotesk-Variable.ttf" as="font" type="font/ttf" crossorigin />
+    <!-- Two keys, and the order matters.
+         `motion`        added here, before paint, so nothing flashes in late.
+         `motion-off`    cancels every hidden state in motion.css, turning the
+                         page back into plain readable HTML.
+
+         While `motion-off` is absent, unrevealed content stays hidden — that is
+         what gives the scroll animations something to animate from. So the
+         gate has to stay shut for as long as the motion layer is alive, and
+         only open if that layer never arrived: motion.js stamps
+         `data-motion-alive` the moment it starts, and this timer checks for
+         that stamp before it does anything. Blocked script, 404 or parse error
+         all end with the same result — a readable page, not a blank one — and
+         the intro and the scroll lock are torn down on the way. -->
+    <script>
+      (function () {
+        var root = document.documentElement;
+        root.classList.add("motion");
+        setTimeout(function () {
+          if (root.dataset.motionAlive) return;
+          root.classList.add("motion-off");
+          root.classList.remove("is-loading");
+          var loader = document.querySelector(".mloader");
+          if (loader) loader.remove();
+        }, 3500);
+      })();
+    </script>
     <link rel="stylesheet" href="assets/css/style.css" />
+    <link rel="stylesheet" href="assets/css/motion.css" />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23efe5d7'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='15' font-weight='700' text-anchor='middle' fill='%23a6171b'%3EDK%3C/text%3E%3C/svg%3E"
@@ -87,6 +114,7 @@
         <section class="hero">
           <div class="hero__bg">
             <video
+              data-motion-parallax="0.16"
               autoplay
               muted
               loop
@@ -99,9 +127,9 @@
           </div>
 
           <div class="container pad hero__inner">
-            <img src="assets/Kaleo_Icon.svg" alt="" width="32" height="32" />
+            <img src="assets/Kaleo_Icon.svg" alt="" width="32" height="32" data-motion-hero="pop" style="--m-delay:120ms" />
 
-            <h1 class="hero__title">
+            <h1 class="hero__title" data-motion-hero>
               <span data-site="heroTitle">darya k.</span>
               <span class="script hero__script" data-site="heroScript">media kit</span>
             </h1>
@@ -109,7 +137,7 @@
             <!-- 853x75 matches the original's arc, with the curved text redrawn
                  as a live textPath so it stays selectable and scalable. Too
                  small to read on a phone, so it swaps for a plain line there. -->
-            <svg class="hero__arc" viewBox="0 0 853 75" aria-hidden="true">
+            <svg class="hero__arc" viewBox="0 0 853 75" aria-hidden="true" data-motion-hero style="--m-delay:620ms">
               <defs>
                 <path id="heroArc" d="M 10 66 Q 426 -14 843 66" />
               </defs>
@@ -124,7 +152,7 @@
               Freelance lifestyle · travel · content creator · UGC
             </p>
 
-            <p class="hero__bottom">
+            <p class="hero__bottom" data-motion-hero style="--m-delay:820ms">
               <a href="https://www.instagram.com/daryas.diary/" target="_blank" rel="noopener" data-site-link="instagram">
                 <span data-site="heroBottomLabel">blog: @daryas.diary</span>
               </a>
@@ -137,7 +165,7 @@
           <div class="about__track" data-about-track>
             <div class="about__sticky">
               <div class="about__head">
-                <p class="about__eyebrow" data-site="aboutEyebrow">Why me?</p>
+                <p class="about__eyebrow reveal" data-motion="fade" data-site="aboutEyebrow">Why me?</p>
                 <h2 class="h-section">
                   <span data-site="aboutHeading">I create the kind of content</span>
                   <span class="spark" aria-hidden="true">&#10024;</span>
@@ -146,36 +174,83 @@
               </div>
 
               <div class="about__photos" data-about-photos>
-                <div class="about__photo about__photo--a">
-                  <img
-                    src="assets/about-01.avif"
-                    alt="Darya at home, natural light"
-                    width="720"
-                    height="1080"
-                    loading="lazy"
-                    decoding="async"
+                <!-- Decorative ground for the collage. aria-hidden and pointer-
+                     events:none, so it is invisible to assistive tech and never
+                     intercepts a click meant for a photo. The path is a smooth
+                     seven-lobed blob, generated rather than hand-drawn so the
+                     curve has no visible corners. -->
+                <svg class="about__blob" viewBox="0 0 620 620" aria-hidden="true" focusable="false">
+                  <path
+                    d="M306.1 30 C383.2 24.9,527.4 69.2,558.1 122.7 C588.8 176.2,515 285.5,490.5 351.2 C466 416.9,465.7 477.1,411.2 516.9 C356.7 556.7,221.7 615.5,163.5 590 C105.3 564.5,73.3 436.7,61.9 364 C50.5 291.3,54.6 209.3,95.3 153.6 C136 97.9,229 35.1,306.1 30 Z"
                   />
+                </svg>
+
+                <!-- Three photos, not three cards. Each one is its own size and
+                     ratio, sits at its own height and leans its own way, and the
+                     group overlaps into a band over the shape behind it.
+
+                     The box (.about__photo) owns the collage's resting tilt and
+                     the scroll motion; the frame (.about__photo-in) owns the
+                     corners, the shadow and the entrance. Splitting them is what
+                     lets a photo fly in from off-position without the tilt and
+                     the scroll fan fighting it for one transform. -->
+                <div class="about__photo about__photo--a">
+                  <div class="about__photo-in">
+                    <img
+                      src="assets/about-01.avif"
+                      alt="Darya at home, natural light"
+                      width="720"
+                      height="1080"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
                 </div>
                 <div class="about__photo about__photo--b">
-                  <img
-                    src="assets/about-03.avif"
-                    alt="Travel moment"
-                    width="720"
-                    height="1080"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <div class="about__photo-in">
+                    <img
+                      src="assets/about-03.avif"
+                      alt="Travel moment"
+                      width="720"
+                      height="1080"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
                 </div>
                 <div class="about__photo about__photo--c">
-                  <img
-                    src="assets/about-02.avif"
-                    alt="Lifestyle detail shot"
-                    width="720"
-                    height="1080"
-                    loading="lazy"
-                    decoding="async"
-                  />
+                  <div class="about__photo-in">
+                    <img
+                      src="assets/about-02.avif"
+                      alt="Lifestyle detail shot"
+                      width="720"
+                      height="1080"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
                 </div>
+
+                <!-- Drawn marks sitting on top of the band, the way the
+                     reference pins its little labels over the photos. Both come
+                     from assets the page already ships; they are decorative, so
+                     assistive tech skips them and they never take a click. -->
+                <img
+                  class="about__sticker about__sticker--eye"
+                  src="assets/why-icon-01.avif"
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="about__sticker about__sticker--spark" aria-hidden="true"
+                  >&#10024;</span
+                >
+                <span
+                  class="about__sticker about__sticker--spark about__sticker--spark-b"
+                  aria-hidden="true"
+                  >&#10024;</span
+                >
               </div>
             </div>
           </div>
@@ -184,8 +259,8 @@
         <!-- ================= WHY PILLARS ================= -->
         <section class="section--tight why">
           <div class="container pad">
-            <div class="why__grid" data-why-track>
-                <article class="why__card">
+            <div class="why__grid" data-why-track data-motion-group>
+                <article class="why__card reveal" data-motion="fade">
                   <p class="small">
                     I see the product through the eyes of the person who&rsquo;s going to use it,
                     so every shot feels relatable.
@@ -193,7 +268,7 @@
                   <img class="why__art" src="assets/why-icon-01.avif" alt="" loading="lazy" />
                 </article>
 
-                <article class="why__card why__card--photo">
+                <article class="why__card why__card--photo reveal">
                   <img
                     class="why__art why__art--fill"
                     src="assets/why-01.avif"
@@ -202,7 +277,7 @@
                   />
                 </article>
 
-                <article class="why__card">
+                <article class="why__card reveal" data-motion="fade">
                   <img class="why__icon" src="assets/why-icon-02.avif" alt="" loading="lazy" />
                   <p class="small">
                     My content doesn&rsquo;t just show the product — it creates the feeling:
@@ -210,7 +285,7 @@
                   </p>
                 </article>
 
-                <article class="why__card why__card--highlight">
+                <article class="why__card why__card--highlight reveal" data-motion="fade">
                   <p class="small">
                     Details matter to me: light, textures, mood. They turn a simple clip into
                     a story.
@@ -225,18 +300,18 @@
         <section class="section" id="stats">
           <div class="container pad">
             <div class="stats">
-              <div class="stats__card reveal">
+              <div class="stats__card reveal" data-motion="blur" data-motion-group>
                 <!-- The four figures come from content.json. data-count is written
                      at runtime so the counter animation always counts to the edited
                      value; the text inside is the no-JS fallback. -->
                 <div class="stats__platform">
                   <h3 class="stats__name">Instagram</h3>
                   <div class="stats__figures">
-                    <div class="stats__figure">
+                    <div class="stats__figure reveal" data-motion="fade">
                       <span class="stats__num" data-stat="statsInstagramFollowers" data-decimals="0">1385</span>
                       <span class="stats__unit">followers</span>
                     </div>
-                    <div class="stats__figure">
+                    <div class="stats__figure reveal" data-motion="fade">
                       <span class="stats__num" data-stat="statsInstagramEngagement" data-decimals="2" data-suffix="%">6.47%</span>
                       <span class="stats__unit">engagement rate</span>
                     </div>
@@ -246,21 +321,21 @@
                 <div class="stats__platform">
                   <h3 class="stats__name">TikTok</h3>
                   <div class="stats__figures">
-                    <div class="stats__figure">
+                    <div class="stats__figure reveal" data-motion="fade">
                       <span class="stats__num" data-stat="statsTiktokFollowers" data-decimals="0">443</span>
                       <span class="stats__unit">followers</span>
                     </div>
-                    <div class="stats__figure">
+                    <div class="stats__figure reveal" data-motion="fade">
                       <span class="stats__num" data-stat="statsTiktokEngagement" data-decimals="2" data-suffix="%">14.29%</span>
                       <span class="stats__unit">engagement rate</span>
                     </div>
                   </div>
                 </div>
 
-                <p class="stats__stamp" data-site="statsUpdated">last update: September 2026</p>
+                <p class="stats__stamp reveal" data-motion="fade" data-site="statsUpdated">last update: September 2026</p>
               </div>
 
-              <div class="reveal">
+              <div class="reveal" data-motion="blur">
                 <h2 class="stats__headline">Stats &amp;<br />Demographics</h2>
 
                 <div class="stats__audience">
@@ -285,7 +360,7 @@
         <!-- ================= WORK (UGC VIDEO) ================= -->
         <section class="section" id="work">
           <div class="container pad">
-            <div class="section-head section-head--split reveal">
+            <div class="section-head section-head--split reveal" data-motion="blur">
               <div>
                 <p class="eyebrow">UGC video examples</p>
                 <h2 class="h-section">
@@ -307,7 +382,7 @@
         <!-- ================= UGC PHOTOGRAPHY (rebuilt) ================= -->
         <section class="section photo-section" id="photography">
           <div class="container pad">
-            <div class="section-head section-head--split reveal">
+            <div class="section-head section-head--split reveal" data-motion="blur">
               <div>
                 <p class="eyebrow">UGC photography</p>
                 <h2 class="h-section">
@@ -335,7 +410,7 @@
         <!-- ================= BRANDS (new) ================= -->
         <section class="section" id="brands">
           <div class="container pad">
-            <div class="section-head section-head--split reveal">
+            <div class="section-head section-head--split reveal" data-motion="blur">
               <div>
                 <p class="eyebrow">Brands I&rsquo;ve worked with</p>
                 <h2 class="h-section">
@@ -353,14 +428,14 @@
               <div class="brands__track" id="brandsTrack"></div>
             </div>
 
-            <div class="brands__grid reveal" id="brandsGrid"></div>
+            <div class="brands__grid" id="brandsGrid" data-motion-group></div>
           </div>
         </section>
 
         <!-- ================= PACKAGES (rebuilt) ================= -->
         <section class="section" id="services" style="background: var(--cream-deep)">
           <div class="container pad">
-            <div class="section-head section-head--split reveal">
+            <div class="section-head section-head--split reveal" data-motion="blur">
               <div>
                 <p class="eyebrow">Packages</p>
                 <h2 class="h-section">
@@ -374,11 +449,11 @@
               </p>
             </div>
 
-            <div class="packages__grid" id="packagesGrid"></div>
+            <div class="packages__grid" id="packagesGrid" data-motion-group></div>
 
             <div class="addons reveal">
               <h3 class="h-card">Add-ons</h3>
-              <ul class="addons__grid" id="addonsList"></ul>
+              <ul class="addons__grid" id="addonsList" data-motion-group></ul>
             </div>
           </div>
         </section>
@@ -386,10 +461,16 @@
         <!-- ================= CTA ================= -->
         <section class="section cta">
           <div class="cta__bg">
-            <img src="assets/photo-08.avif" alt="" loading="lazy" decoding="async" />
+            <img
+              src="assets/photo-08.avif"
+              data-motion-parallax="0.12"
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
           </div>
           <div class="container pad">
-            <div class="cta__inner reveal">
+            <div class="cta__inner reveal" data-motion="blur">
               <img src="assets/Kaleo_Icon.svg" alt="" width="44" height="44" />
               <h2 class="h-section">
                 Some moments speak louder
@@ -455,5 +536,9 @@
 
     <script src="assets/js/data.js"></script>
     <script src="assets/js/main.js"></script>
+    <!-- Runs last: it decorates markup that main.js renders from content.json.
+         Safe to delete — the page keeps every section and stays fully readable,
+         just without the motion layer. -->
+    <script src="assets/js/motion.js"></script>
   </body>
 </html>

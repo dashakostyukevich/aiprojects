@@ -47,6 +47,16 @@
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
 
+# The licensed PP Editorial New faces. They are never rewritten in place under a
+# fixed name, but keeping them on the same revalidate rule as the CSS that calls
+# them means a font swap cannot leave a stale face cached behind a fresh
+# stylesheet — the exact failure where a rebuilt page silently falls back to a
+# system serif.
+[[headers]]
+  for = "/font/*"
+    [headers.values]
+      Cache-Control = "public, max-age=0, must-revalidate"
+
 # CSS and JS are edited without renaming anything, so a year-long immutable
 # cache keeps serving the old build to returning visitors. Revalidate instead.
 [[headers]]

@@ -200,6 +200,11 @@
     initReveal();
     initCountUp(site);
     $("#year").textContent = new Date().getFullYear();
+
+    // Tells assets/js/motion.js the DOM is final. Without this the motion
+    // layer wires its observers before the grids exist, so every card and plan
+    // rendered here would be left in its hidden state and never observed.
+    document.dispatchEvent(new CustomEvent("content:rendered"));
   }
 
   /* ----------------------------------------------------------- site fields */
@@ -358,10 +363,13 @@
   /* -------------------------------------------------------------- brands */
 
   function renderBrands(brands) {
+    // `reveal` on each cell rather than on the grid: the grid is marked as a
+    // motion group, so the cells cascade in one after another instead of the
+    // whole block arriving as a single slab.
     $("#brandsGrid").innerHTML = brands
       .map(
         (b) => `
-    <div class="brand">
+    <div class="brand reveal" data-motion="fade">
       <span class="brand__name">${esc(b.name)}</span>
       <span class="brand__cat">${esc(b.cat)}</span>
     </div>`
@@ -375,33 +383,78 @@
 
   /* ------------------------------------------------------------ packages */
 
+  /* A barcode for the bottom panel of a package card.
+
+     The reference draws these as inline SVG, one per card, none of them alike.
+     The widths come out of a tiny linear congruential generator seeded with
+     the card's index, so a card gets the same barcode every render — a random
+     one would reshuffle itself on every content save. */
+  function barcode(seed) {
+    let s = (seed * 9301 + 49297) % 233280;
+    const rnd = () => (s = (s * 9301 + 49297) % 233280) / 233280;
+
+    const bars = [];
+    let x = 0;
+    while (x < 100) {
+      const w = 0.7 + rnd() * 2.2;
+      // The bar is the full height of the viewBox: a <rect> with no height is
+      // zero-height, and the whole strip renders as nothing at all.
+      bars.push(`<rect x="${x.toFixed(2)}" width="${w.toFixed(2)}" height="48"/>`);
+      // Wide gaps are what make a barcode read as a barcode, so roughly a
+      // quarter of them get extra air.
+      x += w + (rnd() < 0.28 ? 3.4 + rnd() * 2.6 : 0.9 + rnd() * 0.8);
+    }
+
+    return (
+      `<svg class="plan__barcode-svg" viewBox="0 0 100 48" ` +
+      `preserveAspectRatio="none" shape-rendering="crispEdges" aria-hidden="true" ` +
+      `focusable="false"><g fill="currentColor">${bars.join("")}</g></svg>`
+    );
+  }
+
   function renderPackages(packages, email) {
     // Every tier renders identically — no highlighted tier.
     $("#packagesGrid").innerHTML = packages
       .map(
-        (p) => `
+        (p, i) => `
     <article class="plan reveal">
-      <div class="plan__top">
+      <div class="plan__panel">
         <h3 class="plan__name">${esc(p.name)}</h3>
-        <div class="plan__price">
+        <p class="plan__desc">${esc(p.desc)}</p>
+        <ul class="plan__list">
+          ${(p.features || []).map((f) => `<li>${esc(f)}</li>`).join("")}
+        </ul>
+      </div>
+
+      <div class="plan__panel plan__panel--foot">
+        <p class="plan__price">
           ${
             p.amount
-              ? `<span class="plan__amount">$${esc(p.amount)}</span>
-                 <span class="plan__unit">${esc(p.unit)}</span>`
-              : /* The barter tier has no figure — show the word instead of a
-                   price, sized down so it does not out-shout the paid tiers. */
-                `<span class="plan__amount plan__amount--label">${esc(p.amountLabel)}</span>`
+              ? `<span class="plan__label">Price starts at:</span>
+                 <span class="plan__amount">$${esc(p.amount)}</span>`
+              : /* The barter tier has no figure — the word takes the amount's
+                   slot instead, so every card's price row is the same height. */
+                `<span class="plan__label">Available for:</span>
+                 <span class="plan__amount plan__amount--label">${esc(
+                   p.amountLabel
+                 )}</span>`
           }
-        </div>
-        <p class="plan__desc">${esc(p.desc)}</p>
+        </p>
+
+        <div class="plan__barcode">${barcode(i + 1)}</div>
+
+        <p class="plan__foot">
+          ${
+            /* The barter tier has no per-unit figure. Left empty rather than
+               filled with something — the CTA already sits on the right. */
+            p.unit ? `<span class="plan__unit">${esc(p.unit)}</span>` : ""
+          }
+          <a class="plan__cta"
+             href="mailto:${esc(email)}?subject=${encodeURIComponent(
+               p.name + " — enquiry"
+             )}">${esc(p.cta)}<span aria-hidden="true">&nbsp;&rarr;</span></a>
+        </p>
       </div>
-      <ul class="plan__list">
-        ${(p.features || []).map((f) => `<li>${esc(f)}</li>`).join("")}
-      </ul>
-      <a class="btn btn--ghost"
-         href="mailto:${esc(email)}?subject=${encodeURIComponent(
-           p.name + " — enquiry"
-         )}">${esc(p.cta)}</a>
     </article>`
       )
       .join("");
@@ -409,7 +462,10 @@
 
   function renderAddons(addons) {
     $("#addonsList").innerHTML = addons
-      .map((a) => `<li><span>${esc(a.price)}</span>${esc(a.label)}</li>`)
+      .map(
+        (a) =>
+          `<li class="reveal" data-motion="fade"><span>${esc(a.price)}</span>${esc(a.label)}</li>`
+      )
       .join("");
   }
 
@@ -469,49 +525,27 @@
   }
 
   /* -------------------------------------------------- why-me photos */
-  /* Static by design: the three photos sit side by side in the flex row and
-     keep a fixed tilt. The original Webflow build fanned them out on scroll;
-     that motion was removed, so no scroll listener drives these cards. */
+  /* The resting fan — tilt, lift and stacking order — is declared in
+     style.css as custom properties on each card, so it survives with no JS at
+     all. assets/js/motion.js then writes the same two properties from the
+     scroll loop to open the fan as the section arrives. Nothing is written
+     here any more: a second transform on these cards would overwrite the one
+     the motion layer is driving. */
   function setupAboutPhotos() {
-    const aboutPhotos = $("[data-about-photos]");
-    if (!aboutPhotos) return;
-
-    const rest = [
-      { y: 6, rot: 3, z: 1 },
-      { y: -2, rot: -1.5, z: 3 },
-      { y: 6, rot: -3, z: 2 },
-    ];
-
-    $$(".about__photo", aboutPhotos).forEach((card, i) => {
-      card.style.zIndex = String(rest[i].z);
-      card.style.transform =
-        `translate3d(0, ${rest[i].y}px, 0) rotate(${rest[i].rot}deg)`;
-    });
+    /* no-op — see style.css (.about__photo) and assets/js/motion.js */
   }
 
   /* ---------------------------------------------------- reveal on scroll */
 
+  /**
+   * Reveals are owned entirely by assets/js/motion.js, which staggers them
+   * against the media wipes and keeps the whole entrance layer behind one gate.
+   * This observer is deliberately inert rather than deleted: reviving it would
+   * mean two observers racing to add `is-in` to the same elements, and
+   * whichever won would set the transition-delay, producing a visible stutter.
+   */
   function initReveal() {
-    const revealables = $$(".reveal");
-    if (reduced || !("IntersectionObserver" in window)) {
-      revealables.forEach((el) => el.classList.add("is-in"));
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          // Small stagger so siblings cascade rather than pop together.
-          const siblings = Array.from(entry.target.parentElement.children);
-          const i = siblings.indexOf(entry.target);
-          entry.target.style.transitionDelay = `${Math.min(i, 6) * 70}ms`;
-          entry.target.classList.add("is-in");
-          io.unobserve(entry.target);
-        });
-      },
-      { rootMargin: "0px 0px -12% 0px", threshold: 0.08 }
-    );
-    revealables.forEach((el) => io.observe(el));
+    /* no-op — see motion.js */
   }
 
   /* ----------------------------------------------------------- count up */

@@ -11,16 +11,22 @@
   font-display: swap;
 }
 
-/* Latin subset only — the site never needs the CJK ranges, and shipping all
-   of them would add ~1MB for no gain. */
+/* PP Editorial New Italic — commercial font (Pangram Pangram), licensed
+   separately and not redistributable. The licensed files live in `font/` at
+   the project root, outside `assets/`, so they are never published with a
+   partial build by accident.
+
+   Declared as a true italic face rather than its own family name, so anything
+   that styles text italic for any other reason picks it up correctly instead
+   of needing a separate class. No unicode-range here on purpose: PP Editorial
+   New is a full text face and the old Nanum subset range would have clipped
+   valid characters out of it. */
 @font-face {
-  font-family: "Nanum Brush";
-  src: url("../NanumBrushScript-latin.woff2") format("woff2");
+  font-family: "PP Editorial New";
+  src: url("../../font/PPEditorialNew-Italic-BF644b214fb0c0a.otf") format("opentype");
   font-weight: 400;
-  font-style: normal;
+  font-style: italic;
   font-display: swap;
-  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
-    U+02DC, U+2000-206F, U+20AC, U+2122, U+2212, U+FEFF, U+FFFD;
 }
 
 /* --- tokens ---------------------------------------------------------- */
@@ -151,12 +157,25 @@ button {
 
 /* --- type ------------------------------------------------------------ */
 
+/* inline-flex so the hairline after it can sit on the text baseline; the rule
+   itself is drawn out by the motion layer on reveal. */
 .eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.85rem;
   font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--red);
+}
+
+.eyebrow::after {
+  content: "";
+  width: clamp(2.5rem, 6vw, 5rem);
+  height: 1px;
+  background: currentColor;
+  opacity: 0.45;
 }
 
 .h-display {
@@ -191,10 +210,15 @@ button {
   line-height: 1.45;
 }
 
+/* The display accents. The fallbacks matter: if the licensed file in font/ is
+   missing, this resolves to a real italic serif rather than falling through to
+   the browser's default and reflowing every headline on the page. */
 .script {
-  font-family: "Nanum Brush", cursive;
+  font-family: "PP Editorial New", "Iowan Old Style", "Palatino Linotype",
+    Palatino, Georgia, serif;
   font-weight: 400;
-  letter-spacing: 0;
+  font-style: italic;
+  letter-spacing: -0.005em;
   text-transform: none;
 }
 
@@ -315,13 +339,17 @@ button {
   height: 1px;
   background: currentColor;
   transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s var(--ease);
+  transform-origin: 100% 50%;
+  transition: transform 0.45s var(--ease);
 }
 
+/* The rule grows from the far end and flips its origin as it arrives, so it
+   reads as being drawn in from the side the cursor came from rather than
+   snapping out from the left. */
 .nav__link:hover::after,
 .nav__link.is-active::after {
   transform: scaleX(1);
+  transform-origin: 0 50%;
 }
 
 .nav__link.is-active {
@@ -664,51 +692,227 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: clamp(2rem, 5vh, 4rem);
+  /* Enough room above the band for the photos, which sit above their own row
+     and drift a little further as the section passes, to clear the heading
+     without ever touching it. */
+  gap: clamp(2.5rem, 6vh, 5rem);
 }
 
-/* A row of three portrait cards, overlapped by negative margins. Height is
-   driven by the viewport and each card keeps a 2:3 portrait ratio, so the
-   photos stay portrait instead of being cropped into wide landscape strips. */
+/* The collage.
+
+   A centred band of three photos that lean on each other rather than three
+   cards in a row. Each photo brings its own size, its own ratio and its own
+   height to the band, and the tilts alternate so no two neighbours lean the
+   same way — the band reads as hand-placed rather than laid out.
+
+   Height is driven by the viewport and the cards are `flex: none`, so the row
+   is also capped by `42vw`: sizing from viewport height alone makes three
+   cards far too wide on a tablet, and the overflow gets clipped by
+   `.page-wrapper` instead of wrapping. */
 .about__photos {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  height: min(62vh, 34rem);
+  height: min(56vh, 27rem, 42vw);
   width: 100%;
 }
 
-/* Below tablet the three-card fan does not fit, so only the lead card shows. */
-@media (max-width: 700px) {
-  .about__photos {
-    height: min(52vh, 26rem);
-  }
+/* The soft shape behind the group. Purely decorative and deliberately faint:
+   it gives the collage a ground to sit on without competing with the photos
+   for attention. Sits left of centre, the way the reference puts it, so the
+   band is not perfectly symmetrical. */
+.about__blob {
+  position: absolute;
+  left: 46%;
+  top: 50%;
+  width: min(104%, 40rem);
+  height: auto;
+  translate: -50% -50%;
+  fill: var(--red);
+  opacity: 0.07;
+  z-index: 0;
+  pointer-events: none;
+}
 
-  .about__photo + .about__photo {
+/* The box: position in the band and the resting tilt. Nothing about how the
+   photo looks lives here — the frame below owns that — so the scroll loop has
+   this one transform to itself and an entrance animation can never land on top
+   of it.
+
+   `--par-depth` is how far this photo drifts against the band as the section
+   passes. motion.js reads it and writes `--par-y`; the resting values below are
+   what the collage holds when no scroll motion is running. */
+.about__photo {
+  position: relative;
+  flex: none;
+  height: var(--card-h, 100%);
+  aspect-ratio: var(--card-ratio, 4 / 5);
+  transform: translate3d(0, calc(var(--fan-y, 0px) + var(--par-y, 0px)), 0)
+    rotate(var(--fan-rot, 0deg)) scale(var(--fan-scale, 1));
+  will-change: transform;
+}
+
+/* The frame: the rounded corners, the shadow, the clip box and the entrance.
+   Absolutely filling its parent, so it can travel past the box without being
+   clipped by it. */
+.about__photo-in {
+  position: absolute;
+  inset: 0;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--cream-deep);
+  /* A hair of shadow, not the deep drop this used to have. The old value read
+     as three cards stacked on a shelf; the collage needs the photos to look
+     like they are lying on the same surface. */
+  box-shadow: 0 12px 24px -18px rgba(23, 20, 17, 0.45);
+  transition: transform 0.7s var(--ease), box-shadow 0.5s var(--ease);
+}
+
+/* Placement, in the order the photos are written.
+
+   A is the anchor: the tallest of the three and the one the band is composed
+   around. B is the one that comes forward — smaller, tighter in ratio, sitting
+   highest of the three so it overlaps A and C rather than sliding between them.
+   C drops back and out to the right as a wider, lower frame, which is what
+   stops three portraits from reading as a row.
+
+   The tilts alternate and the heights step, the way the reference steps them:
+   up-down-up, left-right-left. */
+.about__photo--a {
+  --card-h: 100%;
+  --card-ratio: 4 / 5;
+  --fan-y: -1.6rem;
+  --fan-rot: -5.5deg;
+  --par-depth: 10px;
+  --enter-x: -1.7rem;
+  --enter-y: 2.6rem;
+  --enter-r: 3.2deg;
+  --enter-extra: 0ms;
+  z-index: 1;
+}
+
+.about__photo--b {
+  --card-h: 88%;
+  --card-ratio: 3 / 4;
+  --fan-y: 1.4rem;
+  --fan-rot: 3.5deg;
+  --par-depth: 18px;
+  --enter-x: 0.5rem;
+  --enter-y: 3.4rem;
+  --enter-r: -2.6deg;
+  --enter-extra: 110ms;
+  z-index: 4;
+}
+
+.about__photo--c {
+  --card-h: 68%;
+  --card-ratio: 4 / 3;
+  --fan-y: 2.6rem;
+  --fan-rot: -2.6deg;
+  --par-depth: 13px;
+  --enter-x: 2.2rem;
+  --enter-y: 2rem;
+  --enter-r: -3deg;
+  --enter-extra: 220ms;
+  z-index: 2;
+}
+
+/* Overlap, as a length rather than a percentage. Percentage margins resolve
+   against the containing block's inline size — the full-width row, not the
+   card — so a "-20%" here would swallow most of the photo rather than a fifth
+   of it. clamp() keeps the overlap proportional to the viewport instead, which
+   lands at roughly a quarter of a photo at every size.
+
+   C takes a lighter overlap than B: it is the frame that reads out past the
+   band, so a deep overlap would tuck it too far back to be legible. */
+.about__photo + .about__photo {
+  margin-left: clamp(-6rem, -6vw, -2rem);
+}
+
+.about__photo--c {
+  margin-left: clamp(-4rem, -3.5vw, -1rem);
+}
+
+.about__photo-in img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Drawn marks on top of the band. Anchored to the band's centre rather than
+   to the edge of the full-width row, because the band is a fixed number of
+   rems while the row is 100% — an edge-anchored mark drifts off the photos as
+   the page widens. */
+.about__sticker {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  transform: rotate(var(--sticker-r, 0deg));
+}
+
+.about__sticker--eye {
+  --sticker-r: -14deg;
+  --sticker-delay: 520ms;
+  left: calc(50% - 31rem);
+  top: -4%;
+  width: clamp(4.5rem, 7vw, 6.5rem);
+  height: auto;
+}
+
+.about__sticker--spark {
+  --sticker-r: 14deg;
+  --sticker-delay: 700ms;
+  right: calc(50% - 30.5rem);
+  top: 2%;
+  font-size: clamp(1.5rem, 2.6vw, 2.4rem);
+  line-height: 1;
+  color: var(--red);
+}
+
+.about__sticker--spark-b {
+  --sticker-r: -18deg;
+  --sticker-delay: 820ms;
+  /* `right` has to be undone: the element above is placed from the right, and
+     a box with both `left` and `right` set stretches between them. */
+  right: auto;
+  left: calc(50% - 30rem);
+  top: 84%;
+  font-size: clamp(1rem, 1.6vw, 1.5rem);
+  color: var(--red);
+}
+
+/* Below the tablet width the band is too narrow to carry marks on its corners
+   without one landing on the heading, so they go rather than shrink. */
+@media (max-width: 1024px) {
+  .about__sticker {
     display: none;
   }
 }
 
-.about__photo {
-  flex: none;
-  height: 100%;
-  aspect-ratio: 2 / 3;
-  border-radius: 1rem;
-  overflow: hidden;
-  background: var(--cream-deep);
-  box-shadow: 0 24px 50px -34px rgba(23, 20, 17, 0.55);
-}
+/* Below tablet the three-frame band does not fit across the page. C drops out
+   and the pair is re-composed tighter and lower, which leaves the same
+   overlapped read instead of a squeezed version of the desktop band. */
+@media (max-width: 700px) {
+  .about__photos {
+    height: min(40vh, 18rem);
+  }
 
-/* Overlap is a share of each card's own width, so all three stay legible
-   instead of the outer two hiding behind the middle one. */
-.about__photo + .about__photo {
-  margin-left: -6%;
-}
+  .about__photo--c {
+    display: none;
+  }
 
-.about__photos img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  .about__photo--b {
+    --card-h: 78%;
+  }
+
+  .about__photo + .about__photo {
+    margin-left: clamp(-4.5rem, -13vw, -1.5rem);
+  }
+
+  .about__blob {
+    width: min(96%, 26rem);
+  }
 }
 
 /* --- why cards ------------------------------------------------------- */
@@ -1094,6 +1298,23 @@ button {
   display: none;
 }
 
+/* Focus-within-the-row: the card under the pointer stays at full strength and
+   its neighbours step back a little, so a dense grid reads as one focused item
+   rather than twelve competing ones. Mild on purpose — a media kit should still
+   show its whole catalogue at a glance. */
+@media (hover: hover) {
+  .work-grid:hover .card,
+  .photo-grid:hover .photo {
+    opacity: 0.62;
+    transition: opacity 0.45s var(--ease);
+  }
+
+  .work-grid .card:hover,
+  .photo-grid .photo:hover {
+    opacity: 1;
+  }
+}
+
 /* --- photography (rebuilt) ------------------------------------------- */
 
 .photo-section {
@@ -1217,6 +1438,15 @@ button {
   animation: marquee 46s linear infinite;
 }
 
+/* Holding the pointer over the ticker stops it, so a visitor who wants to
+   read a name can. It resumes from where it stopped — the animation is not
+   reset, only paused. */
+@media (hover: hover) {
+  .brands__marquee:hover .brands__track {
+    animation-play-state: paused;
+  }
+}
+
 .brands__track span {
   font-size: 1rem;
   font-weight: 600;
@@ -1305,110 +1535,315 @@ button {
   }
 }
 
-/* Four tiers. 2x2 rather than 4-across: at four columns each card is too
-   narrow for the feature list without wrapping every bullet onto two lines. */
-@media (min-width: 1150px) {
+/* Four tiers, one row on desktop.
+
+   The breakpoint is 1300px, not 1150. Four cards need roughly 255px each before
+   the widest footer pair — "per month" plus "Talk about a retainer →" — stops
+   fitting on one line, and the lists start wrapping bullets. Below 1300 the row
+   is two-up and the cards are wider, which is the better trade.
+
+   Only the column count lives here. The padding and type tightening these
+   cards also need is at the end of this block: a `.plan__panel` rule written
+   *after* a media query that narrows it resets that padding straight back. */
+@media (min-width: 1300px) {
   .packages__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
+/* The cards step down the page by a hair, the way the reference's three do, so
+   a row of them reads as hand-placed rather than ruled. A margin, not a
+   transform: the hover peel owns the transform on the price panel, and a second
+   one on the card would fight it. */
+@media (min-width: 760px) {
+  .packages__grid > :nth-child(even) {
+    margin-block-start: clamp(0.5rem, 1.4vw, 1.25rem);
+  }
+}
+
+/* --- hover ---------------------------------------------------------------- */
+
+/* The reference's hover is NOT a card lift. Hovering peels the price panel off
+   the card: it drops 16px, tilts 5°, and its barcode plays through. The card
+   itself never moves. Measured off the reference's own interaction data
+   (a 500ms cubic-bezier(.579,.423,.17,1.452) on the way in, 300ms outSine on the
+   way out).
+
+   Reproducing that faithfully means the *panel* is the interactive element, not
+   the card — which is also why `:focus-within` is here beside `:hover`: the
+   only focusable thing inside a card is the CTA in that panel, so focusing it
+   has to produce the same state or keyboard users get nothing.
+
+   `cursor: pointer` is deliberately absent from `.plan`: the card is not a link,
+   and the whole card reading as clickable when only the CTA is would be a lie. */
+@media (hover: hover) and (pointer: fine) {
+  .plan:hover .plan__panel--foot,
+  .plan:focus-within .plan__panel--foot {
+    transform: translateY(16px) rotateZ(5deg);
+    transition: transform 0.5s cubic-bezier(0.579, 0.423, 0.17, 1.452);
+  }
+}
+
+/* The barcode plays a short scan on the way in, mirroring the reference's
+   lottie. Scoped to the hover cap above, so touch devices never run it. */
+@media (hover: hover) and (pointer: fine) {
+  .plan:hover .plan__barcode-svg,
+  .plan:focus-within .plan__barcode-svg {
+    /* Same easing as the panel, written out for the same reason. */
+    animation: plan-scan 0.5s cubic-bezier(0.39, 0.575, 0.565, 1);
+  }
+}
+
+@keyframes plan-scan {
+  from {
+    transform: scaleX(1);
+  }
+  to {
+    transform: scaleX(1.03);
+  }
+}
+
+/* Two panels, not one card.
+
+   The reference stacks a description panel on a price panel with a dashed rule
+   floating in the gap between them — two receipts stapled together. Both panels
+   are rounded, so the section background shows through the notch at the seam,
+   which is what makes the join read as two pieces rather than one box with a
+   line drawn across it. */
 .plan {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: clamp(1.5rem, 2.5vw, 2rem);
-  background: var(--cream);
-  border: 1px solid rgba(166, 23, 27, 0.28);
-  border-radius: var(--radius);
-  transition: transform 0.5s var(--ease), box-shadow 0.5s var(--ease),
-    border-color 0.4s var(--ease);
+  /* The hover peel tilts the price panel 5°, which swings its corners about
+     13px sideways — enough to reach into the neighbouring card now that all
+     four sit in one row. Lifting the whole card in the stacking order while it
+     is hovered keeps the peeled panel on top of whatever it leans over. */
+  z-index: 0;
 }
 
-.plan:hover {
-  transform: translateY(-4px);
-  border-color: var(--red);
-  box-shadow: 0 24px 50px -34px rgba(23, 20, 17, 0.7);
+.plan:hover,
+.plan:focus-within {
+  z-index: 2;
 }
 
-.plan__top {
+.plan__panel {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  /* Longhands, not the `padding` shorthand: the four-across block below narrows
+     the inline padding only, and a shorthand written after it would reset both
+     sides and silently undo that. */
+  padding-block: clamp(1.25rem, 2.2vw, 1.75rem);
+  padding-inline: clamp(1.25rem, 2.2vw, 1.75rem);
+  background: var(--cream);
+  color: var(--red);
+  border-radius: var(--radius-lg);
+}
+
+/* The description panel takes the slack, so every card's price panel starts on
+   the same line across a row however long the copy above it runs. */
+.plan__panel:first-child {
+  flex: 1;
+}
+
+/* The price panel, with its dashed rule drawn in the gap above it. A pseudo
+   rather than a markup node: the rule is decoration, and the panel is already
+   the element that owns the seam.
+
+   `perspective` on this panel is what gives the hover peel its depth — the
+   rotation happens in 3D against it, so the panel turns away from the viewer
+   rather than spinning flat. The reference puts perspective on the wrapper
+   instead; on the panel itself it reads the same and needs no extra node. */
+.plan__panel--foot {
+  position: relative;
+  margin-top: 1.15rem;
+  gap: 0.85rem;
+  perspective: 1000px;
+  transform: translateY(0) rotateZ(0deg);
+  /* A straight ease on the way out, to match the reference's outSine. Written
+     out rather than as a token: `--ease-soft` is a motion.css variable, and a
+     var() that resolves to nothing voids the whole declaration at
+     computed-value time — the transition silently never runs. */
+  transition: transform 0.3s cubic-bezier(0.39, 0.575, 0.565, 1);
+}
+
+.plan__panel--foot::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: -0.6rem;
+  border-top: 2px dashed rgba(166, 23, 27, 0.42);
 }
 
 .plan__name {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--red);
-}
-
-.plan__price {
-  display: flex;
-  align-items: baseline;
-  gap: 0.4rem;
-  /* Match the line box of a full-size figure, so the divider below every card
-     starts on the same line whether the tier shows a price or the word. */
-  min-height: calc(clamp(2.5rem, 4vw, 3.25rem) * 1);
-}
-
-.plan__amount {
-  font-size: clamp(2.5rem, 4vw, 3.25rem);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.03em;
-  font-variant-numeric: tabular-nums;
-}
-
-/* A word rather than a figure — same slot, smaller so a non-numeric tier
-   never competes with the paid prices beside it. */
-.plan__amount--label {
-  font-size: clamp(1.75rem, 2.6vw, 2.25rem);
-  letter-spacing: -0.02em;
-  font-variant-numeric: normal;
-  color: rgba(23, 20, 17, 0.72);
-}
-
-.plan__unit {
-  font-size: 0.9375rem;
-  color: rgba(23, 20, 17, 0.6);
+  font-family: "PP Editorial New", "Iowan Old Style", "Palatino Linotype",
+    Palatino, Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.75rem, 2.6vw, 2.125rem);
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.6rem;
 }
 
 .plan__desc {
-  color: rgba(23, 20, 17, 0.72);
+  color: rgba(166, 23, 27, 0.88);
 }
 
+/* The list sits at the foot of the description panel, so the four cards line
+   their bullets up with one another however long their copy runs. */
 .plan__list {
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 0.45rem;
+  margin-top: auto;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(23, 20, 17, 0.14);
+  font-size: 0.9375rem;
+  line-height: 1.35;
 }
 
+/* A diamond rather than the round dot this used to use — the reference marks
+   its bullets with one, and it is the detail that stops the list reading as a
+   stock bullet list. */
 .plan__list li {
   display: flex;
-  gap: 0.7rem;
-  font-size: 0.9375rem;
-  line-height: 1.4;
+  gap: 0.6rem;
 }
 
 .plan__list li::before {
   content: "";
   flex: none;
-  width: 0.5rem;
-  height: 0.5rem;
-  margin-top: 0.45em;
-  border-radius: 100px;
-  background: var(--red);
+  width: 0.4rem;
+  height: 0.4rem;
+  margin-top: 0.5em;
+  background: currentColor;
+  rotate: 45deg;
 }
 
-.plan .btn {
-  margin-top: auto;
-  justify-content: center;
+.plan__price {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+/* The small caps in the price panel stand in for the reference's mono face:
+   letterspaced, uppercase, tabular. Cabinet Grotesk at this size and tracking
+   carries the same technical-label feel without adding a font request. */
+.plan__label,
+.plan__unit {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(166, 23, 27, 0.72);
+}
+
+.plan__amount {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* A word rather than a figure — same slot, so the price row keeps its height. */
+.plan__amount--label {
+  font-size: 0.9375rem;
+  letter-spacing: 0.14em;
+}
+
+.plan__unit {
+  /* Never wraps. It is a two-word label, and as a shrinkable flex item it will
+     happily break "per month" across two lines, which makes this one card's
+     price panel taller than its neighbours'. */
+  white-space: nowrap;
+}
+
+.plan__barcode {
+  height: 2.4rem;
+  color: var(--red);
+}
+
+.plan__barcode-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 50%;
+}
+
+.plan__foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.plan__cta {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  /* Always hard right, so a tier with no unit line still ends its footer in
+     the same place as every other card. */
+  margin-left: auto;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.15em;
+  transition: color 0.4s var(--ease);
+}
+
+.plan__cta:hover {
+  color: var(--ink);
+}
+
+/* Keyboard focus. The CTA is the only focusable thing inside a card, so this is
+   the *only* way a keyboard user finds out where they are on the card — and
+   `:focus-within` on the panel above is what makes the peel happen for them
+   too. The ring is offset so it clears the panel's own edge rather than
+   hugging it. */
+.plan__cta:focus-visible {
+  outline: 2px solid var(--red);
+  outline-offset: 4px;
+  border-radius: 2px;
+  color: var(--ink);
+}
+
+/* Touch: no hover, so the peel never fires and the price panel stays flush with
+   the card. Nothing is lost — every price, unit and CTA is plain text in the
+   flow, which is exactly why the reference hides its own CTA until hover and
+   this one does not. */
+@media (hover: none) {
+  .plan__panel--foot {
+    transition: none;
+  }
+}
+
+/* Four across: the last adjustment, and it has to come after every `.plan__*`
+   rule above or it loses the cascade — a `.plan__panel` rule written after a
+   media query that narrows it resets that padding straight back.
+
+   At 289px a card has ~233px of content width, and the widest pair on the page
+   — "per month" plus "Talk about a retainer →" — needs ~256px. So the panels
+   give up some side padding and the small-caps row tightens. Without this the
+   unit wrapped onto two lines and that one card's price panel grew taller than
+   the other three, breaking the alignment the two-panel layout exists for. */
+@media (min-width: 1300px) {
+  .plan__panel {
+    padding-inline: clamp(0.9rem, 1.2vw, 1.05rem);
+  }
+
+  .plan__foot {
+    gap: 0.75rem;
+  }
+
+  .plan__label,
+  .plan__unit,
+  .plan__cta {
+    font-size: 0.625rem;
+    letter-spacing: 0.09em;
+  }
 }
 
 /* add-ons */
@@ -1558,9 +1993,10 @@ button {
   place-items: center;
   padding: clamp(1rem, 4vw, 3rem);
   background: rgba(23, 20, 17, 0.92);
+  backdrop-filter: blur(6px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.4s var(--ease);
+  transition: opacity 0.4s var(--ease), backdrop-filter 0.4s var(--ease);
 }
 
 .lightbox.is-open {
@@ -1574,8 +2010,8 @@ button {
   border-radius: var(--radius);
   overflow: hidden;
   background: #000;
-  transform: scale(0.94);
-  transition: transform 0.5s var(--ease);
+  transform: scale(0.92) rotate(-1.5deg);
+  transition: transform 0.55s var(--ease);
 }
 
 .lightbox.is-open .lightbox__frame {
@@ -1610,24 +2046,13 @@ button {
 
 /* --- reveal on scroll ------------------------------------------------ */
 
-.reveal {
-  opacity: 0;
-  transform: translateY(1.75rem);
-  transition: opacity 0.9s var(--ease), transform 0.9s var(--ease);
-}
-
-.reveal.is-in {
-  opacity: 1;
-  transform: none;
-}
+/* The hidden state for `.reveal` now lives in motion.css, gated on
+   `html.motion:not(.motion-ready)`. It used to sit here unconditionally, which
+   meant that any failure to run the reveal script left the page permanently
+   blank instead of merely unanimated. Kept here as a comment so the reason is
+   not lost the next time someone looks for the rule. */
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
-
   html {
     scroll-behavior: auto;
   }

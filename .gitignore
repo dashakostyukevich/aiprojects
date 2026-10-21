@@ -18,3 +18,8 @@ Icon?
 
 # Netlify CLI local state (site links) — per-project .gitignore covers these too.
 .netlify
+
+# Scratch output from browser-automation testing: console logs, page snapshots
+# and screenshots. Useful while testing, meaningless afterwards, and megabytes
+# of it. Not project source, so it stays out of the repo.
+.playwright-mcp/
