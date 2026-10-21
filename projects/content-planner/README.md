@@ -8,6 +8,23 @@ Status: **working app.** Create, edit and delete posts, saved to the browser's
 localStorage, on two pages — an Overview with the calendar and post list, and an
 Ideas page. Still no backend, database, authentication or API.
 
+## Positioning
+
+This app is deliberately **not** a feature-for-feature rival to Workhorse
+(`app.workhorsehq.co`), which owns the "AI + content strategy + production
+pipeline" lane and is desktop-only on the web.
+
+Here we are a **mobile-first, opinionated planner**: a calm, editorial tool
+that is genuinely good on a phone, starts with working defaults instead of a
+setup wizard, and gets out of the way. See `AUDIT.md` for the competitive
+teardown and `PLAN.md` for the roadmap.
+
+Two commitments shape the roadmap:
+
+1. **Mobile-first, not mobile-tolerant.** The primary surface is a phone.
+2. **Opinionated defaults.** A new user lands on a working plan, not an
+   empty form.
+
 ## Layout
 
 ```
@@ -184,6 +201,8 @@ content-planner/
   .oxlintrc.json        Lint rules
   Dev.command           Finder launcher for the dev server
   public/               Static files copied verbatim into dist/ (favicon)
+  AUDIT.md              Competitive teardown of Workhorse — what they have, where they're weak
+  PLAN.md               Repositioning roadmap: mobile-first, opinionated planner
 See the layout section above for `src/`.
 ```
 
@@ -194,3 +213,5 @@ See the layout section above for `src/`.
   swappable later.
 - Keep it a static build: `npm run build` must produce something that can be
   opened over HTTP with no server-side runtime.
+- No login, no account, no server. `localStorage` only, behind one module.
+- The app must never require horizontal scrolling at 390 px.
