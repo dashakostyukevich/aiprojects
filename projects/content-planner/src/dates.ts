@@ -141,6 +141,28 @@ export function weekdayIndex(iso: string): number {
   return (sundayFirst + 6) % 7
 }
 
+/**
+ * The Monday of the week containing `iso`.
+ *
+ * Counting back by the weekday offset needs no month-boundary logic: Oct 23
+ * 2026 is a Friday (index 4), so back four days lands on Monday Oct 19 even
+ * though the week starts in the previous month.
+ */
+export function startOfWeek(iso: string): string {
+  return addDays(iso, -weekdayIndex(iso))
+}
+
+/** "Oct 19 – 25", or "Dec 28 – Jan 3" when the week crosses a year end. */
+export function weekLabel(weekStart: string): string {
+  const end = addDays(weekStart, 6)
+  const startMonth = MONTH_SHORT[parseISO(weekStart)!.month]
+  const endMonth = MONTH_SHORT[parseISO(end)!.month]
+
+  return startMonth === endMonth
+    ? `${startMonth} ${weekStart.slice(8, 10)} – ${end.slice(8, 10)}`
+    : `${startMonth} ${weekStart.slice(8, 10)} – ${endMonth} ${end.slice(8, 10)}`
+}
+
 /** One square of the calendar grid. */
 export interface CalendarDay {
   /** "2026-03-18" */

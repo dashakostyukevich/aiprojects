@@ -1,3 +1,4 @@
+import { STATUSES } from "../types"
 import type { ContentType, Platform, Status } from "../types"
 
 /*
@@ -50,7 +51,6 @@ const contentTypes: ContentType[] = [
   "Text",
   "Blog post",
 ]
-const statuses: Status[] = ["Idea", "Draft", "Scheduled", "Published"]
 
 export default function FilterBar({
   search,
@@ -117,7 +117,7 @@ export default function FilterBar({
         <FilterSelect
           label="Status"
           value={status}
-          options={statuses}
+          options={STATUSES}
           allLabel="All statuses"
           onChange={onStatus}
         />

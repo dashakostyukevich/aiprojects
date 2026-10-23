@@ -4,13 +4,14 @@ import Header from "./components/Header"
 import SummaryCards from "./components/SummaryCards"
 import PostList from "./components/PostList"
 import Calendar from "./components/Calendar"
+import PlanBoard from "./components/PlanBoard"
 import Ideas from "./components/Ideas"
 import NewPostModal from "./components/NewPostModal"
 import type { DraftPost } from "./components/NewPostModal"
 import { posts as examplePosts } from "./data"
 import { addMonths, isValidISO, parseISO, todayISO } from "./dates"
 import { loadPosts, savePosts } from "./storage"
-import type { Post, View } from "./types"
+import type { Post, Status, View } from "./types"
 
 /*
   What the dialog is currently doing. One state instead of a separate
@@ -34,8 +35,8 @@ type Modal =
   Four pieces of state:
     posts    read from the browser on startup
     modal    what the dialog is doing, or null when it's closed
-    month    the year and month the calendar is showing
-    view     which page is on screen — Overview or Ideas
+    month    the year and month the calendar page is showing
+    view     which page is on screen — Plan, Calendar or Ideas
 */
 function App() {
   // The function form of useState runs once, on the first render, which is
@@ -43,7 +44,7 @@ function App() {
   // on every render.
   const [posts, setPosts] = useState<Post[]>(() => loadPosts() ?? examplePosts)
   const [modal, setModal] = useState<Modal>(null)
-  const [view, setView] = useState<View>("overview")
+  const [view, setView] = useState<View>("plan")
 
   // The calendar opens on the current month, read from the real clock.
   const [month, setMonth] = useState(() => {
@@ -110,14 +111,34 @@ function App() {
   }
 
   /**
-   * Promotes an idea to Draft. A status change and nothing else — the post
-   * keeps its id, date, notes and everything else, so it simply stops being an
-   * idea and disappears from that page on the next render.
+   * Dragging a card on the status board changes one post's status, and
+   * nothing else — it keeps its id, date and notes, and simply appears in a
+   * different column on the next render.
    */
-  function handleMoveToDraft(post: Post) {
+  function handleMoveStatus(post: Post, status: Status) {
     setPosts((current) =>
-      current.map((p) => (p.id === post.id ? { ...p, status: "Draft" } : p)),
+      current.map((p) => (p.id === post.id ? { ...p, status } : p)),
     )
+  }
+
+  /**
+   * Dragging a card on the week board changes one post's date. `date` may be
+   * null, which is what dropping a card into the Unscheduled strip does.
+   */
+  function handleMoveDate(post: Post, date: string | null) {
+    setPosts((current) =>
+      current.map((p) => (p.id === post.id ? { ...p, date } : p)),
+    )
+  }
+
+  /** Opens the dialog to add a post. */
+  function openCreate() {
+    setModal({ mode: "create" })
+  }
+
+  /** Opens the dialog on a post that already exists. */
+  function openEdit(post: Post) {
+    setModal({ mode: "edit", post })
   }
 
   /** Steps the calendar back or forward, keeping the year in step. */
@@ -142,33 +163,46 @@ function App() {
       <Sidebar view={view} onNavigate={setView} />
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <Header onNewPost={() => setModal({ mode: "create" })} />
+        <Header onNewPost={openCreate} />
 
         <main
           className="flex flex-1 flex-col gap-4 px-5 py-6 md:gap-6
             md:px-8 md:py-8"
         >
-          {view === "overview" ? (
+          {view === "plan" && (
             <>
               <SummaryCards posts={posts} />
 
+              <PlanBoard
+                posts={posts}
+                onSelect={openEdit}
+                onMoveDate={handleMoveDate}
+                onMoveStatus={handleMoveStatus}
+              />
+            </>
+          )}
+
+          {view === "calendar" && (
+            <>
               <Calendar
                 month={month}
                 posts={posts}
                 onPrevious={() => stepMonth(-1)}
                 onNext={() => stepMonth(1)}
                 onToday={goToToday}
-                onSelectPost={(post) => setModal({ mode: "edit", post })}
+                onSelectPost={openEdit}
               />
 
               <PostList
                 posts={posts}
-                onEdit={(post) => setModal({ mode: "edit", post })}
+                onEdit={openEdit}
                 onDelete={handleDelete}
                 onShowInCalendar={jumpToPost}
               />
             </>
-          ) : (
+          )}
+
+          {view === "ideas" && (
             <Ideas
               posts={posts}
               // An idea is a new post with the status already chosen. The
@@ -180,9 +214,10 @@ function App() {
                   createHeading: "New idea",
                 })
               }
-              onEdit={(post) => setModal({ mode: "edit", post })}
+              onEdit={openEdit}
               onDelete={handleDelete}
-              onMoveToDraft={handleMoveToDraft}
+              // The same status change the board makes, at a fixed status.
+              onMoveToDraft={(post) => handleMoveStatus(post, "Draft")}
             />
           )}
         </main>

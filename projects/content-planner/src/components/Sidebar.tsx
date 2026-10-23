@@ -10,7 +10,8 @@ import type { View } from "../types"
   other button here does.
 */
 const links: { label: string; view: View }[] = [
-  { label: "Overview", view: "overview" },
+  { label: "Plan", view: "plan" },
+  { label: "Calendar", view: "calendar" },
   { label: "Ideas", view: "ideas" },
 ]
 

@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { STATUSES } from "../types"
 import type { ContentType, Platform, Post, Status } from "../types"
 
 /** What the modal hands back to App when Save is pressed. */
@@ -33,7 +34,6 @@ const contentTypes: ContentType[] = [
   "Text",
   "Blog post",
 ]
-const statuses: Status[] = ["Idea", "Draft", "Scheduled", "Published"]
 
 /* One labelled dropdown, reused three times below. */
 function Select<T extends string>({
@@ -248,7 +248,7 @@ export default function NewPostModal({
             <Select
               label="Status"
               value={draft.status}
-              options={statuses}
+              options={STATUSES}
               onChange={(value) => update("status", value)}
             />
           </div>

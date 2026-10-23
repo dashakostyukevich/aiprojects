@@ -1,5 +1,15 @@
 export type Status = "Idea" | "Draft" | "Scheduled" | "Published"
 
+/**
+ * Every status, in the order a post moves through them.
+ *
+ * A value sits next to its type rather than in a separate constants file, so
+ * adding a status means changing one place. The status board, the modal's
+ * dropdown and the filter's dropdown all read this one array, which is why
+ * they can't drift apart.
+ */
+export const STATUSES: Status[] = ["Idea", "Draft", "Scheduled", "Published"]
+
 export type Platform = "Instagram" | "Threads" | "TikTok" | "Blog"
 
 export type ContentType = "Reel" | "Carousel" | "Story" | "Text" | "Blog post"
@@ -26,9 +36,15 @@ export interface Post {
  * Which page is on screen.
  *
  * There is no router in this app, and it doesn't need one. App holds this in
- * state and renders one view or the other — that is all two pages require.
+ * state and renders one view or the other — that is all three pages require.
  */
-export type View = "overview" | "ideas"
+export type View = "plan" | "calendar" | "ideas"
+
+/**
+ * The two ways of looking at the Plan screen: by day of the week, or by status.
+ * A view, not a saved preference — a reload opens on the week board.
+ */
+export type PlanMode = "week" | "status"
 
 /**
  * What the reader has asked the list to show. Each dropdown is either a real
