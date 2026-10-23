@@ -47,7 +47,7 @@ export const posts: Post[] = [
     platform: "TikTok",
     type: "Reel",
     date: day(6),
-    status: "Idea",
+    status: "Filming",
   },
   {
     id: 5,
@@ -55,7 +55,7 @@ export const posts: Post[] = [
     platform: "Blog",
     type: "Text",
     date: day(13),
-    status: "Idea",
+    status: "Scripting",
   },
   {
     id: 6,
@@ -87,7 +87,7 @@ export const posts: Post[] = [
     platform: "Instagram",
     type: "Carousel",
     date: day(9),
-    status: "Idea",
+    status: "Editing",
   },
   {
     id: 10,
@@ -102,9 +102,9 @@ export const posts: Post[] = [
     title: "Notes toward a piece on designing in public",
     platform: "Threads",
     type: "Text",
-    // No date yet: an idea worth keeping, not something committed to a day.
+    // Still loose notes: the first stage, and no day committed to yet.
     date: null,
-    status: "Idea",
+    status: "Draft",
   },
   {
     id: 12,

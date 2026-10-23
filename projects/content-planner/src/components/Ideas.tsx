@@ -1,44 +1,54 @@
 import type { Post } from "../types"
+import { STATUSES, nextStatus } from "../types"
 import { platformDots, toReadableDate, typeStyles } from "../styles"
-import StatusPill from "./StatusPill"
 
 /*
-  The Ideas page.
+  The Ideas page: the front of the production pipeline.
 
-  There is no separate store for ideas. An idea is just a post whose status is
-  "Idea", so this component receives the same `posts` array as everything else
-  and picks out the ones it needs. Move one to Draft and it stops being an idea
-  on the next render — no copying, no second list to keep in sync.
+  Ideas are not a separate kind of thing and have no marker of their own. An
+  idea is simply a post at the first stage — "Idea" used to be a status and was
+  retired when the pipeline grew. So this component receives the same `posts`
+  array as everything else and picks out the ones at the front of it. Advance
+  one and it leaves this page on the next render — no copying, no second list
+  to keep in sync.
+
+  Both stages below are read from STATUSES rather than typed in, so renaming or
+  extending the pipeline needs no change here.
 
   Create, edit and delete all reuse App's existing handlers and the same modal
   as the rest of the app.
 */
+
+/** The stage this page shows: the first one in the pipeline. */
+const FIRST_STAGE = STATUSES[0]
+
+/** Where the button sends a post. */
+const NEXT_STAGE = nextStatus(FIRST_STAGE)
 
 /* One idea, as a card. */
 function IdeaCard({
   post,
   onEdit,
   onDelete,
-  onMoveToDraft,
+  onAdvance,
 }: {
   post: Post
   onEdit: (post: Post) => void
   onDelete: (post: Post) => void
-  onMoveToDraft: (post: Post) => void
+  onAdvance: (post: Post) => void
 }) {
   return (
     <li
       className="flex flex-col gap-3 rounded-2xl border border-line
         bg-card p-5"
     >
-      <div className="flex items-center justify-between gap-2">
-        <span className="flex items-center gap-2 text-sm text-ink-soft">
-          <span
-            className={`h-2 w-2 rounded-full ${platformDots[post.platform]}`}
-          />
-          {post.platform}
-        </span>
-        <StatusPill status={post.status} />
+      {/* No status pill: everything on this page is at the same stage, so
+          showing it on every card would just repeat the page's own label. */}
+      <div className="flex items-center gap-2 text-sm text-ink-soft">
+        <span
+          className={`h-2 w-2 rounded-full ${platformDots[post.platform]}`}
+        />
+        {post.platform}
       </div>
 
       <h3 className="font-display text-lg leading-snug">
@@ -57,11 +67,11 @@ function IdeaCard({
       <div className="mt-auto flex flex-wrap items-center gap-1 pt-2">
         <button
           type="button"
-          onClick={() => onMoveToDraft(post)}
+          onClick={() => onAdvance(post)}
           className="rounded-full bg-ink px-4 py-1.5 text-sm font-medium
             text-paper transition-opacity hover:opacity-90"
         >
-          Move to Draft
+          Move to {NEXT_STAGE}
         </button>
         <button
           type="button"
@@ -91,16 +101,16 @@ export default function Ideas({
   onNewIdea,
   onEdit,
   onDelete,
-  onMoveToDraft,
+  onAdvance,
 }: {
   posts: Post[]
   onNewIdea: () => void
   onEdit: (post: Post) => void
   onDelete: (post: Post) => void
-  onMoveToDraft: (post: Post) => void
+  onAdvance: (post: Post) => void
 }) {
-  // The whole page is this one line: an idea is a post with status "Idea".
-  const ideas = posts.filter((post) => post.status === "Idea")
+  // The whole page is this one line: an idea is a post at the first stage.
+  const ideas = posts.filter((post) => post.status === FIRST_STAGE)
 
   return (
     <section className="flex flex-col gap-5">
@@ -113,7 +123,8 @@ export default function Ideas({
           <p className="mt-1 text-sm text-ink-soft">
             {ideas.length === 0
               ? "Nothing waiting in the wings."
-              : "Waiting their turn. Move one to Draft when you start writing."}
+              : `Loose notes and half-formed posts. Move one to ${NEXT_STAGE}
+                when you start.`}
           </p>
         </div>
 
@@ -134,11 +145,9 @@ export default function Ideas({
       {ideas.length === 0 ? (
         <div className="rounded-2xl border border-line bg-card px-5 py-14 text-center">
           <p className="font-display text-xl">No ideas yet</p>
-          <p
-            className="mx-auto mt-1 max-w-sm text-sm text-ink-soft"
-          >
-            Write down the next thing you want to make. It stays here until you
-            move it to Draft.
+          <p className="mx-auto mt-1 max-w-sm text-sm text-ink-soft">
+            {`Write down the next thing you want to make. It stays here until
+              you move it to ${NEXT_STAGE}.`}
           </p>
           <button
             type="button"
@@ -157,7 +166,7 @@ export default function Ideas({
               post={post}
               onEdit={onEdit}
               onDelete={onDelete}
-              onMoveToDraft={onMoveToDraft}
+              onAdvance={onAdvance}
             />
           ))}
         </ul>

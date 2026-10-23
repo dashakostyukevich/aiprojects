@@ -1,3 +1,4 @@
+import { STATUSES } from "./types"
 import type { ContentType, Platform, Post, Status } from "./types"
 import { isValidISO } from "./dates"
 
@@ -20,7 +21,37 @@ const contentTypes: ContentType[] = [
   "Text",
   "Blog post",
 ]
-const statuses: Status[] = ["Idea", "Draft", "Scheduled", "Published"]
+
+/**
+ * Statuses from earlier versions of the app, mapped to the one that replaced
+ * them.
+ *
+ * This exists because of what `isPost` below does: it rejects anything it
+ * doesn't recognise. Rename a status without upgrading old data and every post
+ * using it reads as bad data and is quietly thrown away. Ideas were retired
+ * when the pipeline grew to six stages, and became Drafts.
+ */
+const RETIRED_STATUSES: Record<string, Status> = { Idea: "Draft" }
+
+/**
+ * Rewrites one saved post into the shape the app uses now, or passes it
+ * through untouched.
+ *
+ * Takes and returns `unknown` because it runs before anything has been
+ * validated — an old post may not be a well-formed post at all yet.
+ */
+function withCurrentStatus(value: unknown): unknown {
+  if (typeof value !== "object" || value === null) return value
+
+  const post = value as Record<string, unknown>
+  const replacement = RETIRED_STATUSES[post.status as string]
+  if (replacement === undefined) return value
+
+  // A new object, so the array read out of storage is never rewritten in
+  // place. Running this twice is harmless: once upgraded, there is nothing
+  // left for it to match.
+  return { ...post, status: replacement }
+}
 
 /**
  * Checks one saved value really is a post.
@@ -46,7 +77,7 @@ function isPost(value: unknown): value is Post {
     platforms.includes(post.platform as Platform) &&
     contentTypes.includes(post.type as ContentType) &&
     hasValidDate &&
-    statuses.includes(post.status as Status)
+    STATUSES.includes(post.status as Status)
   )
 }
 
@@ -67,10 +98,11 @@ export function loadPosts(): Post[] | null {
     // deleted — so it is passed straight through, not treated as a failure.
     if (parsed.length === 0) return []
 
-    // Keep only the entries that really are posts, so one bad row can't take
-    // the whole app down. If none of them survived, something is wrong with
-    // what was saved and the caller falls back to the examples.
-    const posts = parsed.filter(isPost)
+    // Upgrade anything written by an older version, then keep only the
+    // entries that really are posts, so one bad row can't take the whole app
+    // down. If none of them survived, something is wrong with what was saved
+    // and the caller falls back to the examples.
+    const posts = parsed.map(withCurrentStatus).filter(isPost)
     return posts.length > 0 ? posts : null
   } catch {
     // Unreadable JSON, or storage blocked entirely (private browsing).

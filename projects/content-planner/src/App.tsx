@@ -11,7 +11,15 @@ import type { DraftPost } from "./components/NewPostModal"
 import { posts as examplePosts } from "./data"
 import { addMonths, isValidISO, parseISO, todayISO } from "./dates"
 import { loadPosts, savePosts } from "./storage"
+import { STATUSES, nextStatus } from "./types"
 import type { Post, Status, View } from "./types"
+
+/*
+  The stage a new idea starts at, and the first column of the status board.
+  Read from the list rather than typed in, so renaming the pipeline only ever
+  means changing `STATUSES`.
+ */
+const FIRST_STAGE = STATUSES[0]
 
 /*
   What the dialog is currently doing. One state instead of a separate
@@ -205,19 +213,22 @@ function App() {
           {view === "ideas" && (
             <Ideas
               posts={posts}
-              // An idea is a new post with the status already chosen. The
-              // modal handles the rest, exactly as it does everywhere else.
+              // A new idea is just a post at the first stage. The modal
+              // handles the rest, exactly as it does everywhere else.
               onNewIdea={() =>
                 setModal({
                   mode: "create",
-                  preset: { status: "Idea" },
+                  preset: { status: FIRST_STAGE },
                   createHeading: "New idea",
                 })
               }
               onEdit={openEdit}
               onDelete={handleDelete}
-              // The same status change the board makes, at a fixed status.
-              onMoveToDraft={(post) => handleMoveStatus(post, "Draft")}
+              // Advancing is the same status change the board makes, one
+              // stage further along the pipeline.
+              onAdvance={(post) =>
+                handleMoveStatus(post, nextStatus(post.status))
+              }
             />
           )}
         </main>

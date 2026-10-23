@@ -1,24 +1,33 @@
 import type { Status } from "../types"
 import type { Post } from "../types"
-
-const cards: { label: string; status: Status | null; tone: string }[] = [
-  { label: "Total posts", status: null, tone: "text-ink" },
-  { label: "Drafts", status: "Draft", tone: "text-clay" },
-  { label: "Scheduled", status: "Scheduled", tone: "text-honey" },
-  { label: "Published", status: "Published", tone: "text-sage" },
-]
+import { STATUSES } from "../types"
 
 /*
   Four numbers, in a row on desktop and two-by-two on a phone.
 
+  The middle card counts everything still being made — every stage up to the
+  point where a post is merely waiting for its day. With six statuses, "Drafts"
+  on its own would describe a single step of the pipeline and make the board
+  look busier than it is.
+*/
+const IN_PRODUCTION = STATUSES.slice(0, STATUSES.indexOf("Scheduled"))
+
+const cards: { label: string; statuses: Status[] | null; tone: string }[] = [
+  { label: "Total posts", statuses: null, tone: "text-ink" },
+  { label: "In production", statuses: IN_PRODUCTION, tone: "text-clay" },
+  { label: "Scheduled", statuses: ["Scheduled"], tone: "text-honey" },
+  { label: "Published", statuses: ["Published"], tone: "text-sage" },
+]
+
+/*
   The posts arrive as a prop, so the counts are recomputed every time App's
   posts state changes — including right after a new post is saved.
 */
 export default function SummaryCards({ posts }: { posts: Post[] }) {
   const counts = cards.map((card) =>
-    card.status === null
+    card.statuses === null
       ? posts.length
-      : posts.filter((post) => post.status === card.status).length,
+      : posts.filter((post) => card.statuses!.includes(post.status)).length,
   )
 
   return (

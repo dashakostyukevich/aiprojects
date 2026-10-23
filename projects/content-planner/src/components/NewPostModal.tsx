@@ -15,14 +15,15 @@ export interface DraftPost {
 
 /*
   Every field starts empty, and this is the shape the form works on.
-  `dateInput` stays "" until a date is picked.
+  `dateInput` stays "" until a date is picked. The status starts at the first
+  stage of the pipeline — the front door for anything new.
 */
 const emptyDraft: DraftPost = {
   title: "",
   platform: "Instagram",
   type: "Reel",
   dateInput: "",
-  status: "Idea",
+  status: STATUSES[0],
   notes: "",
 }
 
@@ -96,8 +97,8 @@ function draftFromPost(post: Post): DraftPost {
     a Post     editing  — the form starts filled in with that post
 
   `preset` only applies while creating, and it overwrites parts of the blank
-  form. The Ideas page passes `{ status: "Idea" }` so a post made there lands
-  on the right page without this component knowing Ideas exists.
+  form. The Ideas page passes `{ status: <first stage> }` so a post made there
+  lands on the right page without this component knowing Ideas exists.
 
   Cancel closes without saving. Save checks the title, then hands the draft
   back up to App and clears itself for next time.

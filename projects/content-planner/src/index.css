@@ -17,10 +17,12 @@
   --color-ink-faint: #a39a8d; /* placeholders, counts */
 
   /* Status colours, all muted so nothing shouts */
-  --color-sage: #7d9070; /* published — done */
+  --color-clay: #b5796a; /* draft — loose notes, not started */
+  --color-slate: #7c8ba1; /* scripting — writing the words */
+  --color-plum: #96809b; /* filming — on camera */
+  --color-teal: #6f9191; /* editing — in post-production */
   --color-honey: #c99a4e; /* scheduled — waiting its turn */
-  --color-clay: #b5796a; /* draft — in progress */
-  --color-stone: #9a9186; /* idea — not started */
+  --color-sage: #7d9070; /* published — done */
 
   /* Type */
   --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,

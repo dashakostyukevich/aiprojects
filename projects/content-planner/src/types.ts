@@ -1,14 +1,40 @@
-export type Status = "Idea" | "Draft" | "Scheduled" | "Published"
+/**
+ * Where a post is in production, in the order it moves through them.
+ *
+ * "Idea" used to be a status and has been retired: an idea is simply a post at
+ * the first stage. Anything saved with the old value is upgraded on load, so
+ * nothing is lost — see `storage.ts`.
+ */
+export type Status =
+  | "Draft"
+  | "Scripting"
+  | "Filming"
+  | "Editing"
+  | "Scheduled"
+  | "Published"
 
 /**
  * Every status, in the order a post moves through them.
  *
  * A value sits next to its type rather than in a separate constants file, so
  * adding a status means changing one place. The status board, the modal's
- * dropdown and the filter's dropdown all read this one array, which is why
- * they can't drift apart.
+ * dropdown, the filter's dropdown and the storage check all read this one
+ * array, which is why they can't drift apart.
  */
-export const STATUSES: Status[] = ["Idea", "Draft", "Scheduled", "Published"]
+export const STATUSES: Status[] = [
+  "Draft",
+  "Scripting",
+  "Filming",
+  "Editing",
+  "Scheduled",
+  "Published",
+]
+
+/** The stage a post goes to next. A post at the last stage stays there. */
+export function nextStatus(status: Status): Status {
+  const index = STATUSES.indexOf(status)
+  return STATUSES[Math.min(index + 1, STATUSES.length - 1)]
+}
 
 export type Platform = "Instagram" | "Threads" | "TikTok" | "Blog"
 

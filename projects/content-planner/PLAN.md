@@ -20,29 +20,36 @@ Concretely, this means we ship **less** than Workhorse, deliberately: no AI, no 
 
 Everything else depends on this. Workhorse's depth comes from its data model, not its UI.
 
-### 1.1 Status becomes a production pipeline
+### 1.1 Status becomes a production pipeline — ✅ done
 
-Replace the four generic statuses with six that describe *where the work is*:
+Replace the four generic statuses with six that describe *where the work is*.
+
+**Shipped as** `STATUSES` in `src/types.ts`, in the order a post moves through
+them:
 
 ```ts
 export type Status =
-  | "needs_idea"
-  | "needs_script"
-  | "needs_filming"
-  | "needs_edit"
-  | "final_prep"
-  | "posted"
+  | "Draft"        // loose notes
+  | "Scripting"    // writing the words
+  | "Filming"      // on camera
+  | "Editing"      // in post-production
+  | "Scheduled"    // has a date
+  | "Published"    // live
 ```
 
-`Draft` and `Scheduled` are not stages of production — they are scheduling states. Move them to a separate boolean:
+Two departures from the proposal below. The `needs_*` names lost to plain
+English, which reads better in a column header. And `Scheduled` stayed a stage
+rather than becoming a `scheduled: boolean` — it is where a post goes when it
+has a day, and the date itself is already its own field.
 
-```ts
-scheduled: boolean   // has a date and is committed
-```
+`needs_idea` was dropped outright rather than renamed: an idea is simply a post
+at the first stage, which is what the Ideas page shows. Retiring a status means
+`storage.ts` has to upgrade saved posts on load, or every post still carrying
+the old value would be rejected as malformed data and lost.
 
-`needs_idea` ≈ our old `Idea`. `posted` ≈ our old `Published`. `Draft` becomes `needs_script` with `scheduled: false`.
-
-**Why:** a planner for creators is really a production tracker. Four generic statuses cannot answer "what do I film next?" — six pipeline stages can, and that question is the daily driver.
+**Why it still matters:** a planner for creators is really a production
+tracker. Four generic statuses cannot answer "what do I film next?" — six
+pipeline stages can, and that question is the daily driver.
 
 ### 1.2 Add content pillars
 

@@ -7,9 +7,13 @@ import BoardCard from "./BoardCard"
 import BoardColumn from "./BoardColumn"
 
 /*
-  The status board: one column per status, from Idea through to Published.
-  Dragging a card into another column changes that post's status and nothing
-  else — the date, the notes and the id all stay as they were.
+  The status board: one column per status, running left to right from loose
+  notes through to published. Dragging a card into another column changes that
+  post's status and nothing else — the date, the notes and the id all stay as
+  they were.
+
+  Six columns read from STATUSES, so adding a stage to that one array is all it
+  takes to grow the board.
 
   As with the week board, dragging is a mouse gesture. On a phone, tap a card
   to open the dialog and change the status there.
@@ -17,8 +21,10 @@ import BoardColumn from "./BoardColumn"
 
 /** A short line for each column header, so the board reads at a glance. */
 const hints: Record<Status, string> = {
-  Idea: "Not started",
-  Draft: "Being written",
+  Draft: "Loose notes",
+  Scripting: "Writing the words",
+  Filming: "On camera",
+  Editing: "In post-production",
   Scheduled: "Has a date",
   Published: "Live",
 }
@@ -68,7 +74,10 @@ export default function StatusBoard({
   }
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    // Six columns side by side would be slivers, so the board is two rows of
+    // three from lg up — wide enough for a title to read without wrapping
+    // into a ribbon.
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {STATUSES.map((status) => {
         const statusPosts = posts.filter((post) => post.status === status)
 

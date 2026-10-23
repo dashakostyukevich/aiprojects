@@ -68,7 +68,7 @@ Persisted everywhere: sidebar, mini month-grid with per-pillar colour dots, acco
 | Ground | warm cream | `#faf7f2` paper / `#fffdf9` card |
 | Display type | high-contrast serif | `Iowan Old Style` / `Palatino` serif — same move |
 | Body | grotesque | `system-ui` |
-| Accent | dusty rose `#E97997` + sage green | sage / honey / clay / stone |
+| Accent | dusty rose `#E97997` + sage green | six muted status colours: clay / slate / plum / teal / honey / sage |
 | Forms | pill buttons, hairline borders, pill chips | pill buttons, hairline borders, pill chips |
 | Motion | coachmarks, staggered entrances | minimal |
 

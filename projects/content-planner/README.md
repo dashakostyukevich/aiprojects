@@ -44,13 +44,13 @@ src/
     SummaryCards.tsx    the four count cards
     PlanBoard.tsx       the Week / Status toggle and the week stepping
     WeekBoard.tsx       seven day columns, plus the Unscheduled strip
-    StatusBoard.tsx     four columns, one per status
+    StatusBoard.tsx     six columns, one per stage of the pipeline
     BoardCard.tsx       one draggable post card, shared by both boards
     BoardColumn.tsx     one titled drop zone, shared by both boards
     Calendar.tsx        the month grid and its Previous / Today / Next buttons
     FilterBar.tsx       the search box and the three filter dropdowns
     PostList.tsx        the list of posts, plus the filter state
-    Ideas.tsx           the Ideas page: a card grid of posts with status "Idea"
+    Ideas.tsx           the Ideas page: a card grid of posts at the first stage
     StatusPill.tsx      the small coloured status label
     NewPostModal.tsx    the create/edit dialog, shared by every page
 ```
@@ -79,9 +79,10 @@ To try a different month, use the Previous / Next buttons. Clicking a date in th
 post list jumps the calendar to that month.
 
 Design notes: cream page (`paper`), lighter cards (`card`), hairline borders
-(`line`), serif headings via `font-display`, and four muted status colours —
-sage for published, honey for scheduled, clay for draft, stone for idea. Change
-a value in `src/index.css` and the whole app follows.
+(`line`), serif headings via `font-display`, and six muted status colours — clay
+for draft, slate for scripting, plum for filming, teal for editing, honey for
+scheduled, sage for published. Change a value in `src/index.css` and the whole
+app follows.
 
 ## Stack
 
@@ -117,7 +118,7 @@ One board, two ways of reading it:
 | Mode | Columns | Dragging changes |
 | --- | --- | --- |
 | Week | seven days, Monday first, plus an Unscheduled strip | the post's **date** |
-| Status | Idea, Draft, Scheduled, Published | the post's **status** |
+| Status | Draft, Scripting, Filming, Editing, Scheduled, Published | the post's **status** |
 
 Both boards show the same posts — only the grouping differs, and only one thing
 about a post can change from each. `PlanBoard` owns the toggle and the week being
@@ -125,8 +126,8 @@ shown; below it, `WeekBoard` and `StatusBoard` are each about sixty lines and
 share `BoardCard` and `BoardColumn`.
 
 ```tsx
-const ideas = posts.filter((post) => post.status === "Idea")   // status board
-const dayPosts = byDate.get(iso) ?? []                        // week board
+const statusPosts = posts.filter((post) => post.status === status) // status board
+const dayPosts = byDate.get(iso) ?? []                             // week board
 ```
 
 Posts with no date have nowhere to sit in the seven day columns, so they collect
@@ -155,7 +156,8 @@ At `xl` and above the week board is seven columns side by side. Below that it is
 a vertical list — one day per row, which is how a week is read on a phone
 anyway. This is deliberate: the app must never require sideways scrolling at
 390 px, and seven columns at that width would be unreadable slivers. The status
-board is four columns from `xl`, two from `sm`, and one below that.
+board is three columns from `lg` — two rows of three, because six side by side
+would be the same slivers — two from `sm`, and one below that.
 
 The board's mode and week are state inside `PlanBoard`, not in `App`, because
 they are ways of looking at the board rather than data about it — like the list's
@@ -163,24 +165,32 @@ filters, they reset when you leave the page.
 
 ## The Ideas page
 
-An idea is not a separate kind of thing. It is a post whose `status` is
-`"Idea"`, so `Ideas.tsx` takes the same `posts` array as everything else and
-does this one line of work:
+The pipeline has six stages, read from `STATUSES`: Draft, Scripting, Filming,
+Editing, Scheduled, Published. There is no seventh "Idea" status — an idea is a
+post at the front of the pipeline, so `Ideas.tsx` takes the same `posts` array
+as everything else and shows the first stage:
 
 ```tsx
-const ideas = posts.filter((post) => post.status === "Idea")
+const FIRST_STAGE = STATUSES[0]
+const ideas = posts.filter((post) => post.status === FIRST_STAGE)
 ```
 
 Nothing is copied and there is no second data structure to keep in sync. The
-"Move to Draft" button maps over the posts and replaces one — the post keeps its
-id, date and notes, and simply stops being an idea on the next render.
+"Move to Scripting" button maps over the posts and replaces one — the post keeps
+its id, date and notes, and simply leaves this page on the next render.
+
+Both stages are read from `STATUSES` rather than typed in, so renaming a stage or
+extending the pipeline needs no change here: the page always shows the first
+stage and always offers the one after it. Idea cards carry no status pill,
+because every card on the page is at the same stage and showing it would just
+repeat the page's own label.
 
 Everything else is reused:
 
-- **Create** opens the same modal, with `preset: { status: "Idea" }` so the form
-  already has the right status, and `createHeading: "New idea"` so the dialog
-  says what it is. A preset is only a few fields layered over the blank form,
-  which is why the rest still starts empty.
+- **Create** opens the same modal, with `preset: { status: FIRST_STAGE }` so the
+  form already has the right status, and `createHeading: "New idea"` so the
+  dialog says what it is. A preset is only a few fields layered over the blank
+  form, which is why the rest still starts empty.
 - **Edit** and **delete** are the exact handlers the other pages use.
 - **Storage** is the same single `localStorage` key. There is no ideas-specific
   persistence anywhere.
@@ -219,8 +229,8 @@ network call anywhere in the app.
 
 `App` loads once with a lazy `useState` initializer, then saves from a
 `useEffect` watching `posts`. Create, edit, delete, dragging a card on either
-board and moving an idea to Draft all only call `setPosts` — none of them saves
-directly, so no handler can forget to.
+board and advancing an idea to the next stage all only call `setPosts` — none of
+them saves directly, so no handler can forget to.
 
 New ids come from the highest existing id plus one, computed with `reduce`
 starting at 0. `Math.max(...posts.map(...))` looks equivalent but returns
@@ -234,6 +244,21 @@ Bad saved data is filtered rather than trusted: anything that isn't a
 well-formed post is dropped, and if nothing survives the app falls back to the
 examples. An empty array is respected as a real state — it means every post was
 deleted.
+
+Renaming a status would otherwise be the exception that quietly loses data: the
+check rejects anything it doesn't recognise, so a post saved with a retired
+value would read as bad data and be dropped. `storage.ts` therefore upgrades
+saved posts on the way in, before they are validated:
+
+```ts
+const RETIRED_STATUSES: Record<string, Status> = { Idea: "Draft" }
+```
+
+Ideas were retired when the pipeline grew to six stages, and became Drafts — the
+first stage. The upgrade runs on every load and rewrites a post into a new
+object, so it is safe to run twice: once a value has been replaced there is
+nothing left for it to match, and the stored JSON is rewritten to the new shape
+on the next save.
 
 ## Commands
 

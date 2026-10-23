@@ -6,16 +6,20 @@ import type { ContentType, Platform, Status } from "./types"
 */
 
 export const statusStyles: Record<Status, string> = {
-  Idea: "bg-stone/10 text-stone ring-stone/25",
   Draft: "bg-clay/10 text-clay ring-clay/25",
+  Scripting: "bg-slate/10 text-slate ring-slate/25",
+  Filming: "bg-plum/10 text-plum ring-plum/25",
+  Editing: "bg-teal/10 text-teal ring-teal/25",
   Scheduled: "bg-honey/15 text-honey ring-honey/30",
   Published: "bg-sage/10 text-sage ring-sage/25",
 }
 
 /** Solid colours for the small status bars on calendar entries. */
 export const statusBars: Record<Status, string> = {
-  Idea: "bg-stone",
   Draft: "bg-clay",
+  Scripting: "bg-slate",
+  Filming: "bg-plum",
+  Editing: "bg-teal",
   Scheduled: "bg-honey",
   Published: "bg-sage",
 }
