@@ -1,82 +1,103 @@
-import type { Post } from "../types"
-import { STATUSES, nextStatus } from "../types"
-import { platformDots, toReadableDate, typeStyles } from "../styles"
+import { useState } from "react"
+import type { Idea, IdeaTag, Post } from "../types"
+import { IDEA_TAGS } from "../types"
+import { ideaTagChip } from "../styles"
 
 /*
-  The Ideas page: the front of the production pipeline.
+  The Ideas page.
 
-  Ideas are not a separate kind of thing and have no marker of their own. An
-  idea is simply a post at the first stage — "Idea" used to be a status and was
-  retired when the pipeline grew. So this component receives the same `posts`
-  array as everything else and picks out the ones at the front of it. Advance
-  one and it leaves this page on the next render — no copying, no second list
-  to keep in sync.
+  An idea is its own thing here, not a stage of a post: a hook or a topic is
+  the raw material a post gets built from, and one idea can outlive several
+  posts. So this page shows the `ideas` list, and the post list never sees it.
 
-  Both stages below are read from STATUSES rather than typed in, so renaming or
-  extending the pipeline needs no change here.
+  Tags are a way of looking at the page, held in local state like the post
+  list's filters. Choosing one re-reads the same array — it never rewrites an
+  idea, so tagging nothing is always safe.
 
-  Create, edit and delete all reuse App's existing handlers and the same modal
-  as the rest of the app.
+  Turning an idea into a post copies its title into a new Draft and records the
+  link back. The idea stays on this page afterwards, deliberately: the same
+  hook is often worth a second post, and deleting the raw material the moment
+  you use it once is how a good idea gets lost.
 */
 
-/** The stage this page shows: the first one in the pipeline. */
-const FIRST_STAGE = STATUSES[0]
-
-/** Where the button sends a post. */
-const NEXT_STAGE = nextStatus(FIRST_STAGE)
+/** Which tag the page is currently showing. */
+type IdeaFilter = "all" | "uncategorised" | IdeaTag
 
 /* One idea, as a card. */
 function IdeaCard({
-  post,
+  idea,
+  linkedPost,
   onEdit,
   onDelete,
-  onAdvance,
+  onPromote,
+  onOpenPost,
 }: {
-  post: Post
-  onEdit: (post: Post) => void
-  onDelete: (post: Post) => void
-  onAdvance: (post: Post) => void
+  idea: Idea
+  /** The post this idea became, when it still exists. */
+  linkedPost?: Post
+  onEdit: (idea: Idea) => void
+  onDelete: (idea: Idea) => void
+  onPromote: (idea: Idea) => void
+  onOpenPost: (post: Post) => void
 }) {
   return (
     <li
       className="flex flex-col gap-3 rounded-2xl border border-line
         bg-card p-5"
     >
-      {/* No status pill: everything on this page is at the same stage, so
-          showing it on every card would just repeat the page's own label. */}
-      <div className="flex items-center gap-2 text-sm text-ink-soft">
+      {/*
+        A tag is grey on purpose. Colour in this app already means status or
+        platform, so a coloured tag beside a status pill would read as the
+        same kind of information.
+      */}
+      {idea.tag ? (
         <span
-          className={`h-2 w-2 rounded-full ${platformDots[post.platform]}`}
-        />
-        {post.platform}
-      </div>
-
-      <h3 className="font-display text-lg leading-snug">
-        <span className={`mr-2 text-xs ${typeStyles[post.type]}`}>
-          {post.type}
-        </span>
-        {post.title}
-      </h3>
-
-      <p className="text-sm text-ink-faint">
-        {post.date === null ? "No date yet" : toReadableDate(post.date)}
-      </p>
-
-      {/* Actions sit at the bottom of every card, even when the titles above
-          are different lengths. `mt-auto` is what pushes them there. */}
-      <div className="mt-auto flex flex-wrap items-center gap-1 pt-2">
-        <button
-          type="button"
-          onClick={() => onAdvance(post)}
-          className="rounded-full bg-ink px-4 py-1.5 text-sm font-medium
-            text-paper transition-opacity hover:opacity-90"
+          className={`w-fit rounded-full px-2.5 py-1 text-xs font-medium ${ideaTagChip}`}
         >
-          Move to {NEXT_STAGE}
-        </button>
+          {idea.tag}
+        </span>
+      ) : (
+        <span className="w-fit text-xs text-ink-faint">Uncategorised</span>
+      )}
+
+      <h3 className="font-display text-lg leading-snug">{idea.title}</h3>
+
+      {idea.notes && <p className="text-sm text-ink-soft">{idea.notes}</p>}
+
+      {/*
+        Actions sit at the bottom of every card, even when the titles above
+        are different lengths. `mt-auto` is what pushes them there.
+      */}
+      <div className="mt-auto flex flex-wrap items-center gap-1 pt-2">
+        {/*
+          Once an idea has become a post the button follows that post instead
+          of making a second one. If it was deleted, the link dangles and this
+          quietly offers to promote the idea again.
+        */}
+        {linkedPost ? (
+          <button
+            type="button"
+            onClick={() => onOpenPost(linkedPost)}
+            className="rounded-full bg-ink px-4 py-1.5 text-sm font-medium
+              text-paper transition-opacity hover:opacity-90"
+          >
+            View post
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => onPromote(idea)}
+            className="rounded-full bg-ink px-4 py-1.5 text-sm font-medium
+              text-paper transition-opacity hover:opacity-90"
+          >
+            Turn into a post
+          </button>
+        )}
+
         <button
           type="button"
-          onClick={() => onEdit(post)}
-          aria-label={`Edit ${post.title}`}
+          onClick={() => onEdit(idea)}
+          aria-label={`Edit ${idea.title}`}
           className="rounded-full px-3 py-1.5 text-sm text-ink-soft
             transition-colors hover:bg-ink/5 hover:text-ink"
         >
@@ -84,8 +105,8 @@ function IdeaCard({
         </button>
         <button
           type="button"
-          onClick={() => onDelete(post)}
-          aria-label={`Delete ${post.title}`}
+          onClick={() => onDelete(idea)}
+          aria-label={`Delete ${idea.title}`}
           className="rounded-full px-3 py-1.5 text-sm text-ink-faint
             transition-colors hover:bg-clay/10 hover:text-clay"
         >
@@ -97,20 +118,56 @@ function IdeaCard({
 }
 
 export default function Ideas({
+  ideas,
   posts,
-  onNewIdea,
+  onNew,
   onEdit,
   onDelete,
-  onAdvance,
+  onPromote,
+  onOpenPost,
 }: {
+  ideas: Idea[]
+  /** Used only to follow an idea's link to the post it became. */
   posts: Post[]
-  onNewIdea: () => void
-  onEdit: (post: Post) => void
-  onDelete: (post: Post) => void
-  onAdvance: (post: Post) => void
+  onNew: () => void
+  onEdit: (idea: Idea) => void
+  onDelete: (idea: Idea) => void
+  onPromote: (idea: Idea) => void
+  onOpenPost: (post: Post) => void
 }) {
-  // The whole page is this one line: an idea is a post at the first stage.
-  const ideas = posts.filter((post) => post.status === FIRST_STAGE)
+  const [filter, setFilter] = useState<IdeaFilter>("all")
+
+  const untagged = ideas.filter((idea) => idea.tag === undefined).length
+
+  // Each chip carries its own count, so the page answers "how many topics do
+  // I have?" without clicking through them all.
+  //
+  // Every chip is always shown, including at zero. One that vanished while
+  // selected would leave the page filtering by something with no control left
+  // to see it or turn it off — the count is allowed to be a bit untidy; the
+  // controls are not.
+  const chips: { label: string; value: IdeaFilter; count: number }[] = [
+    { label: "All", value: "all", count: ideas.length },
+    ...IDEA_TAGS.map((tag) => ({
+      label: tag,
+      value: tag as IdeaFilter,
+      count: ideas.filter((idea) => idea.tag === tag).length,
+    })),
+    { label: "Uncategorised", value: "uncategorised", count: untagged },
+  ]
+
+  const visible = ideas.filter((idea) => {
+    if (filter === "all") return true
+    if (filter === "uncategorised") return idea.tag === undefined
+    return idea.tag === filter
+  })
+
+  // Spelled out rather than read back off the chip above, so the empty state
+  // still names the right tag if the chip list ever changes.
+  const filterLabel =
+    filter === "all" || filter === "uncategorised"
+      ? filter
+      : filter.toLowerCase()
 
   return (
     <section className="flex flex-col gap-5">
@@ -121,19 +178,16 @@ export default function Ideas({
         <div>
           <h2 className="font-display text-2xl tracking-tight">Ideas</h2>
           <p className="mt-1 text-sm text-ink-soft">
-            {ideas.length === 0
-              ? "Nothing waiting in the wings."
-              : `Loose notes and half-formed posts. Move one to ${NEXT_STAGE}
-                when you start.`}
+            Hooks, topics and visuals, kept before they become posts.
           </p>
         </div>
 
-        {/* Hidden once there are no ideas, because the empty state below
-            already offers the same button. */}
+        {/* Hidden when the empty state below is showing, because that already
+            offers the same button. */}
         {ideas.length > 0 && (
           <button
             type="button"
-            onClick={onNewIdea}
+            onClick={onNew}
             className="shrink-0 rounded-full bg-ink px-5 py-2.5 text-sm
               font-medium text-paper transition-opacity hover:opacity-90"
           >
@@ -146,12 +200,12 @@ export default function Ideas({
         <div className="rounded-2xl border border-line bg-card px-5 py-14 text-center">
           <p className="font-display text-xl">No ideas yet</p>
           <p className="mx-auto mt-1 max-w-sm text-sm text-ink-soft">
-            {`Write down the next thing you want to make. It stays here until
-              you move it to ${NEXT_STAGE}.`}
+            Write down the hook, the subject or the image while it is fresh.
+            It stays here until you turn it into a post.
           </p>
           <button
             type="button"
-            onClick={onNewIdea}
+            onClick={onNew}
             className="mt-4 rounded-full bg-ink px-5 py-2 text-sm
               font-medium text-paper transition-opacity hover:opacity-90"
           >
@@ -159,17 +213,65 @@ export default function Ideas({
           </button>
         </div>
       ) : (
-        <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {ideas.map((post) => (
-            <IdeaCard
-              key={post.id}
-              post={post}
-              onEdit={onEdit}
-              onDelete={onDelete}
-              onAdvance={onAdvance}
-            />
-          ))}
-        </ul>
+        <>
+          {/* Tag filters. Real buttons, not links: they change what is shown
+              rather than going anywhere. */}
+          <div className="flex flex-wrap gap-2">
+            {chips.map((chip) => {
+              const isActive = chip.value === filter
+
+              return (
+                <button
+                  key={chip.value}
+                  type="button"
+                  onClick={() => setFilter(chip.value)}
+                  aria-pressed={isActive}
+                  className={`rounded-full px-3.5 py-1.5 text-sm transition-colors ${
+                    isActive
+                      ? "bg-ink font-medium text-paper"
+                      : "text-ink-soft hover:bg-ink/5 hover:text-ink"
+                  }`}
+                >
+                  {chip.label}{" "}
+                  <span
+                    className={
+                      isActive ? "text-paper/60" : "text-ink-faint"
+                    }
+                  >
+                    {chip.count}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+
+          {visible.length === 0 ? (
+            <div className="rounded-2xl border border-line bg-card px-5 py-14 text-center">
+              <p className="font-display text-xl">
+                Nothing tagged {filterLabel}
+              </p>
+              <p className="mx-auto mt-1 max-w-sm text-sm text-ink-soft">
+                Tag an idea this way from the edit dialog, or add a new one.
+              </p>
+            </div>
+          ) : (
+            <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+              {visible.map((idea) => (
+                <IdeaCard
+                  key={idea.id}
+                  idea={idea}
+                  // A link to a post that has since been deleted is simply
+                  // left unresolved, and the card offers to promote again.
+                  linkedPost={posts.find((post) => post.id === idea.postId)}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
+                  onPromote={onPromote}
+                  onOpenPost={onOpenPost}
+                />
+              ))}
+            </ul>
+          )}
+        </>
       )}
     </section>
   )

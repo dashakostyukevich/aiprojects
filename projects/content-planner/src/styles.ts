@@ -5,6 +5,18 @@ import type { ContentType, Platform, Status } from "./types"
   complete strings. Look a colour up by name and use it: statusStyles.Published.
 */
 
+/**
+ * The chip on an idea, showing its tag.
+ *
+ * Deliberately grey. Every colour in the palette already means a status or a
+ * platform, so a coloured tag sitting beside a status pill would read as the
+ * same kind of information — and a green "Hooks" chip beside a green
+ * "Published" pill would be actively misleading. A tag is told apart by its
+ * words, not its colour.
+ */
+export const ideaTagChip =
+  "bg-ink-soft/10 text-ink-soft ring-1 ring-inset ring-line"
+
 export const statusStyles: Record<Status, string> = {
   Draft: "bg-clay/10 text-clay ring-clay/25",
   Scripting: "bg-slate/10 text-slate ring-slate/25",

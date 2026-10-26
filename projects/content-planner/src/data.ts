@@ -1,4 +1,4 @@
-import type { Post } from "./types"
+import type { Idea, Post } from "./types"
 import { addDays, todayISO } from "./dates"
 
 /*
@@ -113,5 +113,63 @@ export const posts: Post[] = [
     type: "Text",
     date: null,
     status: "Draft",
+  },
+]
+
+/*
+  Example ideas, on the same footing as the posts above: written by hand,
+  copied in on a first run, then ignored in favour of the browser's copy.
+
+  An idea is only an id and a title, so most of these are one line — that is
+  the point of the short form. One has no tag at all, to show the
+  "Uncategorised" group, and one has already become a post (id 2 below, linked
+  to the billing post) to show what a promoted idea looks like on the page.
+*/
+export const ideas: Idea[] = [
+  {
+    id: 1,
+    title: "The first sentence decides everything",
+    tag: "Hooks",
+    notes: "Open with the consequence, not the setup.",
+  },
+  {
+    id: 2,
+    title: "\"I billed hourly for three years. Here's what it cost me.\"",
+    tag: "Hooks",
+    // Already used once — which is exactly why the idea is kept afterwards.
+    postId: 2,
+    notes: "Worked better as an opener than as the headline.",
+  },
+  {
+    id: 3,
+    title: "What freelance work actually costs beyond the day rate",
+    tag: "Topics",
+    notes: "Invoicing gaps, unpaid admin, the quiet months.",
+  },
+  {
+    id: 4,
+    title: "Why every portfolio site looks the same now",
+    tag: "Topics",
+  },
+  {
+    id: 5,
+    title: "Overhead desk shot, one warm lamp, nothing switched on",
+    tag: "Visuals",
+    notes: "Same framing every week so the grid reads as a set.",
+  },
+  {
+    id: 6,
+    title: "Time-lapse of a blank page filling up with type",
+    tag: "Visuals",
+  },
+  {
+    id: 7,
+    title: "A short piece about declining the wrong clients",
+    tag: "Post ideas",
+    notes: "Three examples, then the script I actually use.",
+  },
+  {
+    id: 8,
+    title: "Something about the cafés where work actually happens",
   },
 ]

@@ -4,10 +4,11 @@ A content planning app. Client-side only: no backend, no database, no
 authentication, no external APIs. Everything will live in `localStorage` in the
 browser.
 
-Status: **working app.** Create, edit and delete posts, saved to the browser's
-localStorage, on three pages — a Plan screen with draggable week and status
-boards, a Calendar page with the month grid and searchable list, and an Ideas
-page. Still no backend, database, authentication or API.
+Status: **working app.** Create, edit and delete posts and ideas, saved to the
+browser's localStorage, on three pages — a Plan screen with draggable week and
+status boards, a Calendar page with the month grid and searchable list, and an
+Ideas page for hooks, topics and visuals before they become posts. Still no
+backend, database, authentication or API.
 
 ## Positioning
 
@@ -31,10 +32,10 @@ Two commitments shape the roadmap:
 ```
 src/
   main.tsx              entry point — leave alone
-  App.tsx               the three pages, the posts, and which page is on screen
+  App.tsx               both lists, the three pages, and which page is on screen
   index.css             Tailwind import + the warm colour palette
-  types.ts              what a Post looks like, plus the STATUSES list
-  data.ts               12 example posts, dated relative to today
+  types.ts              what a Post and an Idea look like, plus the tag lists
+  data.ts               12 example posts and 8 example ideas
   styles.ts             colour classes for each status, platform and content type
   dates.ts              all date maths: ISO parsing, week and month grids
   storage.ts            the only file that touches localStorage
@@ -50,9 +51,11 @@ src/
     Calendar.tsx        the month grid and its Previous / Today / Next buttons
     FilterBar.tsx       the search box and the three filter dropdowns
     PostList.tsx        the list of posts, plus the filter state
-    Ideas.tsx           the Ideas page: a card grid of posts at the first stage
+    Ideas.tsx           the Ideas page: a card grid of ideas and its tag chips
     StatusPill.tsx      the small coloured status label
-    NewPostModal.tsx    the create/edit dialog, shared by every page
+    Dialog.tsx          the frame every dialog shares: backdrop, panel, heading
+    NewPostModal.tsx    the long form — seven fields, for posts
+    IdeaDialog.tsx      the short form — three fields, for ideas
 ```
 
 ## Dates
@@ -165,35 +168,82 @@ filters, they reset when you leave the page.
 
 ## The Ideas page
 
-The pipeline has six stages, read from `STATUSES`: Draft, Scripting, Filming,
-Editing, Scheduled, Published. There is no seventh "Idea" status — an idea is a
-post at the front of the pipeline, so `Ideas.tsx` takes the same `posts` array
-as everything else and shows the first stage:
+An idea is its own thing, not a stage of a post.
+
+The pipeline — Draft, Scripting, Filming, Editing, Scheduled, Published —
+describes how close a *post* is to being live. An idea is the material a post
+gets built from, and it does not sit on that scale at all: a hook or a topic has
+no platform, no format and no date yet, and one idea can outlive several posts.
+Squeezing ideas into the post table would mean inventing a fake platform and a
+fake status for every passing thought, which is why there are two lists.
+
+So `Idea` is a separate type — a title, an optional tag, optional notes, and a
+link to the post it became:
 
 ```tsx
-const FIRST_STAGE = STATUSES[0]
-const ideas = posts.filter((post) => post.status === FIRST_STAGE)
+interface Idea {
+  id: number
+  title: string
+  tag?: "Hooks" | "Topics" | "Visuals" | "Post ideas"
+  notes?: string
+  postId?: number
+}
 ```
 
-Nothing is copied and there is no second data structure to keep in sync. The
-"Move to Scripting" button maps over the posts and replaces one — the post keeps
-its id, date and notes, and simply leaves this page on the next render.
+The form is deliberately three fields. Recording an idea has to be quicker than
+losing it, which is the whole argument for a short form beside the long one
+posts use.
 
-Both stages are read from `STATUSES` rather than typed in, so renaming a stage or
-extending the pipeline needs no change here: the page always shows the first
-stage and always offers the one after it. Idea cards carry no status pill,
-because every card on the page is at the same stage and showing it would just
-repeat the page's own label.
+### Tags
 
-Everything else is reused:
+Tags are a way of *looking* at the page, not something the page acts on. The
+chips across the top — All, Hooks, Topics, Visuals, Post ideas, Uncategorised —
+each carry a count, and choosing one filters the grid. That state lives inside
+`Ideas`, like the post list's filters, and is deliberately not saved.
 
-- **Create** opens the same modal, with `preset: { status: FIRST_STAGE }` so the
-  form already has the right status, and `createHeading: "New idea"` so the
-  dialog says what it is. A preset is only a few fields layered over the blank
-  form, which is why the rest still starts empty.
-- **Edit** and **delete** are the exact handlers the other pages use.
-- **Storage** is the same single `localStorage` key. There is no ideas-specific
-  persistence anywhere.
+Every chip stays visible even at zero. One that vanished while selected would
+leave the page filtering by something with no control left to see it or turn it
+off; a count is allowed to be untidy, the controls are not.
+
+Tags are grey on purpose. Every colour in the palette already means a status or
+a platform, so a coloured tag sitting beside a status pill would read as the
+same kind of information.
+
+The tag is optional: deciding what kind of thought you just had is a separate
+act from having it. Untagged ideas collect under their own group rather than
+blocking the save.
+
+### Turning an idea into a post
+
+"Turn into a post" copies the idea's title into a new Draft, carries its notes
+across, and opens the long form so the rest can be filled in. Both lists change
+in one `setStore`, so the post and the link to it are written together and can
+never be half-saved.
+
+The idea stays on the page afterwards, and gains a link to what it became. That
+is deliberate: using an idea once is not the same as using it up, and a hook
+that worked is worth a second post. Promotion adds a post rather than moving the
+idea somewhere else. The card then offers "View post" instead of promoting a
+second time — and if that post is later deleted, the link dangles harmlessly
+and the card offers to promote again.
+
+Deleting an idea never touches the post it became. They are separate records.
+
+### Two forms
+
+Posts and ideas have separate dialogs, because a form's length is part of what
+it is for:
+
+| | The post form | The idea form |
+| --- | --- | --- |
+| Fields | title, platform, format, date, status, notes | title, tag, notes |
+| Panel | `max-w-lg` | `max-w-md` |
+| Opened by | the header button, the boards, the calendar | the Ideas page |
+
+Both are built on `Dialog.tsx`, which owns the backdrop, the panel, the heading
+and the close button — so the two look like siblings without a second copy of
+the same styling to keep in step. A dialog owns nothing about its fields; it is
+only the frame.
 
 The current page is not saved. A reload opens Plan, which is the page you want
 first.
@@ -217,48 +267,76 @@ at the list, not data about it. A reload starts unfiltered.
 ## How data is stored
 
 Everything lives in the browser's `localStorage` under one key,
-`content-planner:posts`, holding a JSON array. No server, no account, no
-network call anywhere in the app.
+`content-planner:posts`, holding a JSON object with both lists. No server, no
+account, no network call anywhere in the app.
+
+```json
+{ "posts": [...], "ideas": [...] }
+```
+
+One key rather than two, so a save writes both lists together and they cannot
+end up out of step with each other.
 
 `src/storage.ts` is the only file that touches `localStorage`:
 
-- `loadPosts()` — reads and parses the key. Returns `null` if nothing is saved
-  or the data can't be trusted, and `App` then falls back to the example posts.
-- `savePosts(posts)` — writes the array. Never throws, so a full or blocked
+- `loadStore()` — reads and parses the key. Returns `null` if nothing is saved
+  or the data can't be trusted, and `App` then falls back to the examples.
+- `saveStore(store)` — writes both lists. Never throws, so a full or blocked
   store can't break the app.
 
-`App` loads once with a lazy `useState` initializer, then saves from a
-`useEffect` watching `posts`. Create, edit, delete, dragging a card on either
-board and advancing an idea to the next stage all only call `setPosts` — none of
-them saves directly, so no handler can forget to.
+`App` keeps the two lists in one piece of state. `setPosts` and `setIdeas` are
+wrappers that replace one list and leave the other exactly as it was — a second
+piece of state would mean two saves that could fall out of step. Create, edit,
+delete, dragging a card on either board and promoting an idea all only call
+those; none of them saves directly, so no handler can forget to.
 
 New ids come from the highest existing id plus one, computed with `reduce`
-starting at 0. `Math.max(...posts.map(...))` looks equivalent but returns
+starting at 0. `Math.max(...items.map(...))` looks equivalent but returns
 `-Infinity` on an empty list, which JSON turns into `null`.
 
 Storage is per-origin, so `localhost:5173` (dev) and `localhost:4173`
 (preview) keep separate copies. To wipe saved data and start from the examples
 again, run `localStorage.clear()` in the browser console.
 
-Bad saved data is filtered rather than trusted: anything that isn't a
-well-formed post is dropped, and if nothing survives the app falls back to the
-examples. An empty array is respected as a real state — it means every post was
-deleted.
+### Reading old data
 
-Renaming a status would otherwise be the exception that quietly loses data: the
-check rejects anything it doesn't recognise, so a post saved with a retired
-value would read as bad data and be dropped. `storage.ts` therefore upgrades
-saved posts on the way in, before they are validated:
+Bad saved data is filtered rather than trusted: anything that isn't a
+well-formed post or idea is dropped, and if nothing survives the app falls back
+to the examples. An empty list is respected as a real state — it means
+everything was deleted.
+
+Two upgrades run on the way in, before validation, because both would otherwise
+throw data away.
+
+**The old array shape.** Before ideas existed the key held a bare array of
+posts. `loadStore` reads that shape too, and treats it as a store with no ideas
+in it:
+
+```ts
+if (Array.isArray(parsed)) {
+  const posts = readPosts(parsed)
+  return posts === null ? null : { posts, ideas: [] }
+}
+```
+
+Reading the old shape rather than refusing it is what stops an upgrade from
+emptying the app. Someone upgrading this way keeps every post and starts with an
+empty Ideas page — example ideas are only ever copied in on a first run, never
+into data that already exists.
+
+**A renamed status.** The check rejects anything it doesn't recognise, so a post
+saved with a retired status would read as bad data and be dropped:
 
 ```ts
 const RETIRED_STATUSES: Record<string, Status> = { Idea: "Draft" }
 ```
 
-Ideas were retired when the pipeline grew to six stages, and became Drafts — the
-first stage. The upgrade runs on every load and rewrites a post into a new
-object, so it is safe to run twice: once a value has been replaced there is
-nothing left for it to match, and the stored JSON is rewritten to the new shape
-on the next save.
+The status once called "Idea" went this way when the pipeline grew to six
+stages. That is not the same thing as the `Idea` type — a separate list with its
+own form — so only a post's *status* is upgraded here. The upgrade runs on every
+load and rewrites a post into a new object, so it is safe to run twice: once a
+value has been replaced there is nothing left for it to match, and the stored
+JSON is rewritten to the new shape on the next save.
 
 ## Commands
 

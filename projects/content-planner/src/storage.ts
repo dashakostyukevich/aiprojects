@@ -1,5 +1,5 @@
 import { STATUSES } from "./types"
-import type { ContentType, Platform, Post, Status } from "./types"
+import type { ContentType, Idea, IdeaTag, Platform, Post, Status } from "./types"
 import { isValidISO } from "./dates"
 
 /*
@@ -7,11 +7,21 @@ import { isValidISO } from "./dates"
   touches localStorage, so this is the only place to look if the storage
   format ever changes.
 
-  localStorage holds strings only, so posts are saved as JSON. Everything is
-  kept under a single key: one array is easier to read, write, and reason
-  about than one key per post.
+  localStorage holds strings only, so everything is saved as JSON under one key,
+  holding both lists:
+
+    { posts: [...], ideas: [...] }
+
+  One key rather than two, so a save writes both lists at once and they can
+  never end up out of step with each other.
 */
 const STORAGE_KEY = "content-planner:posts"
+
+/** Both lists the app keeps, as they are stored. */
+export interface Store {
+  posts: Post[]
+  ideas: Idea[]
+}
 
 const platforms: Platform[] = ["Instagram", "Threads", "TikTok", "Blog"]
 const contentTypes: ContentType[] = [
@@ -21,6 +31,7 @@ const contentTypes: ContentType[] = [
   "Text",
   "Blog post",
 ]
+const ideaTags: IdeaTag[] = ["Hooks", "Topics", "Visuals", "Post ideas"]
 
 /**
  * Statuses from earlier versions of the app, mapped to the one that replaced
@@ -28,8 +39,11 @@ const contentTypes: ContentType[] = [
  *
  * This exists because of what `isPost` below does: it rejects anything it
  * doesn't recognise. Rename a status without upgrading old data and every post
- * using it reads as bad data and is quietly thrown away. Ideas were retired
- * when the pipeline grew to six stages, and became Drafts.
+ * using it reads as bad data and is quietly thrown away. The status once called
+ * "Idea" went this way when the pipeline grew to six stages, and became Draft.
+ *
+ * That is not the same thing as the `Idea` type, which is a separate list with
+ * its own short form. Only a post's *status* is upgraded here.
  */
 const RETIRED_STATUSES: Record<string, Status> = { Idea: "Draft" }
 
@@ -82,28 +96,82 @@ function isPost(value: unknown): value is Post {
 }
 
 /**
- * Reads the saved posts.
- * Returns null when there is nothing saved yet, or when what is saved can't be
- * trusted — the caller then falls back to the example posts.
+ * Checks one saved value really is an idea.
+ *
+ * An idea is a much looser thing than a post — just an id and a title, with a
+ * tag, notes and a link all optional — so this check is correspondingly light.
+ * An unrecognised tag is dropped rather than kept, which means adding a tag to
+ * `IDEA_TAGS` later would discard it from old saves; if that ever happens, give
+ * it the same upgrade treatment as retired statuses above.
  */
-export function loadPosts(): Post[] | null {
+function isIdea(value: unknown): value is Idea {
+  if (typeof value !== "object" || value === null) return false
+
+  const idea = value as Record<string, unknown>
+
+  if (typeof idea.id !== "number") return false
+  if (typeof idea.title !== "string" || idea.title.trim() === "") return false
+  if (idea.tag !== undefined && !ideaTags.includes(idea.tag as IdeaTag)) {
+    return false
+  }
+  if (idea.notes !== undefined && typeof idea.notes !== "string") return false
+  if (idea.postId !== undefined && typeof idea.postId !== "number") return false
+
+  return true
+}
+
+/**
+ * Turns a raw array from storage into posts.
+ *
+ * Returns null when the array held entries but none of them survived the
+ * check — that means what was saved isn't usable, and the caller falls back to
+ * the examples. An empty array is a different thing entirely: it is a real
+ * state, meaning every post was deleted, so it passes through.
+ */
+function readPosts(raw: unknown[]): Post[] | null {
+  if (raw.length === 0) return []
+
+  // Upgrade anything written by an older version, then keep only the entries
+  // that really are posts, so one bad row can't take the whole app down.
+  const posts = raw.map(withCurrentStatus).filter(isPost)
+  return posts.length > 0 ? posts : null
+}
+
+/**
+ * Reads both saved lists.
+ *
+ * Returns null when there is nothing saved yet, or when what is saved can't be
+ * trusted — the caller then falls back to the examples.
+ */
+export function loadStore(): Store | null {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (raw === null) return null
 
     const parsed: unknown = JSON.parse(raw)
-    if (!Array.isArray(parsed)) return null
 
-    // An empty array is a legitimate saved state — it means every post was
-    // deleted — so it is passed straight through, not treated as a failure.
-    if (parsed.length === 0) return []
+    // The shape from before ideas existed: a bare array of posts. Reading it
+    // as well, rather than refusing it, is what keeps upgrading the format
+    // from emptying the app.
+    if (Array.isArray(parsed)) {
+      const posts = readPosts(parsed)
+      return posts === null ? null : { posts, ideas: [] }
+    }
 
-    // Upgrade anything written by an older version, then keep only the
-    // entries that really are posts, so one bad row can't take the whole app
-    // down. If none of them survived, something is wrong with what was saved
-    // and the caller falls back to the examples.
-    const posts = parsed.map(withCurrentStatus).filter(isPost)
-    return posts.length > 0 ? posts : null
+    if (typeof parsed !== "object" || parsed === null) return null
+
+    const saved = parsed as Record<string, unknown>
+    if (!Array.isArray(saved.posts)) return null
+
+    const posts = readPosts(saved.posts)
+    if (posts === null) return null
+
+    // Ideas are optional on purpose: a store written before they existed, or
+    // edited by hand, simply has none. Anything malformed is dropped rather
+    // than allowed to break the page.
+    const ideas = Array.isArray(saved.ideas) ? saved.ideas.filter(isIdea) : []
+
+    return { posts, ideas }
   } catch {
     // Unreadable JSON, or storage blocked entirely (private browsing).
     return null
@@ -111,12 +179,12 @@ export function loadPosts(): Post[] | null {
 }
 
 /**
- * Writes the posts. Called after every change, so it must never throw —
+ * Writes both lists. Called after every change, so it must never throw —
  * a failed save shouldn't take the app down with it.
  */
-export function savePosts(posts: Post[]): void {
+export function saveStore(store: Store): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(posts))
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(store))
   } catch {
     // Storage full or unavailable. The app keeps working in memory.
   }

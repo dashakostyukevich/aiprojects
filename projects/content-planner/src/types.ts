@@ -30,15 +30,50 @@ export const STATUSES: Status[] = [
   "Published",
 ]
 
-/** The stage a post goes to next. A post at the last stage stays there. */
-export function nextStatus(status: Status): Status {
-  const index = STATUSES.indexOf(status)
-  return STATUSES[Math.min(index + 1, STATUSES.length - 1)]
-}
-
 export type Platform = "Instagram" | "Threads" | "TikTok" | "Blog"
 
 export type ContentType = "Reel" | "Carousel" | "Story" | "Text" | "Blog post"
+
+/**
+ * The kinds of idea, in the order the filter chips show them.
+ *
+ * An idea is deliberately a separate thing from a post, not a stage of one. A
+ * hook or a topic is not a post that hasn't been written yet — it is the raw
+ * material a post gets built from, and one idea can outlive several posts. So
+ * it gets its own type, its own short form, and its own list.
+ *
+ * This is also a different axis from `ContentType`, which answers "what shape
+ * will this be" (a Reel, a carousel). A tag answers "what is it" — an angle, a
+ * subject, an image, a whole post.
+ */
+export type IdeaTag = "Hooks" | "Topics" | "Visuals" | "Post ideas"
+
+export const IDEA_TAGS: IdeaTag[] = [
+  "Hooks",
+  "Topics",
+  "Visuals",
+  "Post ideas",
+]
+
+export interface Idea {
+  id: number
+  /** The whole idea, often one line. This is what makes the form short. */
+  title: string
+  /**
+   * Optional on purpose. A passing thought gets captured before you decide
+   * what kind of thing it is, and untitled ideas collect under "Uncategorised"
+   * rather than blocking the save.
+   */
+  tag?: IdeaTag
+  /** Private scribbles, the same idea as `Post.notes`. */
+  notes?: string
+  /**
+   * The post this idea became, once it has. The idea is kept after promotion —
+   * a hook is often worth a second post — so this is a link, not a move. It
+   * dangles harmlessly if that post is later deleted.
+   */
+  postId?: number
+}
 
 export interface Post {
   id: number
