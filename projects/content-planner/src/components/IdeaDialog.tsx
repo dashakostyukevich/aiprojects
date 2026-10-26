@@ -14,17 +14,17 @@ export interface DraftIdea {
 /*
   The idea dialog — the short form, three fields.
 
-  Compare the post dialog: platform, format, date, status and notes is a form
-  you sit down and fill in once, on purpose. This one is a form you flick
-  through while something is still fresh, which is why it asks for almost
-  nothing. An idea that takes a minute to record is an idea that doesn't get
-  recorded.
+  Compare the post editor: platform, format, day, status, cover, hooks, script
+  and caption is a page you sit down and work through once, on purpose. This
+  one is a form you flick through while something is still fresh, which is why
+  it asks for almost nothing. An idea that takes a minute to record is an idea
+  that doesn't get recorded.
 
   The tag starts empty. Deciding what kind of thought you just had is a
   separate act from having it, so nothing here forces the question — an
   untagged idea simply collects under "Uncategorised" on the page.
 
-  The frame comes from `Dialog`, shared with the post form.
+  The frame comes from `Dialog`.
 */
 export default function IdeaDialog({
   idea,

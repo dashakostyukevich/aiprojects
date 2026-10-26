@@ -65,7 +65,7 @@ export interface Idea {
    * rather than blocking the save.
    */
   tag?: IdeaTag
-  /** Private scribbles, the same idea as `Post.notes`. */
+  /** Private scribbles. A post's equivalent free writing is its caption. */
   notes?: string
   /**
    * The post this idea became, once it has. The idea is kept after promotion —
@@ -77,6 +77,7 @@ export interface Idea {
 
 export interface Post {
   id: number
+  /** The page heading, and what every board card and list row shows. */
   title: string
   platform: Platform
   type: ContentType
@@ -89,8 +90,19 @@ export interface Post {
    */
   date: string | null
   status: Status
-  /** Private scribbles. Optional, and not shown in the list. */
-  notes?: string
+  /**
+   * The cover image as a data URL, already downscaled before it got here —
+   * see `cover.ts`. Absent when the post has none.
+   */
+  cover?: string
+  /**
+   * The three writing sections, in the order they appear on the editor page.
+   * All optional: a post can be a bare title, or a finished script, or
+   * anything between the two.
+   */
+  hooks?: string
+  script?: string
+  caption?: string
 }
 
 /**

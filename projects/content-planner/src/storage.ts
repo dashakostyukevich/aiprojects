@@ -51,20 +51,38 @@ const RETIRED_STATUSES: Record<string, Status> = { Idea: "Draft" }
  * Rewrites one saved post into the shape the app uses now, or passes it
  * through untouched.
  *
+ * Two upgrades happen here, both of them renames the reader can't guess:
+ *
+ *   - a retired status, mapped to the stage that replaced it
+ *   - the free-notes field, folded into the caption section when the post
+ *     editor grew hooks, script and caption and stopped having notes
+ *
  * Takes and returns `unknown` because it runs before anything has been
  * validated — an old post may not be a well-formed post at all yet.
+ *
+ * Running it twice is harmless: an upgraded post matches neither case, so the
+ * result is returned unchanged.
  */
-function withCurrentStatus(value: unknown): unknown {
+function upgradePost(value: unknown): unknown {
   if (typeof value !== "object" || value === null) return value
 
   const post = value as Record<string, unknown>
-  const replacement = RETIRED_STATUSES[post.status as string]
-  if (replacement === undefined) return value
+  const changes: Record<string, unknown> = {}
 
-  // A new object, so the array read out of storage is never rewritten in
-  // place. Running this twice is harmless: once upgraded, there is nothing
-  // left for it to match.
-  return { ...post, status: replacement }
+  const retired = RETIRED_STATUSES[post.status as string]
+  if (retired !== undefined) changes.status = retired
+
+  // Only fold notes across when there isn't already a caption, so a post that
+  // somehow carries both can't lose the caption it has.
+  if (typeof post.notes === "string" && post.caption === undefined) {
+    changes.caption = post.notes
+  }
+
+  if (Object.keys(changes).length === 0) return value
+
+  const upgraded: Record<string, unknown> = { ...post, ...changes }
+  delete upgraded.notes
+  return upgraded
 }
 
 /**
@@ -133,7 +151,7 @@ function readPosts(raw: unknown[]): Post[] | null {
 
   // Upgrade anything written by an older version, then keep only the entries
   // that really are posts, so one bad row can't take the whole app down.
-  const posts = raw.map(withCurrentStatus).filter(isPost)
+  const posts = raw.map(upgradePost).filter(isPost)
   return posts.length > 0 ? posts : null
 }
 
@@ -179,13 +197,20 @@ export function loadStore(): Store | null {
 }
 
 /**
- * Writes both lists. Called after every change, so it must never throw —
- * a failed save shouldn't take the app down with it.
+ * Writes both lists, and says whether it worked.
+ *
+ * Called after every change, so it must never throw — a failed save shouldn't
+ * take the app down with it. It does report back, though: the usual reason for
+ * failure is storage being full, which is easy to reach now that posts can
+ * carry a cover image. App turns `false` into a warning rather than letting
+ * the app keep looking fine while writing nothing.
  */
-export function saveStore(store: Store): void {
+export function saveStore(store: Store): boolean {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(store))
+    return true
   } catch {
     // Storage full or unavailable. The app keeps working in memory.
+    return false
   }
 }

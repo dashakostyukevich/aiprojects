@@ -108,7 +108,7 @@ Rule: **migration must never throw and never lose data silently.** If a post can
 | `src/index.css` | add pillar accent colours alongside the existing four |
 | `src/components/SummaryCards.tsx` | count by pipeline stage |
 | `src/components/StatusPill.tsx` | new labels |
-| `src/components/NewPostModal.tsx` | pillar select, multi-platform, scheduled toggle |
+| `src/components/PostEditor.tsx` | pillar select, multi-platform, scheduled toggle |
 | `src/components/FilterBar.tsx` | filter by pillar as well as platform/status/type |
 | `src/components/PostList.tsx` | pillar dot on each row |
 

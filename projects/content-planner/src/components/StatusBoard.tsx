@@ -7,16 +7,16 @@ import BoardCard from "./BoardCard"
 import BoardColumn from "./BoardColumn"
 
 /*
-  The status board: one column per status, running left to right from loose
-  notes through to published. Dragging a card into another column changes that
-  post's status and nothing else — the date, the notes and the id all stay as
-  they were.
+  The status board: one column per status, running left to right from an
+  untouched draft through to published. Dragging a card into another column
+  changes that post's status and nothing else — the date, the written sections
+  and the id all stay as they were.
 
   Six columns read from STATUSES, so adding a stage to that one array is all it
   takes to grow the board.
 
   As with the week board, dragging is a mouse gesture. On a phone, tap a card
-  to open the dialog and change the status there.
+  to open the editor page and change the status there.
 */
 
 /** A short line for each column header, so the board reads at a glance. */

@@ -38,6 +38,7 @@ src/
   data.ts               12 example posts and 8 example ideas
   styles.ts             colour classes for each status, platform and content type
   dates.ts              all date maths: ISO parsing, week and month grids
+  cover.ts              a picked image file, shrunk to something storage can hold
   storage.ts            the only file that touches localStorage
   components/
     Sidebar.tsx         navigation: Plan, Calendar, Ideas
@@ -53,8 +54,8 @@ src/
     PostList.tsx        the list of posts, plus the filter state
     Ideas.tsx           the Ideas page: a card grid of ideas and its tag chips
     StatusPill.tsx      the small coloured status label
-    Dialog.tsx          the frame every dialog shares: backdrop, panel, heading
-    NewPostModal.tsx    the long form — seven fields, for posts
+    PostEditor.tsx      the post editor — a whole page, for creating and editing
+    Dialog.tsx          the frame the idea dialog uses: backdrop, panel, heading
     IdeaDialog.tsx      the short form — three fields, for ideas
 ```
 
@@ -114,6 +115,65 @@ Plan is the landing page: it is the screen a plan lives on. Calendar holds the
 month grid and the searchable list, which moved out of the old Overview to give
 the boards a page of their own.
 
+## The post editor
+
+A post is edited on a page of its own rather than in a dialog. It takes the
+place of the header and the page underneath; the sidebar stays, because that is
+where you leave from, and it still points at the page you came from.
+
+The page runs in the order a post is actually made:
+
+| Part | Fields |
+| --- | --- |
+| Heading | the title, typed straight in — what every card and list row shows |
+| Header | platform, content type, status, day, cover image |
+| Writing | hooks, then script, then caption |
+
+The five header fields are the decisions made once and then not thought about
+again. The three sections below are the work in the order it happens: what
+stops the scroll, what you say, what goes underneath. All four text fields are
+optional, so a post can be a bare title, a finished script, or anything between
+the two.
+
+Creating and editing are this one page with the same eight fields. `App` holds a
+single `editor` state — `{ create }` or `{ edit, post }` — and renders
+`PostEditor` whenever it isn't null, so there is only ever one form to keep
+correct. The idea dialog is still a dialog: three short fields do not need a
+page, and they belong to one card rather than to the whole screen.
+
+The title is a textarea that grows to its content rather than an input, because
+an input shows only as much as fits on one line and the heading is the one place
+the whole title should be readable. Enter saves instead of adding a line — a
+title is a single line of data.
+
+### Cover images
+
+A cover is picked from disk and stored as a data URL, which puts it against
+`localStorage`'s roughly 5 MB for the whole origin — and one phone photo can be
+more than half of that. `cover.ts` redraws every image onto a canvas at a
+maximum of 1200 px on its longest edge and re-encodes it as JPEG before it is
+handed to storage. A 4000 × 2400 screenshot of 884 KB comes out at about
+72 KB.
+
+An image already inside that limit is stored as it is, so a small PNG keeps its
+transparency instead of coming back with a white box behind it.
+
+### Leaving without saving
+
+A page you can type a whole script into is a worse thing to lose on a misclick
+than a dialog was, so leaving asks first — `window.confirm`, the same as
+deleting:
+
+```ts
+if (editorDirty && !window.confirm("Discard your unsaved changes to this post?"))
+  return false
+```
+
+The editor reports whether its form still differs from the state it opened with,
+and every way out — Back, Cancel, any sidebar item — goes through that one
+check. Saving doesn't ask: the writing has just been kept, so there is nothing
+left to question.
+
 ## The Plan screen
 
 One board, two ways of reading it:
@@ -146,12 +206,12 @@ entry, exactly as editing does, so there is still one list of posts and one
 
 The boards use the browser's native drag and drop, which does not fire on touch
 screens. Rather than add a second, heavier drag implementation for phones, a tap
-on any card opens the edit dialog, where the date and status can be changed
+on any card opens the editor page, where the date and status can be changed
 directly. That is the phone's way of moving a post, and it works everywhere.
 
 Because a drag and a click can arrive together, `BoardCard` swallows the one
 stray click that some browsers fire when a drag ends, so dropping a card never
-throws the dialog open.
+throws the editor open.
 
 ### Layout
 
@@ -220,9 +280,9 @@ blocking the save.
 ### Turning an idea into a post
 
 "Turn into a post" copies the idea's title into a new Draft, carries its notes
-across, and opens the long form so the rest can be filled in. Both lists change
-in one `setStore`, so the post and the link to it are written together and can
-never be half-saved.
+across into the caption, and opens the editor page so the rest can be filled in.
+Both lists change in one write, so the post and the link to it are saved
+together and can never be half-saved.
 
 The idea stays on the page afterwards, and gains a link to what it became. That
 is deliberate: using an idea once is not the same as using it up, and a hook
@@ -233,21 +293,20 @@ and the card offers to promote again.
 
 Deleting an idea never touches the post it became. They are separate records.
 
-### Two forms
+### One page and one dialog
 
-Posts and ideas have separate dialogs, because a form's length is part of what
-it is for:
+Posts and ideas have different homes, because length is part of what a form is
+for:
 
-| | The post form | The idea form |
+| | The post editor | The idea form |
 | --- | --- | --- |
-| Fields | title, platform, format, date, status, notes | title, tag, notes |
-| Panel | `max-w-lg` | `max-w-md` |
-| Opened by | the header button, the boards, the calendar | the Ideas page |
+| Fields | title, platform, format, day, status, cover, hooks, script, caption | title, tag, notes |
+| Surface | a page of its own, replacing the main content | a `max-w-md` dialog over the page |
+| Opened by | the header button, the boards, the calendar, promoting an idea | the Ideas page |
 
-Both are built on `Dialog.tsx`, which owns the backdrop, the panel, the heading
-and the close button — so the two look like siblings without a second copy of
-the same styling to keep in step. A dialog owns nothing about its fields; it is
-only the frame.
+The idea dialog is still built on `Dialog.tsx`, which owns the backdrop, the
+panel, the heading and the close button. A dialog owns nothing about its fields;
+it is only the frame.
 
 The current page is not saved. A reload opens Plan, which is the page you want
 first.
@@ -285,14 +344,17 @@ end up out of step with each other.
 
 - `loadStore()` — reads and parses the key. Returns `null` if nothing is saved
   or the data can't be trusted, and `App` then falls back to the examples.
-- `saveStore(store)` — writes both lists. Never throws, so a full or blocked
-  store can't break the app.
+- `saveStore(store)` — writes both lists and returns whether it worked. Never
+  throws, so a full or blocked store can't break the app; the `false` it returns
+  instead is what puts the red "this change has not been saved" banner on screen.
 
-`App` keeps the two lists in one piece of state. `setPosts` and `setIdeas` are
-wrappers that replace one list and leave the other exactly as it was — a second
-piece of state would mean two saves that could fall out of step. Create, edit,
-delete, dragging a card on either board and promoting an idea all only call
-those; none of them saves directly, so no handler can forget to.
+`App` keeps the two lists in one piece of state. Every change — create, edit,
+delete, dragging a card on either board, promoting an idea — goes through
+`applyStore`, which puts the new store in memory and writes it in the same
+breath, and then through the `setPosts` and `setIdeas` wrappers that replace one
+list and leave the other exactly as it was. A second piece of state would mean
+two saves that could fall out of step; saving from an effect instead would mean
+the warning can't say which write failed.
 
 New ids come from the highest existing id plus one, computed with `reduce`
 starting at 0. `Math.max(...items.map(...))` looks equivalent but returns
@@ -309,8 +371,8 @@ well-formed post or idea is dropped, and if nothing survives the app falls back
 to the examples. An empty list is respected as a real state — it means
 everything was deleted.
 
-Two upgrades run on the way in, before validation, because both would otherwise
-throw data away.
+Three upgrades run on the way in, before validation, because all of them would
+otherwise throw data away.
 
 **The old array shape.** Before ideas existed the key held a bare array of
 posts. `loadStore` reads that shape too, and treats it as a store with no ideas
@@ -328,8 +390,8 @@ emptying the app. Someone upgrading this way keeps every post and starts with an
 empty Ideas page — example ideas are only ever copied in on a first run, never
 into data that already exists.
 
-**A renamed status.** The check rejects anything it doesn't recognise, so a post
-saved with a retired status would read as bad data and be dropped:
+**Two renamed fields.** The check rejects anything it doesn't recognise, so a
+post saved with a retired status would read as bad data and be dropped:
 
 ```ts
 const RETIRED_STATUSES: Record<string, Status> = { Idea: "Draft" }
@@ -337,10 +399,18 @@ const RETIRED_STATUSES: Record<string, Status> = { Idea: "Draft" }
 
 The status once called "Idea" went this way when the pipeline grew to six
 stages. That is not the same thing as the `Idea` type — a separate list with its
-own form — so only a post's *status* is upgraded here. The upgrade runs on every
-load and rewrites a post into a new object, so it is safe to run twice: once a
-value has been replaced there is nothing left for it to match, and the stored
-JSON is rewritten to the new shape on the next save.
+own form — so only a post's *status* is upgraded here.
+
+The second rename is the post's free `notes` field, folded into `caption` when
+the editor grew hooks, script and caption and stopped having notes. Both renames
+happen in `upgradePost`, which runs on every load and rewrites a post into a new
+object, so it is safe to run twice: once a value has been replaced there is
+nothing left for it to match, and the stored JSON is rewritten to the new shape
+on the next save.
+
+Renaming a *type* rather than a value needs the same treatment. Adding a tag to
+`IDEA_TAGS` later, for instance, would discard it from old saves unless it gets
+an upgrade here too.
 
 ## Commands
 

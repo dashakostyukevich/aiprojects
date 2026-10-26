@@ -23,7 +23,10 @@ export const posts: Post[] = [
     type: "Carousel",
     date: day(-5),
     status: "Scheduled",
-    notes: "Photos are in the shared album. Needs a pull quote.",
+    hooks: "Five cafés. One week. Not a single one regretted.",
+    caption:
+      "Full list of addresses at the link — and yes, the third one is where " +
+      "I wrote most of this. Photos live in the shared album.",
   },
   {
     id: 2,
@@ -56,6 +59,15 @@ export const posts: Post[] = [
     type: "Text",
     date: day(13),
     status: "Scripting",
+    hooks: "I tried eleven design tools last year. I kept four.",
+    script: `Cold open: the desk, everything laid out, eleven of them.
+
+1. The one I open every morning — and what it quietly replaced.
+2. The one that cost the most and still earned it.
+3. The one I cancelled twice and came back to.
+4. The one nobody talks about.
+
+Close on the four that survived, and why the other seven didn't.`,
   },
   {
     id: 6,
