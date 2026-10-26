@@ -196,12 +196,43 @@ export default function Ideas({
         )}
       </div>
 
+      {/*
+        The chips are always on show, including on a page with no ideas at all.
+        Seeing the four types before you have written one is the point: it says
+        what an idea can be, rather than presenting an empty box and a form.
+      */}
+      <div className="flex flex-wrap gap-2">
+        {chips.map((chip) => {
+          const isActive = chip.value === filter
+
+          return (
+            <button
+              key={chip.value}
+              type="button"
+              onClick={() => setFilter(chip.value)}
+              aria-pressed={isActive}
+              className={`rounded-full px-3.5 py-1.5 text-sm transition-colors ${
+                isActive
+                  ? "bg-ink font-medium text-paper"
+                  : "text-ink-soft hover:bg-ink/5 hover:text-ink"
+              }`}
+            >
+              {chip.label}{" "}
+              <span className={isActive ? "text-paper/60" : "text-ink-faint"}>
+                {chip.count}
+              </span>
+            </button>
+          )
+        })}
+      </div>
+
       {ideas.length === 0 ? (
         <div className="rounded-2xl border border-line bg-card px-5 py-14 text-center">
           <p className="font-display text-xl">No ideas yet</p>
           <p className="mx-auto mt-1 max-w-sm text-sm text-ink-soft">
             Write down the hook, the subject or the image while it is fresh.
-            It stays here until you turn it into a post.
+            Tag it when you know what kind it is — it stays here until you turn
+            it into a post.
           </p>
           <button
             type="button"
@@ -212,66 +243,29 @@ export default function Ideas({
             + New idea
           </button>
         </div>
+      ) : visible.length === 0 ? (
+        <div className="rounded-2xl border border-line bg-card px-5 py-14 text-center">
+          <p className="font-display text-xl">Nothing tagged {filterLabel}</p>
+          <p className="mx-auto mt-1 max-w-sm text-sm text-ink-soft">
+            Tag an idea this way from the edit dialog, or add a new one.
+          </p>
+        </div>
       ) : (
-        <>
-          {/* Tag filters. Real buttons, not links: they change what is shown
-              rather than going anywhere. */}
-          <div className="flex flex-wrap gap-2">
-            {chips.map((chip) => {
-              const isActive = chip.value === filter
-
-              return (
-                <button
-                  key={chip.value}
-                  type="button"
-                  onClick={() => setFilter(chip.value)}
-                  aria-pressed={isActive}
-                  className={`rounded-full px-3.5 py-1.5 text-sm transition-colors ${
-                    isActive
-                      ? "bg-ink font-medium text-paper"
-                      : "text-ink-soft hover:bg-ink/5 hover:text-ink"
-                  }`}
-                >
-                  {chip.label}{" "}
-                  <span
-                    className={
-                      isActive ? "text-paper/60" : "text-ink-faint"
-                    }
-                  >
-                    {chip.count}
-                  </span>
-                </button>
-              )
-            })}
-          </div>
-
-          {visible.length === 0 ? (
-            <div className="rounded-2xl border border-line bg-card px-5 py-14 text-center">
-              <p className="font-display text-xl">
-                Nothing tagged {filterLabel}
-              </p>
-              <p className="mx-auto mt-1 max-w-sm text-sm text-ink-soft">
-                Tag an idea this way from the edit dialog, or add a new one.
-              </p>
-            </div>
-          ) : (
-            <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {visible.map((idea) => (
-                <IdeaCard
-                  key={idea.id}
-                  idea={idea}
-                  // A link to a post that has since been deleted is simply
-                  // left unresolved, and the card offers to promote again.
-                  linkedPost={posts.find((post) => post.id === idea.postId)}
-                  onEdit={onEdit}
-                  onDelete={onDelete}
-                  onPromote={onPromote}
-                  onOpenPost={onOpenPost}
-                />
-              ))}
-            </ul>
-          )}
-        </>
+        <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {visible.map((idea) => (
+            <IdeaCard
+              key={idea.id}
+              idea={idea}
+              // A link to a post that has since been deleted is simply
+              // left unresolved, and the card offers to promote again.
+              linkedPost={posts.find((post) => post.id === idea.postId)}
+              onEdit={onEdit}
+              onDelete={onDelete}
+              onPromote={onPromote}
+              onOpenPost={onOpenPost}
+            />
+          ))}
+        </ul>
       )}
     </section>
   )

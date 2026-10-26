@@ -201,9 +201,13 @@ chips across the top — All, Hooks, Topics, Visuals, Post ideas, Uncategorised 
 each carry a count, and choosing one filters the grid. That state lives inside
 `Ideas`, like the post list's filters, and is deliberately not saved.
 
-Every chip stays visible even at zero. One that vanished while selected would
-leave the page filtering by something with no control left to see it or turn it
-off; a count is allowed to be untidy, the controls are not.
+The chips are on show whether the page holds ideas or not — including on a
+first visit, where all six read zero. Seeing the four types before you have
+written one is the point: it says what an idea can be, rather than presenting
+an empty box and a form. Every chip stays visible at zero too. One that
+vanished while selected would leave the page filtering by something with no
+control left to see it or turn it off; a count is allowed to be untidy, the
+controls are not.
 
 Tags are grey on purpose. Every colour in the palette already means a status or
 a platform, so a coloured tag sitting beside a status pill would read as the
