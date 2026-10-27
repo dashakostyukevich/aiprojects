@@ -13,6 +13,7 @@ const links: { label: string; view: View }[] = [
   { label: "Plan", view: "plan" },
   { label: "Calendar", view: "calendar" },
   { label: "Ideas", view: "ideas" },
+  { label: "Pillars", view: "pillars" },
 ]
 
 export default function Sidebar({

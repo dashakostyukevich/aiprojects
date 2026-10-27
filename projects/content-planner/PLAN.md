@@ -51,7 +51,9 @@ the old value would be rejected as malformed data and lost.
 tracker. Four generic statuses cannot answer "what do I film next?" — six
 pipeline stages can, and that question is the daily driver.
 
-### 1.2 Add content pillars
+### 1.2 Add content pillars — ✅ done, with a different model
+
+The original proposal:
 
 ```ts
 export interface Pillar {
@@ -65,9 +67,47 @@ export interface Pillar {
 }
 ```
 
-`emoji` as its own field is a deliberate correction to Workhorse's bug — emoji baked into the name fights the serif type.
+**Shipped as** a smaller shape in `src/types.ts`:
 
-Pillar colour becomes the primary visual signal, which is what makes the mini-calendar dots and a future grid preview possible.
+```ts
+export interface Pillar {
+  id: number
+  name: string              // "Postcards in Progress"
+  type: PillarType          // one of nine, see below
+  description?: string      // what belongs here — and what doesn't
+}
+```
+
+Four departures, all deliberate:
+
+- **`bucket` became `type`, with nine values instead of four.** Emotional /
+  value / lifestyle / ritual is a taxonomy with no external referent: nobody
+  else uses it, so it can only be learned, never looked up. The nine types come
+  from Cloud Campaign's published guide to content pillars — Educational,
+  Promotional, Engaging, Inspiring, Entertaining, Community, Authenticity,
+  Trending, Social proof — and they answer a question the four buckets don't:
+  what does this post do *for the reader*? That is also the thing a page can
+  audit, which is what makes the mix card possible.
+- **`emoji` dropped.** It was proposed to avoid Workhorse's bug of baking an
+  emoji into the name, and that bug is real — but the fix for "name plus a
+  decorative marker" is not a second decorative marker. A pillar is told apart
+  by its words.
+- **`color` dropped.** Every colour in the palette already means a status or a
+  platform. A pillar colour would be a third meaning for the same six hues, and
+  a green pillar chip beside a green Published pill reads as the same kind of
+  information. Pillar chips are grey, like idea tags.
+- **`recurringDays` dropped.** Nothing consumes it. The week board places posts
+  by date already, so a recurrence rule would be a field you fill in and never
+  see — and the first screen that would need it (a recurring template) doesn't
+  exist.
+
+`description` is optional rather than required, because a name is enough to
+start; the Pillars page says out loud when a pillar has none, which is more
+useful than blocking the save.
+
+**Also shipped beyond the proposal:** the Pillars page itself, the nine-type
+reference with per-type advice, a mix card, and `Post.pillarId` so posts are
+actually filed under a pillar. See README's "The Pillars page".
 
 ### 1.3 A post carries more than one platform
 
@@ -101,22 +141,54 @@ Rule: **migration must never throw and never lose data silently.** If a post can
 
 | File | Change |
 | --- | --- |
-| `src/types.ts` | new `Status`, `Pillar`, updated `Post`, `ListFilters` |
-| `src/storage.ts` | `migrate()` + pillar storage under `content-planner:pillars` |
-| `src/styles.ts` | status styles remapped to the six stages; pillar colour lookup |
-| `src/data.ts` | example posts migrated; 3–4 example pillars with real recurring days |
-| `src/index.css` | add pillar accent colours alongside the existing four |
-| `src/components/SummaryCards.tsx` | count by pipeline stage |
-| `src/components/StatusPill.tsx` | new labels |
-| `src/components/PostEditor.tsx` | pillar select, multi-platform, scheduled toggle |
-| `src/components/FilterBar.tsx` | filter by pillar as well as platform/status/type |
-| `src/components/PostList.tsx` | pillar dot on each row |
+| `src/types.ts` | new `Status`, `Pillar` + `PILLAR_TYPES`, updated `Post`, `ListFilters` |
+| `src/storage.ts` | upgrade posts on load; pillars live in the same key as the other lists, not a separate `content-planner:pillars` |
+| `src/styles.ts` | status styles remapped to the six stages; one grey chip shared by tags and pillars |
+| `src/data.ts` | example posts migrated; 4 example pillars across 4 types, every post filed under one |
+| `src/index.css` | *(not needed — pillars carry no colour of their own)* |
+| `src/components/SummaryCards.tsx` | ✅ count by pipeline stage |
+| `src/components/StatusPill.tsx` | ✅ new labels |
+| `src/components/PostEditor.tsx` | ✅ pillar select; multi-platform and scheduled toggle still open |
+| `src/components/FilterBar.tsx` | filter by pillar as well as platform/status/type — still open |
+| `src/components/PostList.tsx` | ✅ pillar chip on each row |
+| `src/components/Pillars.tsx` | new: the strategy page |
+| `src/components/PillarDialog.tsx` | new: the short pillar form |
 
 ## Phase 2 — The surfaces that make pillars worth having
 
-### 2.1 Strategy view (mobile-first)
+### 2.1 Strategy view (mobile-first) — ✅ mostly done, as the Pillars page
 
-A third view, not a fifth. Content:
+Shipped as a fourth nav item rather than a third view, and without the parts of
+the 1.2 model that didn't survive: no colour, no bucket chip, no recurring days.
+
+What the plan asked for and what exists:
+
+- pillars as a **vertical stack of cards**, not a carousel — ✅ done, and it
+  stacks to one column at phone width like everything else.
+- each pillar's **description** and a **count of posts** filed under it — ✅ done.
+- **type** instead of bucket chip — ✅ done, and the type is the thing the page
+  is built around.
+- per-pillar **"next scheduled post"** — not done. Every post already carries a
+  date and the week board is one click away; a second place to read the same
+  date needs a reason.
+- **seed 3 example pillars on first run** — ✅ done, four of them, across four
+  types.
+
+Added beyond the plan, because a page of cards is not yet a strategy:
+
+- **the mix** — every type in one list with a bar of how many posts it carries,
+  so what is missing is as visible as what is there,
+- **rule-based observations** about the set (a pillar with no description, posts
+  filed under nothing, two pillars sharing a type, no type that asks anything),
+  capped at three,
+- **the nine-type reference** with what each is for, how to make one land, and
+  how it usually goes wrong — shown even when no pillar exists, so the
+  vocabulary is readable before it is needed.
+
+The strategy work that is genuinely still open is the **pillar filter** on the
+post list, and per-pillar "next scheduled post" only if the mix proves too coarse.
+
+The original proposal, for reference:
 
 - the pillars as a vertical stack of cards (not Workhorse's horizontal carousel — carousels hide items and are hostile on phones),
 - each pillar's colour, bucket chip, description, recurring days,

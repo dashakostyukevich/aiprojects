@@ -1,5 +1,14 @@
-import { STATUSES } from "./types"
-import type { ContentType, Idea, IdeaTag, Platform, Post, Status } from "./types"
+import { PILLAR_TYPES, STATUSES } from "./types"
+import type {
+  ContentType,
+  Idea,
+  IdeaTag,
+  Pillar,
+  PillarType,
+  Platform,
+  Post,
+  Status,
+} from "./types"
 import { isValidISO } from "./dates"
 
 /*
@@ -8,19 +17,21 @@ import { isValidISO } from "./dates"
   format ever changes.
 
   localStorage holds strings only, so everything is saved as JSON under one key,
-  holding both lists:
+  holding all three lists:
 
-    { posts: [...], ideas: [...] }
+    { posts: [...], ideas: [...], pillars: [...] }
 
-  One key rather than two, so a save writes both lists at once and they can
-  never end up out of step with each other.
+  One key rather than three, so a save writes everything at once and the lists
+  can never end up out of step with each other — which matters most for pillars,
+  because a post points at one by id.
 */
 const STORAGE_KEY = "content-planner:posts"
 
-/** Both lists the app keeps, as they are stored. */
+/** Everything the app keeps, as it is stored. */
 export interface Store {
   posts: Post[]
   ideas: Idea[]
+  pillars: Pillar[]
 }
 
 const platforms: Platform[] = ["Instagram", "Threads", "TikTok", "Blog"]
@@ -109,7 +120,8 @@ function isPost(value: unknown): value is Post {
     platforms.includes(post.platform as Platform) &&
     contentTypes.includes(post.type as ContentType) &&
     hasValidDate &&
-    STATUSES.includes(post.status as Status)
+    STATUSES.includes(post.status as Status) &&
+    (post.pillarId === undefined || typeof post.pillarId === "number")
   )
 }
 
@@ -139,6 +151,33 @@ function isIdea(value: unknown): value is Idea {
 }
 
 /**
+ * Checks one saved value really is a pillar.
+ *
+ * Like an idea, a pillar is a small thing — an id, a name, a type and an
+ * optional description — so the check is short. A pillar whose type is not one
+ * of the nine is dropped rather than kept, which is the same trade-off idea
+ * tags make: renaming a type later would need the upgrade treatment that
+ * retired statuses get, or old pillars using the old name would disappear.
+ */
+function isPillar(value: unknown): value is Pillar {
+  if (typeof value !== "object" || value === null) return false
+
+  const pillar = value as Record<string, unknown>
+
+  if (typeof pillar.id !== "number") return false
+  if (typeof pillar.name !== "string" || pillar.name.trim() === "") return false
+  if (!PILLAR_TYPES.includes(pillar.type as PillarType)) return false
+  if (
+    pillar.description !== undefined &&
+    typeof pillar.description !== "string"
+  ) {
+    return false
+  }
+
+  return true
+}
+
+/**
  * Turns a raw array from storage into posts.
  *
  * Returns null when the array held entries but none of them survived the
@@ -156,7 +195,7 @@ function readPosts(raw: unknown[]): Post[] | null {
 }
 
 /**
- * Reads both saved lists.
+ * Reads every saved list.
  *
  * Returns null when there is nothing saved yet, or when what is saved can't be
  * trusted — the caller then falls back to the examples.
@@ -173,7 +212,7 @@ export function loadStore(): Store | null {
     // from emptying the app.
     if (Array.isArray(parsed)) {
       const posts = readPosts(parsed)
-      return posts === null ? null : { posts, ideas: [] }
+      return posts === null ? null : { posts, ideas: [], pillars: [] }
     }
 
     if (typeof parsed !== "object" || parsed === null) return null
@@ -186,10 +225,19 @@ export function loadStore(): Store | null {
 
     // Ideas are optional on purpose: a store written before they existed, or
     // edited by hand, simply has none. Anything malformed is dropped rather
-    // than allowed to break the page.
+    // than allowed to break the page. The same goes for pillars below.
     const ideas = Array.isArray(saved.ideas) ? saved.ideas.filter(isIdea) : []
 
-    return { posts, ideas }
+    // Pillars arrived after ideas, so a store saved by the previous version has
+    // no `pillars` key at all. It gets an empty list rather than the examples:
+    // filling in sample pillars would put words in the mouth of someone who
+    // already has their own posts. Nothing is lost — their posts simply have no
+    // pillar until they pick one.
+    const pillars = Array.isArray(saved.pillars)
+      ? saved.pillars.filter(isPillar)
+      : []
+
+    return { posts, ideas, pillars }
   } catch {
     // Unreadable JSON, or storage blocked entirely (private browsing).
     return null
@@ -197,7 +245,7 @@ export function loadStore(): Store | null {
 }
 
 /**
- * Writes both lists, and says whether it worked.
+ * Writes every list, and says whether it worked.
  *
  * Called after every change, so it must never throw — a failed save shouldn't
  * take the app down with it. It does report back, though: the usual reason for

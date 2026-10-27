@@ -1,4 +1,4 @@
-import type { Idea, Post } from "./types"
+import type { Idea, Pillar, Post } from "./types"
 import { addDays, todayISO } from "./dates"
 
 /*
@@ -15,6 +15,54 @@ function day(offset: number): string {
   return addDays(today, offset)
 }
 
+/*
+  Example pillars, on the same footing as everything else here: copied in on a
+  first run, then ignored in favour of the browser's copy.
+
+  Four pillars across four of the nine types, because a real set is uneven — the
+  interesting part of the Pillars page is what is missing, and this set is
+  missing everything that asks for something. That is deliberate: it is the most
+  common shape a personal account has, and it gives the advice on that page
+  something true to say.
+
+  The names are specific on purpose. "Travel" and "Design" are topics, not
+  pillars; "Postcards in Progress" tells you what to shoot.
+*/
+export const pillars: Pillar[] = [
+  {
+    id: 1,
+    name: "Postcards in Progress",
+    type: "Inspiring",
+    description:
+      "Places, and what they looked like on the days I wasn't working. The " +
+      "slowest thing I post, and the one people save.",
+  },
+  {
+    id: 2,
+    name: "Freelance, honestly",
+    type: "Authenticity",
+    description:
+      "Day rates, quiet months, the jobs I said no to. What the work is " +
+      "actually like, including the parts that don't photograph.",
+  },
+  {
+    id: 3,
+    name: "The explainer",
+    type: "Educational",
+    description:
+      "One thing I learned, taught properly: the specific version, with the " +
+      "number in it, rather than the topic.",
+  },
+  {
+    id: 4,
+    name: "Work where it happens",
+    type: "Community",
+    description:
+      "Cafés, borrowed desks and other people's studios. Where the work " +
+      "actually gets done, and who else is there doing it.",
+  },
+]
+
 export const posts: Post[] = [
   {
     id: 1,
@@ -23,6 +71,7 @@ export const posts: Post[] = [
     type: "Carousel",
     date: day(-5),
     status: "Scheduled",
+    pillarId: 1,
     hooks: "Five cafés. One week. Not a single one regretted.",
     caption:
       "Full list of addresses at the link — and yes, the third one is where " +
@@ -35,6 +84,7 @@ export const posts: Post[] = [
     type: "Text",
     date: day(-1),
     status: "Draft",
+    pillarId: 2,
   },
   {
     id: 3,
@@ -43,6 +93,7 @@ export const posts: Post[] = [
     type: "Reel",
     date: day(2),
     status: "Scheduled",
+    pillarId: 1,
   },
   {
     id: 4,
@@ -51,6 +102,7 @@ export const posts: Post[] = [
     type: "Reel",
     date: day(6),
     status: "Filming",
+    pillarId: 4,
   },
   {
     id: 5,
@@ -59,6 +111,7 @@ export const posts: Post[] = [
     type: "Text",
     date: day(13),
     status: "Scripting",
+    pillarId: 3,
     hooks: "I tried eleven design tools last year. I kept four.",
     script: `Cold open: the desk, everything laid out, eleven of them.
 
@@ -76,6 +129,7 @@ Close on the four that survived, and why the other seven didn't.`,
     type: "Story",
     date: day(3),
     status: "Draft",
+    pillarId: 4,
   },
   {
     id: 7,
@@ -84,6 +138,7 @@ Close on the four that survived, and why the other seven didn't.`,
     type: "Text",
     date: day(-12),
     status: "Published",
+    pillarId: 3,
   },
   {
     id: 8,
@@ -92,6 +147,7 @@ Close on the four that survived, and why the other seven didn't.`,
     type: "Carousel",
     date: day(-9),
     status: "Published",
+    pillarId: 2,
   },
   {
     id: 9,
@@ -100,6 +156,7 @@ Close on the four that survived, and why the other seven didn't.`,
     type: "Carousel",
     date: day(9),
     status: "Editing",
+    pillarId: 1,
   },
   {
     id: 10,
@@ -108,6 +165,7 @@ Close on the four that survived, and why the other seven didn't.`,
     type: "Text",
     date: day(-3),
     status: "Published",
+    pillarId: 1,
   },
   {
     id: 11,
@@ -117,6 +175,7 @@ Close on the four that survived, and why the other seven didn't.`,
     // Still loose notes: the first stage, and no day committed to yet.
     date: null,
     status: "Draft",
+    pillarId: 3,
   },
   {
     id: 12,
@@ -125,6 +184,7 @@ Close on the four that survived, and why the other seven didn't.`,
     type: "Text",
     date: null,
     status: "Draft",
+    pillarId: 3,
   },
 ]
 

@@ -6,16 +6,23 @@ import PostList from "./components/PostList"
 import Calendar from "./components/Calendar"
 import PlanBoard from "./components/PlanBoard"
 import Ideas from "./components/Ideas"
+import Pillars from "./components/Pillars"
 import PostEditor from "./components/PostEditor"
 import type { EditorDraft } from "./components/PostEditor"
 import IdeaDialog from "./components/IdeaDialog"
 import type { DraftIdea } from "./components/IdeaDialog"
-import { ideas as exampleIdeas, posts as examplePosts } from "./data"
+import PillarDialog from "./components/PillarDialog"
+import type { DraftPillar } from "./components/PillarDialog"
+import {
+  ideas as exampleIdeas,
+  pillars as examplePillars,
+  posts as examplePosts,
+} from "./data"
 import { addMonths, isValidISO, parseISO, todayISO } from "./dates"
 import { loadStore, saveStore } from "./storage"
 import type { Store } from "./storage"
 import { STATUSES } from "./types"
-import type { Idea, Post, Status, View } from "./types"
+import type { Idea, Pillar, Post, Status, View } from "./types"
 
 /*
   The stage a new post starts at. Read from the list rather than typed in, so
@@ -24,19 +31,25 @@ import type { Idea, Post, Status, View } from "./types"
 const FIRST_STAGE = STATUSES[0]
 
 /*
-  What the idea dialog is currently doing. One state instead of a separate
-  "is open" flag and "which idea" value, so the two can never disagree.
+  What the dialog is currently doing. One state instead of a separate "is open"
+  flag and "which thing" value, so the two can never disagree.
 
-    null                closed
-    { newIdea }         adding a brand new idea
-    { editIdea, idea }  changing an idea that already exists
+    null                     closed
+    { newIdea }              adding a brand new idea
+    { editIdea, idea }       changing an idea that already exists
+    { newPillar }            adding a brand new pillar
+    { editPillar, pillar }   changing a pillar that already exists
 
-  Posts are not here any more: the long form grew into a page, which App
-  renders in place of the rest of the screen rather than over the top of it.
+  Both kinds are short forms, which is why they share one piece of state rather
+  than a flag each. Posts are not here any more: the long form grew into a page,
+  which App renders in place of the rest of the screen rather than over the top
+  of it.
 */
-type IdeaModal =
+type Modal =
   | { mode: "newIdea" }
   | { mode: "editIdea"; idea: Idea }
+  | { mode: "newPillar" }
+  | { mode: "editPillar"; pillar: Pillar }
   | null
 
 /*
@@ -58,33 +71,38 @@ function nextId(items: { id: number }[]): number {
 }
 
 /*
-  App owns both lists. Everything below receives them as props and re-renders
-  when they change, which is why the boards, the count cards, the calendar and
-  the ideas grid all update together.
+  App owns every list. Everything below receives them as props and re-renders
+  when they change, which is why the boards, the count cards, the calendar, the
+  ideas grid and the pillars page all update together.
 
-  Six pieces of state:
-    store        both lists, read from the browser on startup
+  Seven pieces of state:
+    store        every list, read from the browser on startup
     editor       which post the editor page has open, or null when it doesn't
     editorDirty  whether the editor holds writing that hasn't been saved
-    ideaModal    what the idea dialog is doing, or null when it is closed
+    modal        what the short-form dialog is doing, or null when it is closed
     saveFailed   the last write to localStorage didn't take
     month        the year and month the calendar page is showing
-    view         which page is on screen — Plan, Calendar or Ideas
+    view         which page is on screen — Plan, Calendar, Ideas or Pillars
 */
 function App() {
   // The function form of useState runs once, on the first render, which is
   // what we want for reading storage. Passing the object directly would run it
   // on every render.
   const [store, setStore] = useState<Store>(
-    () => loadStore() ?? { posts: examplePosts, ideas: exampleIdeas },
+    () =>
+      loadStore() ?? {
+        posts: examplePosts,
+        ideas: exampleIdeas,
+        pillars: examplePillars,
+      },
   )
   const [editor, setEditor] = useState<Editor>(null)
   const [editorDirty, setEditorDirty] = useState(false)
-  const [ideaModal, setIdeaModal] = useState<IdeaModal>(null)
+  const [modal, setModal] = useState<Modal>(null)
   const [saveFailed, setSaveFailed] = useState(false)
   const [view, setView] = useState<View>("plan")
 
-  const { posts, ideas } = store
+  const { posts, ideas, pillars } = store
 
   // The calendar opens on the current month, read from the real clock.
   const [month, setMonth] = useState(() => {
@@ -125,6 +143,11 @@ function App() {
     applyStore({ ...store, ideas: update(store.ideas) })
   }
 
+  /** Updates the pillars and leaves the other two lists alone. */
+  function setPillars(update: (pillars: Pillar[]) => Pillar[]) {
+    applyStore({ ...store, pillars: update(store.pillars) })
+  }
+
   /** Closes the editor outright, with no question asked. */
   function closeEditor() {
     setEditor(null)
@@ -163,8 +186,8 @@ function App() {
     setView(next)
   }
 
-  function closeIdeaModal() {
-    setIdeaModal(null)
+  function closeModal() {
+    setModal(null)
   }
 
   /** Turns the form values into a post. */
@@ -184,6 +207,10 @@ function App() {
       // No date at all means null, which keeps the post off the calendar.
       date: draft.dateInput === "" ? null : draft.dateInput,
       status: draft.status,
+      // "No pillar" in the dropdown is null; absent is how a post with no
+      // pillar is stored, so the two are converted here rather than in the
+      // page, which never needs to know how a post is written.
+      pillarId: draft.pillarId === null ? undefined : draft.pillarId,
       cover: draft.cover === "" ? undefined : draft.cover,
       hooks: section(draft.hooks),
       script: section(draft.script),
@@ -256,19 +283,29 @@ function App() {
 
   /** Opens the short form to add an idea. */
   function openNewIdea() {
-    setIdeaModal({ mode: "newIdea" })
+    setModal({ mode: "newIdea" })
   }
 
   /** Opens the short form on an idea that already exists. */
   function openEditIdea(idea: Idea) {
-    setIdeaModal({ mode: "editIdea", idea })
+    setModal({ mode: "editIdea", idea })
+  }
+
+  /** Opens the short form to add a pillar. */
+  function openNewPillar() {
+    setModal({ mode: "newPillar" })
+  }
+
+  /** Opens the short form on a pillar that already exists. */
+  function openEditPillar(pillar: Pillar) {
+    setModal({ mode: "editPillar", pillar })
   }
 
   /** One save handler for both modes of the idea dialog. */
   function handleSaveIdea(draft: DraftIdea) {
-    if (ideaModal?.mode === "editIdea") {
+    if (modal?.mode === "editIdea") {
       const updated: Idea = {
-        ...ideaModal.idea,
+        ...modal.idea,
         title: draft.title,
         tag: draft.tag,
         notes: draft.notes,
@@ -290,7 +327,39 @@ function App() {
       ])
     }
 
-    closeIdeaModal()
+    closeModal()
+  }
+
+  /**
+   * One save handler for both modes of the pillar dialog.
+   *
+   * A description left empty is not stored, for the same reason empty post
+   * sections aren't: "" and absent mean the same thing to everything that reads
+   * them. A pillar with no description is a real state — the Pillars page says
+   * so out loud rather than pretending it isn't.
+   */
+  function handleSavePillar(draft: DraftPillar) {
+    const trimmed = draft.description.trim()
+    const description = trimmed === "" ? undefined : trimmed
+
+    if (modal?.mode === "editPillar") {
+      const updated: Pillar = {
+        ...modal.pillar,
+        name: draft.name,
+        type: draft.type,
+        description,
+      }
+      setPillars((current) =>
+        current.map((pillar) => (pillar.id === updated.id ? updated : pillar)),
+      )
+    } else {
+      setPillars((current) => [
+        { id: nextId(current), name: draft.name, type: draft.type, description },
+        ...current,
+      ])
+    }
+
+    closeModal()
   }
 
   /** Removes one idea, after asking first. Any post it became is left alone. */
@@ -301,6 +370,45 @@ function App() {
     if (!confirmed) return
 
     setIdeas((current) => current.filter((i) => i.id !== idea.id))
+  }
+
+  /**
+   * Removes one pillar, after asking first.
+   *
+   * The posts keep everything else but lose their `pillarId`. A post filed
+   * under a pillar that no longer exists would quietly disappear from every
+   * count on the Pillars page, which reads as a bug rather than a consequence
+   * — the reader would still see the post listed, with nothing saying why it
+   * is missing from the mix. Clearing the id makes the change visible where it
+   * happened: the post shows "No pillar" until another one is chosen.
+   *
+   * Posts and pillars change in one applyStore, so the two can't be written
+   * half-way.
+   */
+  function handleDeletePillar(pillar: Pillar) {
+    const used = posts.filter((post) => post.pillarId === pillar.id).length
+
+    const consequence =
+      used === 0
+        ? "This cannot be undone."
+        : used === 1
+          ? "Its one post keeps everything else but loses its pillar. This " +
+            "cannot be undone."
+          : `${used} posts keep everything else but lose their pillar. This ` +
+            "cannot be undone."
+
+    const confirmed = window.confirm(
+      `Delete "${pillar.name}"?\n\n${consequence}`,
+    )
+    if (!confirmed) return
+
+    applyStore({
+      posts: store.posts.map((post) =>
+        post.pillarId === pillar.id ? { ...post, pillarId: undefined } : post,
+      ),
+      ideas: store.ideas,
+      pillars: store.pillars.filter((p) => p.id !== pillar.id),
+    })
   }
 
   /**
@@ -334,6 +442,7 @@ function App() {
       ideas: store.ideas.map((candidate) =>
         candidate.id === idea.id ? { ...candidate, postId: post.id } : candidate,
       ),
+      pillars: store.pillars,
     })
 
     // Land straight in the editor page — that is the point of promoting.
@@ -389,6 +498,7 @@ function App() {
           <PostEditor
             // Passing the post is what puts the page into edit mode.
             post={editor.mode === "edit" ? editor.post : undefined}
+            pillars={pillars}
             onSave={handleSaveEditor}
             onCancel={dismissEditor}
             onDirtyChange={setEditorDirty}
@@ -427,6 +537,7 @@ function App() {
 
                   <PostList
                     posts={posts}
+                    pillars={pillars}
                     onEdit={openEdit}
                     onDelete={handleDelete}
                     onShowInCalendar={jumpToPost}
@@ -445,25 +556,48 @@ function App() {
                   onOpenPost={openEdit}
                 />
               )}
+
+              {view === "pillars" && (
+                <Pillars
+                  pillars={pillars}
+                  posts={posts}
+                  onNew={openNewPillar}
+                  onEdit={openEditPillar}
+                  onDelete={handleDeletePillar}
+                />
+              )}
             </main>
           </>
         )}
       </div>
 
       {/*
-        The idea dialog still rides over the page — it is short, and it belongs
-        to a specific card rather than taking over the screen. The state says
-        which one, or neither: when it is null the dialog stays unmounted, so
-        each open starts with a fresh form.
+        The short forms still ride over the page — they are three fields each,
+        and they belong to a specific card rather than taking over the screen.
+        The state says which one, or neither: when it is null both stay
+        unmounted, so each open starts with a fresh form.
+
+        The two checks below are mutually exclusive, which is what lets each one
+        read `modal.pillar` or `modal.idea` without a cast.
       */}
-      {ideaModal !== null && (
-        <IdeaDialog
-          // Passing the idea is what puts the short form into edit mode.
-          idea={ideaModal.mode === "editIdea" ? ideaModal.idea : undefined}
-          onSave={handleSaveIdea}
-          onCancel={closeIdeaModal}
-        />
-      )}
+      {modal !== null &&
+        (modal.mode === "newIdea" || modal.mode === "editIdea") && (
+          <IdeaDialog
+            // Passing the idea is what puts the short form into edit mode.
+            idea={modal.mode === "editIdea" ? modal.idea : undefined}
+            onSave={handleSaveIdea}
+            onCancel={closeModal}
+          />
+        )}
+
+      {modal !== null &&
+        (modal.mode === "newPillar" || modal.mode === "editPillar") && (
+          <PillarDialog
+            pillar={modal.mode === "editPillar" ? modal.pillar : undefined}
+            onSave={handleSavePillar}
+            onCancel={closeModal}
+          />
+        )}
     </div>
   )
 }

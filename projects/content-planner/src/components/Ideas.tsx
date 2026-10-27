@@ -1,7 +1,7 @@
 import { useState } from "react"
 import type { Idea, IdeaTag, Post } from "../types"
 import { IDEA_TAGS } from "../types"
-import { ideaTagChip } from "../styles"
+import { quietChip } from "../styles"
 
 /*
   The Ideas page.
@@ -52,7 +52,7 @@ function IdeaCard({
       */}
       {idea.tag ? (
         <span
-          className={`w-fit rounded-full px-2.5 py-1 text-xs font-medium ${ideaTagChip}`}
+          className={`w-fit rounded-full px-2.5 py-1 text-xs font-medium ${quietChip}`}
         >
           {idea.tag}
         </span>

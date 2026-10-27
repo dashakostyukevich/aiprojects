@@ -6,15 +6,16 @@ import type { ContentType, Platform, Status } from "./types"
 */
 
 /**
- * The chip on an idea, showing its tag.
+ * The neutral chip, for a label rather than a signal — an idea's tag, a post's
+ * pillar.
  *
  * Deliberately grey. Every colour in the palette already means a status or a
  * platform, so a coloured tag sitting beside a status pill would read as the
  * same kind of information — and a green "Hooks" chip beside a green
- * "Published" pill would be actively misleading. A tag is told apart by its
- * words, not its colour.
+ * "Published" pill would be actively misleading. These are told apart by their
+ * words, not their colour.
  */
-export const ideaTagChip =
+export const quietChip =
   "bg-ink-soft/10 text-ink-soft ring-1 ring-inset ring-line"
 
 export const statusStyles: Record<Status, string> = {

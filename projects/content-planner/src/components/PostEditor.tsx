@@ -2,13 +2,15 @@ import { useEffect, useRef, useState } from "react"
 import type { ChangeEvent } from "react"
 import { fileToCover } from "../cover"
 import { STATUSES } from "../types"
-import type { ContentType, Platform, Post, Status } from "../types"
+import type { ContentType, Pillar, Platform, Post, Status } from "../types"
 
 /** What the page hands back to App when Save is pressed. */
 export interface EditorDraft {
   title: string
   platform: Platform
   type: ContentType
+  /** The pillar this post belongs to, or null when it isn't filed under one. */
+  pillarId: number | null
   /** The raw "2026-03-18" from the date input. "" means no date at all. */
   dateInput: string
   status: Status
@@ -33,6 +35,7 @@ const blankDraft: EditorDraft = {
   title: "",
   platform: "Instagram",
   type: "Reel",
+  pillarId: null,
   dateInput: "",
   status: STATUSES[0],
   cover: "",
@@ -55,6 +58,7 @@ function draftFromPost(post: Post): EditorDraft {
     title: post.title,
     platform: post.platform,
     type: post.type,
+    pillarId: post.pillarId ?? null,
     // Posts store the same "YYYY-MM-DD" the date input uses, so it goes
     // straight back in. No conversion needed either way.
     dateInput: post.date ?? "",
@@ -143,26 +147,29 @@ function Section({
  * The order of the page is deliberate and follows how a post is actually made:
  *
  *   1. the title, which is the page heading and names the post everywhere
- *   2. the header — platform, content type, status, day, cover image, all the
- *      decisions that get made once and then not thought about again
+ *   2. the header — platform, content type, pillar, status, day, cover image:
+ *      all the decisions that get made once and then not thought about again
  *   3. hooks, then script, then caption — the writing, in the order it is
  *      written: what stops the scroll, what you say, what goes underneath
  *
  * `post` is the difference between the two modes: undefined starts the page
  * blank, a Post starts it filled in with that post.
  *
- * All eight fields live in one `draft`. The page reports back whether that
+ * All nine fields live in one `draft`. The page reports back whether that
  * draft still differs from what it opened with (see `onDirtyChange`), so App
  * can ask before throwing typed work away.
  */
 export default function PostEditor({
   post,
+  pillars,
   onSave,
   onCancel,
   onDirtyChange,
 }: {
   /** The post being edited, or undefined when creating a new one. */
   post?: Post
+  /** What the Pillar dropdown offers, read from App's pillar list. */
+  pillars: Pillar[]
   onSave: (draft: EditorDraft) => void
   onCancel: () => void
   /** Reports true once the form differs from the state it opened in. */
@@ -264,7 +271,7 @@ export default function PostEditor({
   return (
     <div className="flex flex-1 flex-col">
       {/*
-        The header carries the title and the five fixed decisions. It scrolls
+        The header carries the title and the six fixed decisions. It scrolls
         away with the page on purpose — none of it is needed once you are
         writing, and keeping all of it on screen would leave a script with a
         hundred lines to live in.
@@ -339,9 +346,11 @@ export default function PostEditor({
             )}
           </div>
 
-          {/* The header row: the four choices that set the post's place in
-              the app. Two across on a phone, four once there is room. */}
-          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {/* The header row: the five choices that set the post's place in
+              the app. Two across on a phone, three once there is room. With
+              an odd number, the last row simply doesn't fill — which reads
+              better than squeezing five dropdowns into one line. */}
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
             <Select
               label="Platform"
               value={draft.platform}
@@ -354,6 +363,35 @@ export default function PostEditor({
               options={contentTypes}
               onChange={(value) => update("type", value)}
             />
+
+            {/*
+              The pillar, unlike the two above it, is chosen from a list the
+              reader owns and can be left empty — so it gets its own select
+              rather than the shared `Select`, whose options are a fixed list of
+              strings and which has no way to say "none".
+            */}
+            <label className="flex flex-col gap-1.5">
+              <span className="text-xs font-medium text-ink-soft">Pillar</span>
+              <select
+                value={draft.pillarId === null ? "" : String(draft.pillarId)}
+                onChange={(event) =>
+                  update(
+                    "pillarId",
+                    event.target.value === "" ? null : Number(event.target.value),
+                  )
+                }
+                className="rounded-lg border border-line bg-card px-3 py-2
+                  text-sm text-ink outline-none focus:border-ink-faint"
+              >
+                <option value="">No pillar</option>
+                {pillars.map((pillar) => (
+                  <option key={pillar.id} value={pillar.id}>
+                    {pillar.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+
             <Select
               label="Status"
               value={draft.status}
