@@ -2,6 +2,7 @@ import { useState } from "react"
 import Dialog from "./Dialog"
 import { IDEA_TAGS } from "../types"
 import type { Idea, IdeaTag } from "../types"
+import { primaryButton, secondaryButton } from "../styles"
 
 /** What the dialog hands back to App when Save is pressed. */
 export interface DraftIdea {
@@ -10,6 +11,11 @@ export interface DraftIdea {
   tag?: IdeaTag
   notes: string
 }
+
+/* The shared look of every control in this form. */
+const fieldStyle =
+  "rounded-xl border bg-card px-3 py-2.5 text-sm text-ink " +
+  "placeholder:text-ink-faint"
 
 /*
   The idea dialog — the short form, three fields.
@@ -70,7 +76,7 @@ export default function IdeaDialog({
       >
         <label className="flex flex-col gap-1.5">
           <span className="text-xs font-medium text-ink-soft">
-            Title <span className="text-clay">*</span>
+            Title <span className="text-danger">*</span>
           </span>
           <input
             value={draft.title}
@@ -80,13 +86,12 @@ export default function IdeaDialog({
             }}
             placeholder="The idea, in one line"
             autoFocus
-            className={`rounded-lg border bg-card px-3 py-2 text-sm
-              outline-none focus:border-ink-faint ${
-                titleError ? "border-clay" : "border-line"
-              }`}
+            className={`${fieldStyle} ${
+              titleError ? "border-danger" : "border-line"
+            }`}
           />
           {titleError && (
-            <span className="text-xs text-clay">
+            <span className="text-xs text-danger">
               A title is required before saving.
             </span>
           )}
@@ -106,8 +111,7 @@ export default function IdeaDialog({
             onChange={(event) =>
               update("tag", (event.target.value || undefined) as IdeaTag)
             }
-            className="rounded-lg border border-line bg-card px-3 py-2 text-sm
-              text-ink outline-none focus:border-ink-faint"
+            className={`${fieldStyle} border-line`}
           >
             <option value="">Uncategorised</option>
             {IDEA_TAGS.map((tag) => (
@@ -127,26 +131,15 @@ export default function IdeaDialog({
             onChange={(event) => update("notes", event.target.value)}
             rows={3}
             placeholder="Why it's worth keeping…"
-            className="resize-none rounded-lg border border-line bg-card
-              px-3 py-2 text-sm outline-none focus:border-ink-faint"
+            className={`${fieldStyle} resize-none border-line`}
           />
         </label>
 
         <div className="mt-1 flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="rounded-full border border-line px-5 py-2 text-sm
-              font-medium text-ink-soft transition-colors
-              hover:bg-ink/5 hover:text-ink"
-          >
+          <button type="button" onClick={onCancel} className={secondaryButton}>
             Cancel
           </button>
-          <button
-            type="submit"
-            className="rounded-full bg-ink px-5 py-2 text-sm font-medium
-              text-paper transition-opacity hover:opacity-90"
-          >
+          <button type="submit" className={primaryButton}>
             {idea ? "Save changes" : "Save idea"}
           </button>
         </div>

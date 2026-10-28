@@ -1,37 +1,121 @@
 @import "tailwindcss";
 
 /*
-  One warm palette for the whole app. Each colour is given a name so the
-  classes read as plain English: class="bg-paper" instead of an odd hex code.
-  Change a value here and every card, border and shadow follows.
+  The Mondays design system, mapped onto the names this app already uses.
+
+  Every colour has a plain-English name so the classes read as sentences:
+  class="bg-card" instead of a hex code. Change a value here and every card,
+  border, chip and shadow follows.
+
+  Two names are this app's own: `paper` is the canvas the cards sit on, and
+  `ink` is the text. The rest line up with the design system one for one.
 */
 @theme {
   /* Surfaces, from furthest back to closest */
-  --color-paper: #faf7f2; /* the page background: warm cream */
-  --color-card: #fffdf9; /* cards and panels, a touch lighter than the page */
-  --color-line: #ece5d9; /* borders and dividers */
+  --color-paper: #f7f7f7; /* the page behind the cards */
+  --color-card: #ffffff; /* cards, inputs, the sidebar */
+  --color-subtle: #f4f4f5; /* quiet chips, hover states, count pills */
+  --color-line: #e8e8ea; /* 1px borders between regions */
+  /*
+    Dotted dividers inside lists. Darker than the design system's #E3E3E6 on
+    purpose: a 1px dotted line only covers half the pixels it spans, so that
+    grey lands at about #F1F1F3 on screen and the rule disappears. This value
+    reads at the same weight as a solid hairline.
+  */
+  --color-line-soft: #d5d5db;
 
-  /* Text */
-  --color-ink: #2b2723; /* headings and primary text */
-  --color-ink-soft: #6b6259; /* secondary text, labels */
-  --color-ink-faint: #a39a8d; /* placeholders, counts */
+  /* Text, darkest to lightest */
+  --color-ink: #111111; /* headings, titles, key numbers */
+  --color-ink-soft: #555558; /* body copy, labels, nav items */
+  --color-ink-faint: #8e8e93; /* timestamps, helper text, counts */
 
-  /* Status colours, all muted so nothing shouts */
-  --color-clay: #b5796a; /* draft — loose notes, not started */
-  --color-slate: #7c8ba1; /* scripting — writing the words */
-  --color-plum: #96809b; /* filming — on camera */
-  --color-teal: #6f9191; /* editing — in post-production */
-  --color-honey: #c99a4e; /* scheduled — waiting its turn */
-  --color-sage: #7d9070; /* published — done */
+  /* Primary: the one blue. Actions and the current location. */
+  --color-primary: #2f66e6;
+  --color-primary-dark: #2554c4;
+  --color-primary-tint: #e6eefd;
 
-  /* Type */
-  --font-display: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia,
-    serif;
+  /*
+    The five pastels. Status is the only thing in this app that gets a colour
+    (see styles.ts for which stage takes which one).
+  */
+  --color-pink: #eba3ea;
+  --color-orange: #f78f57;
+  --color-yellow: #f4ea3a;
+  --color-blue: #5b8def;
+  --color-green: #a8eda2;
+
+  /*
+    The one colour the design system does not have. Destructive actions, a
+    failed write and the one "watch out" label have to say "stop", and none of
+    the five pastels is dark enough to read as a warning on white.
+  */
+  --color-danger: #b3261e;
+  --color-danger-tint: #fbeae9;
+
+  /*
+    Type. A neutral grotesk for the whole interface, and a serif for the
+    wordmark only — the design system forbids the serif anywhere else.
+
+    Both stacks start with the design system's own fonts and fall back to what
+    macOS already has, so the app never has to fetch a font from a CDN.
+  */
+  --font-sans: "Inter", "SF Pro Text", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", system-ui, sans-serif;
+  --font-brand: "Instrument Serif", "Playfair Display", "Iowan Old Style",
+    Palatino, Georgia, serif;
+
+  /* Shape: 20px cards, 12px buttons and inputs, 8px small tiles. */
+  --radius-2xl: 1.25rem;
+
+  /* Elevation, always soft and wide — never a hard black shadow. */
+  --shadow-card: 0 8px 24px rgb(17 17 17 / 0.06);
+  --shadow-pop: 0 16px 40px rgb(17 17 17 / 0.1);
 }
 
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Headings are medium, never bold: hierarchy comes from size, not weight. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 500;
+}
+
+/* Focus is always visible, on every control, in the one blue. */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+/*
+  A press is a small physical cue. Draggable cards are left out: they are
+  picked up and moved, and scaling one under the cursor fights that.
+*/
+@media (prefers-reduced-motion: no-preference) {
+  button:not(:disabled):not([draggable="true"]):active,
+  [role="button"]:not([draggable="true"]):active {
+    transform: scale(0.98);
+  }
+}
+
+/* Motion is optional. When it is turned off, nothing moves at all. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

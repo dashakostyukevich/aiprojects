@@ -3,6 +3,7 @@ import type { DragEvent } from "react"
 import type { Post, Status } from "../types"
 import { STATUSES } from "../types"
 import { toReadableDate } from "../dates"
+import { statusBars } from "../styles"
 import BoardCard from "./BoardCard"
 import BoardColumn from "./BoardColumn"
 
@@ -86,6 +87,7 @@ export default function StatusBoard({
             key={status}
             title={status}
             hint={hints[status]}
+            dot={statusBars[status]}
             isDropTarget={overStatus === status}
             count={statusPosts.length}
             emptyLabel="Nothing here yet. Drag a card across."

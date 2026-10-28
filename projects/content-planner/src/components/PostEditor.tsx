@@ -3,6 +3,7 @@ import type { ChangeEvent } from "react"
 import { fileToCover } from "../cover"
 import { STATUSES } from "../types"
 import type { ContentType, Pillar, Platform, Post, Status } from "../types"
+import { primaryButton, secondaryButton } from "../styles"
 
 /** What the page hands back to App when Save is pressed. */
 export interface EditorDraft {
@@ -29,6 +30,15 @@ const contentTypes: ContentType[] = [
   "Text",
   "Blog post",
 ]
+
+/*
+  Every dropdown, date field and textarea on this page is the same control in
+  a different place: white, a hairline border, 12px corners. Keeping it in one
+  string means the five header fields can't drift apart.
+*/
+const fieldStyle =
+  "rounded-xl border border-line bg-card px-3 py-2.5 text-sm text-ink " +
+  "placeholder:text-ink-faint"
 
 /* Every field starts empty, and this is what a brand new post begins as. */
 const blankDraft: EditorDraft = {
@@ -88,8 +98,7 @@ function Select<T extends string>({
       <select
         value={value}
         onChange={(event) => onChange(event.target.value as T)}
-        className="rounded-lg border border-line bg-card px-3 py-2 text-sm
-          text-ink outline-none focus:border-ink-faint"
+        className={fieldStyle}
       >
         {options.map((option) => (
           <option key={option} value={option}>
@@ -124,7 +133,7 @@ function Section({
   return (
     <section className="flex flex-col gap-2">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-        <h2 className="font-display text-xl">{label}</h2>
+        <h2 className="text-xl text-ink">{label}</h2>
         <p className="text-xs text-ink-faint">{note}</p>
       </div>
       <textarea
@@ -133,8 +142,7 @@ function Section({
         rows={rows}
         placeholder={placeholder}
         className="resize-y rounded-xl border border-line bg-card px-4 py-3
-          text-sm leading-relaxed text-ink outline-none
-          focus:border-ink-faint"
+          text-sm leading-relaxed text-ink placeholder:text-ink-faint"
       />
     </section>
   )
@@ -287,14 +295,14 @@ export default function PostEditor({
         */}
         <div
           className="mx-auto flex w-full max-w-3xl flex-col gap-5 px-5 py-5
-            md:px-8"
+            md:px-8 md:py-7"
         >
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={onCancel}
-              className="-ml-2 flex items-center gap-1.5 rounded-full px-2
-                py-1 text-sm text-ink-soft transition-colors hover:bg-ink/5
+              className="-ml-2 flex items-center gap-1.5 rounded-xl px-2 py-1
+                text-sm text-ink-soft transition-colors hover:bg-subtle
                 hover:text-ink"
             >
               <span aria-hidden="true">←</span> Back
@@ -334,13 +342,14 @@ export default function PostEditor({
                 handleSave()
               }}
               placeholder="Untitled post"
-              className={`font-display w-full resize-none overflow-hidden
-                border-b bg-transparent pb-2 text-3xl leading-tight
-                tracking-tight outline-none placeholder:text-ink-faint
-                md:text-4xl ${titleError ? "border-clay" : "border-transparent"}`}
+              className={`w-full resize-none overflow-hidden border-b
+                bg-transparent pb-2 text-3xl font-medium leading-tight
+                placeholder:text-ink-faint md:text-4xl ${
+                  titleError ? "border-danger" : "border-transparent"
+                }`}
             />
             {titleError && (
-              <span className="text-xs text-clay">
+              <span className="text-xs text-danger">
                 A title is required before saving.
               </span>
             )}
@@ -380,8 +389,8 @@ export default function PostEditor({
                     event.target.value === "" ? null : Number(event.target.value),
                   )
                 }
-                className="rounded-lg border border-line bg-card px-3 py-2
-                  text-sm text-ink outline-none focus:border-ink-faint"
+                className="rounded-xl border border-line bg-card px-3 py-2.5
+                  text-sm text-ink"
               >
                 <option value="">No pillar</option>
                 {pillars.map((pillar) => (
@@ -404,8 +413,7 @@ export default function PostEditor({
                 type="date"
                 value={draft.dateInput}
                 onChange={(event) => update("dateInput", event.target.value)}
-                className="rounded-lg border border-line bg-card px-3 py-2
-                  text-sm text-ink outline-none focus:border-ink-faint"
+                className={fieldStyle}
               />
             </label>
           </div>
@@ -430,9 +438,10 @@ export default function PostEditor({
                 type="button"
                 onClick={() => fileInput.current?.click()}
                 disabled={coverBusy}
-                className="rounded-lg border border-dashed border-line px-4
+                className="rounded-xl border border-dashed border-line px-4
                   py-2.5 text-sm text-ink-soft transition-colors
-                  hover:border-ink-faint hover:text-ink disabled:opacity-60"
+                  hover:border-ink-faint hover:bg-subtle hover:text-ink
+                  disabled:opacity-40"
               >
                 {coverBusy ? "Adding…" : "+ Add cover"}
               </button>
@@ -449,7 +458,7 @@ export default function PostEditor({
                     onClick={() => fileInput.current?.click()}
                     disabled={coverBusy}
                     className="text-xs text-ink-soft underline underline-offset-2
-                      transition-colors hover:text-ink disabled:opacity-60"
+                      transition-colors hover:text-ink disabled:opacity-40"
                   >
                     {coverBusy ? "Adding…" : "Replace"}
                   </button>
@@ -460,7 +469,7 @@ export default function PostEditor({
                       update("cover", "")
                     }}
                     className="text-xs text-ink-faint underline underline-offset-2
-                      transition-colors hover:text-clay"
+                      transition-colors hover:text-danger"
                   >
                     Remove
                   </button>
@@ -469,7 +478,7 @@ export default function PostEditor({
             )}
 
             {coverError && (
-              <span className="text-xs text-clay">{coverError}</span>
+              <span className="text-xs text-danger">{coverError}</span>
             )}
           </div>
         </div>
@@ -514,32 +523,21 @@ export default function PostEditor({
         two hundred lines off screen.
       */}
       <div
-        className="sticky bottom-0 border-t border-line bg-paper/95
+        className="sticky bottom-0 border-t border-line bg-card/95
           backdrop-blur"
       >
         <div
           className="mx-auto flex w-full max-w-3xl flex-wrap items-center
-            justify-between gap-3 px-5 py-3 md:px-8"
+            justify-end gap-3 px-5 py-3 sm:justify-between md:px-8"
         >
           <p className="hidden text-xs text-ink-faint sm:block">
             Nothing is saved until you press {saveLabel.toLowerCase()}.
           </p>
           <div className="flex gap-2">
-            <button
-              type="button"
-              onClick={onCancel}
-              className="rounded-full border border-line px-5 py-2 text-sm
-                font-medium text-ink-soft transition-colors hover:bg-ink/5
-                hover:text-ink"
-            >
+            <button type="button" onClick={onCancel} className={secondaryButton}>
               Cancel
             </button>
-            <button
-              type="button"
-              onClick={handleSave}
-              className="rounded-full bg-ink px-5 py-2 text-sm font-medium
-                text-paper transition-opacity hover:opacity-90"
-            >
+            <button type="button" onClick={handleSave} className={primaryButton}>
               {saveLabel}
             </button>
           </div>

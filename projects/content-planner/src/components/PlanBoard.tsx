@@ -51,7 +51,7 @@ export default function PlanBoard({
           sm:flex-row sm:items-center"
       >
         <div>
-          <h2 className="font-display text-2xl tracking-tight">Plan</h2>
+          <h2 className="text-2xl text-ink">Plan</h2>
           <p className="mt-1 text-sm text-ink-soft">
             {mode === "week"
               ? "Drag a post to another day to change its date."
@@ -60,9 +60,10 @@ export default function PlanBoard({
         </div>
 
         {/* A segmented control rather than two links: these are two views of
-            one board, not two pages. */}
+            one board, not two pages. The chosen side is blue — it is where you
+            are. */}
         <div
-          className="inline-flex shrink-0 rounded-full border border-line
+          className="inline-flex shrink-0 rounded-xl border border-line
             bg-card p-1"
         >
           {modes.map((entry) => (
@@ -71,10 +72,10 @@ export default function PlanBoard({
               type="button"
               onClick={() => setMode(entry.mode)}
               aria-pressed={mode === entry.mode}
-              className={`rounded-full px-4 py-1.5 text-sm transition-colors ${
+              className={`rounded-lg px-4 py-2 text-sm transition-colors ${
                 mode === entry.mode
-                  ? "bg-ink font-medium text-paper"
-                  : "text-ink-soft hover:text-ink"
+                  ? "bg-primary font-medium text-white"
+                  : "text-ink-soft hover:bg-subtle hover:text-ink"
               }`}
             >
               {entry.label}
@@ -96,16 +97,16 @@ export default function PlanBoard({
               type="button"
               onClick={() => stepWeek(-1)}
               aria-label="Previous week"
-              className="rounded-full border border-line px-3 py-1.5 text-sm
-                text-ink-soft transition-colors hover:bg-ink/5 hover:text-ink"
+              className="rounded-xl border border-line px-3 py-2 text-sm
+                text-ink-soft transition-colors hover:bg-subtle hover:text-ink"
             >
               ‹
             </button>
             <button
               type="button"
               onClick={() => setWeekAnchor(startOfWeek(todayISO()))}
-              className="rounded-full border border-line px-3 py-1.5 text-sm
-                text-ink-soft transition-colors hover:bg-ink/5 hover:text-ink"
+              className="rounded-xl border border-line px-3 py-2 text-sm
+                text-ink-soft transition-colors hover:bg-subtle hover:text-ink"
             >
               This week
             </button>
@@ -113,8 +114,8 @@ export default function PlanBoard({
               type="button"
               onClick={() => stepWeek(1)}
               aria-label="Next week"
-              className="rounded-full border border-line px-3 py-1.5 text-sm
-                text-ink-soft transition-colors hover:bg-ink/5 hover:text-ink"
+              className="rounded-xl border border-line px-3 py-2 text-sm
+                text-ink-soft transition-colors hover:bg-subtle hover:text-ink"
             >
               ›
             </button>

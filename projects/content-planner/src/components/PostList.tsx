@@ -1,6 +1,12 @@
 import { useState } from "react"
 import type { ListFilters, Pillar, Post } from "../types"
-import { platformDots, quietChip, toReadableDate, typeStyles } from "../styles"
+import {
+  deleteButton,
+  quietButton,
+  quietChip,
+  secondaryButton,
+  toReadableDate,
+} from "../styles"
 import StatusPill from "./StatusPill"
 import FilterBar from "./FilterBar"
 
@@ -30,31 +36,32 @@ function PostRow({
   return (
     <li
       className="flex flex-col gap-3 px-5 py-4 transition-colors
-        hover:bg-paper/60 sm:flex-row sm:items-center sm:gap-4"
+        hover:bg-subtle/60 sm:flex-row sm:items-center sm:gap-4"
     >
-      {/* Platform, shown as a dot plus a name */}
-      <div className="flex items-center gap-2 sm:w-40 sm:shrink-0">
-        <span className={`h-2 w-2 rounded-full ${platformDots[post.platform]}`} />
+      {/* Platform, as plain secondary text. Colour in this app is the status
+          pill's job, so a platform dot beside it would compete for the same
+          attention. */}
+      <div className="sm:w-40 sm:shrink-0">
         <span className="text-sm text-ink-soft">{post.platform}</span>
       </div>
 
       {/* Title gets the most room. The pillar rides at the end of it as a
           quiet label rather than a column of its own: it is a fact about the
           post, not something you scan for on the way down. */}
-      <p className="min-w-0 flex-1 text-sm font-medium">
-        <span className={`mr-2 ${typeStyles[post.type]}`}>{post.type}</span>
-        {post.title}
+      <p className="min-w-0 flex-1 text-base">
+        <span className="mr-2 text-xs text-ink-faint">{post.type}</span>
+        <span className="font-medium">{post.title}</span>
         {pillar !== undefined && (
           <span
             className={`ml-2 whitespace-nowrap rounded-full px-2 py-0.5
-              text-xs font-normal ${quietChip}`}
+              align-middle text-xs ${quietChip}`}
           >
             {pillar}
           </span>
         )}
       </p>
 
-      <div className="flex flex-wrap items-center justify-between gap-4 sm:justify-end">
+      <div className="flex flex-wrap items-center justify-between gap-3 sm:justify-end">
         {post.date === null ? (
           // Undated posts stay in this list and never reach the calendar.
           <span className="text-sm italic text-ink-faint">No date</span>
@@ -78,8 +85,7 @@ function PostRow({
             type="button"
             onClick={() => onEdit(post)}
             aria-label={`Edit ${post.title}`}
-            className="rounded-full px-3 py-1 text-sm text-ink-soft
-              transition-colors hover:bg-ink/5 hover:text-ink"
+            className={quietButton}
           >
             Edit
           </button>
@@ -87,8 +93,7 @@ function PostRow({
             type="button"
             onClick={() => onDelete(post)}
             aria-label={`Delete ${post.title}`}
-            className="rounded-full px-3 py-1 text-sm text-ink-faint
-              transition-colors hover:bg-clay/10 hover:text-clay"
+            className={deleteButton}
           >
             Delete
           </button>
@@ -104,8 +109,8 @@ function EmptyState({ hasActiveFilters, onClear }: {
   onClear: () => void
 }) {
   return (
-    <div className="px-5 py-14 text-center">
-      <p className="font-display text-xl">Nothing here</p>
+    <div className="px-5 py-16 text-center">
+      <p className="text-xl text-ink">Nothing here</p>
       <p className="mx-auto mt-1 max-w-xs text-sm text-ink-soft">
         {hasActiveFilters
           ? "No posts match your search and filters. Try widening them."
@@ -115,8 +120,7 @@ function EmptyState({ hasActiveFilters, onClear }: {
         <button
           type="button"
           onClick={onClear}
-          className="mt-4 rounded-full bg-ink px-5 py-2 text-sm font-medium
-            text-paper transition-opacity hover:opacity-90"
+          className={`${secondaryButton} mt-5`}
         >
           Clear filters
         </button>
@@ -192,9 +196,9 @@ export default function PostList({
     <section className="overflow-hidden rounded-2xl border border-line bg-card">
       <div
         className="flex items-baseline justify-between gap-3 border-b
-          border-line px-5 py-4"
+          border-line px-5 py-5"
       >
-        <h2 className="font-display text-xl">All posts</h2>
+        <h2 className="text-xl text-ink">All posts</h2>
         <span className="text-sm text-ink-faint">
           {hasActiveFilters
             ? `${visiblePosts.length} of ${posts.length}`
@@ -218,7 +222,10 @@ export default function PostList({
       {visiblePosts.length === 0 ? (
         <EmptyState hasActiveFilters={hasActiveFilters} onClear={clearFilters} />
       ) : (
-        <ul className="divide-y divide-line border-t border-line">
+        // Dotted separators, the design system's treatment for rows inside a
+        // list. A solid line is kept for the edge of a region, not between
+        // items in it.
+        <ul className="divide-y divide-dotted divide-line-soft border-t border-line">
           {visiblePosts.map((post) => (
             <PostRow
               key={post.id}

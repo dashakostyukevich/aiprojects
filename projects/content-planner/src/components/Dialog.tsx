@@ -5,9 +5,12 @@ import type { ReactNode } from "react"
   panel that comes up from the bottom on a phone and centres on a desktop, a
   heading, and a close button.
 
-  The post form and the much shorter idea form both use it, so the two stay
-  looking like siblings without a second copy of the same styling to keep in
-  step. A dialog owns nothing about its fields — it is only the frame.
+  The idea form and the pillar form both use it, so the two stay looking like
+  siblings without a second copy of the same styling to keep in step. A dialog
+  owns nothing about its fields — it is only the frame.
+
+  It is the one place in the app that floats above the page, so it takes the
+  design system's third elevation: a wide, soft shadow and no hard edge.
 
   Clicking the dimmed background cancels. Clicking inside the panel does not,
   which is what the stopPropagation on the panel is for: without it, reaching
@@ -22,7 +25,7 @@ export default function Dialog({
   title: string
   onClose: () => void
   children: ReactNode
-  /** The post form is wide. The idea form is not — it has three fields. */
+  /** Set when a form has more than three fields. */
   wide?: boolean
 }) {
   return (
@@ -36,21 +39,22 @@ export default function Dialog({
         aria-modal="true"
         aria-labelledby="dialog-heading"
         onClick={(event) => event.stopPropagation()}
-        className={`max-h-[92vh] w-full overflow-y-auto rounded-t-2xl
-          border border-line bg-paper p-6 sm:rounded-2xl ${
+        className={`max-h-[92vh] w-full overflow-y-auto rounded-t-2xl border
+          border-line bg-card p-6 shadow-pop sm:rounded-2xl ${
             wide ? "max-w-lg" : "max-w-md"
           }`}
       >
-        <div className="mb-5 flex items-start justify-between gap-4">
-          <h2 id="dialog-heading" className="font-display text-2xl">
+        <div className="mb-5 flex items-center justify-between gap-4">
+          <h2 id="dialog-heading" className="text-xl text-ink">
             {title}
           </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="-mr-1 -mt-1 rounded-full px-2 py-1 text-lg
-              leading-none text-ink-faint transition-colors hover:text-ink"
+            className="-mr-1 grid h-9 w-9 place-items-center rounded-xl text-lg
+              leading-none text-ink-faint transition-colors hover:bg-subtle
+              hover:text-ink"
           >
             ×
           </button>

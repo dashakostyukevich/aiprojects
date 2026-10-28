@@ -34,11 +34,11 @@ Two commitments shape the roadmap:
 src/
   main.tsx              entry point — leave alone
   App.tsx               every list, the four pages, and which page is on screen
-  index.css             Tailwind import + the warm colour palette
+  index.css             Tailwind import + the design tokens (colour, type, shape)
   types.ts              what a Post, an Idea and a Pillar look like, plus the lists
   pillarTypes.ts        what each of the nine pillar types is for, and the advice
   data.ts               12 example posts, 8 example ideas, 4 example pillars
-  styles.ts             colour classes for each status, platform and content type
+  styles.ts             status colours, chips and the button shapes, in one place
   dates.ts              all date maths: ISO parsing, week and month grids
   cover.ts              a picked image file, shrunk to something storage can hold
   storage.ts            the only file that touches localStorage
@@ -86,11 +86,40 @@ drops any saved post whose date doesn't parse, so bad data can't reach the grid.
 To try a different month, use the Previous / Next buttons. Clicking a date in the
 post list jumps the calendar to that month.
 
-Design notes: cream page (`paper`), lighter cards (`card`), hairline borders
-(`line`), serif headings via `font-display`, and six muted status colours — clay
-for draft, slate for scripting, plum for filming, teal for editing, honey for
-scheduled, sage for published. Change a value in `src/index.css` and the whole
-app follows.
+## Design
+
+The interface follows the **Mondays design system**: a near-white canvas, white
+cards with 1px hairline borders and 20px corners, one confident blue for actions
+and the current location, and a small set of pastels that only ever mean a
+status.
+
+`src/index.css` holds the tokens — the five surfaces, three text weights, the
+blue, the five pastels and the two shadows. Change a value there and every
+component follows, because no component carries a hex code of its own.
+
+Three decisions are worth knowing about, because each one is a deliberate
+departure or addition:
+
+- **Status is the only thing that carries colour.** Six stages, five pastels, so
+  Draft takes the neutral: nothing has started yet and colour is meant to mean
+  something. The rest run pink (Scripting), orange (Filming), yellow (Editing),
+  blue (Scheduled), green (Published) — blue is the same
+  colour the calendar already gives a scheduled post, and green is the stage
+  that is finished. Platform, content type, idea tags and pillar types are told
+  apart by their words instead.
+- **One colour is added to the system: `danger` (#B3261E).** The system's five
+  pastels are all too light to read as "stop" on white, and a destructive action
+  has to. It is used for the delete hover, a failed write, a field error, and the
+  one "usually goes wrong" label on the pillar reference.
+- **List dividers are dotted.** A 1px dotted rule covers only half the pixels it
+  spans, so the system's `#E3E3E6` lands at about `#F1F1F3` on screen and
+  disappears. The token is set darker so the rendered line matches the weight of
+  a solid hairline, and stays lighter than the border around the card.
+
+The serif is the wordmark's alone (`--font-brand`, top left); every other piece
+of text is the interface sans. No font is fetched — both stacks start with the
+system font they name and fall back to what the operating system already has,
+because the app never talks to a network.
 
 ## Stack
 
@@ -277,10 +306,10 @@ vanished while selected would leave the page filtering by something with no
 control left to see it or turn it off; a count is allowed to be untidy, the
 controls are not.
 
-Tags are grey on purpose. Every colour in the palette already means a status or
-a platform, so a coloured tag sitting beside a status pill would read as the
-same kind of information. Post pillars reuse the same grey chip for the same
-reason — a label is told apart by its words, not its colour.
+Tags are grey on purpose. Every colour in the palette already means a status, so
+a coloured tag sitting beside a status pill would read as the same kind of
+information. Post pillars reuse the same grey chip for the same reason — a label
+is told apart by its words, not its colour.
 
 The tag is optional: deciding what kind of thought you just had is a separate
 act from having it. Untagged ideas collect under their own group rather than

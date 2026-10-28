@@ -1,5 +1,6 @@
 import { STATUSES } from "../types"
 import type { ContentType, Platform, Status } from "../types"
+import { secondaryButton } from "../styles"
 
 /*
   The search box and the three dropdowns.
@@ -7,6 +8,10 @@ import type { ContentType, Platform, Status } from "../types"
   This component holds no state of its own. It takes the current filters and
   reports changes through `onChange`, the same way Header reports a click. That
   keeps one copy of the filters, held by PostList.
+
+  The search field takes the design system's treatment for one: a filled
+  subtle field with no border, so it reads as something you type in rather than
+  another button in the row.
 */
 
 /** One dropdown whose first option is "All". */
@@ -24,13 +29,13 @@ function FilterSelect<T extends string>({
   onChange: (value: T | "all") => void
 }) {
   return (
-    <label className="flex min-w-0 flex-col gap-1">
+    <label className="flex min-w-0 flex-col gap-1.5">
       <span className="text-xs font-medium text-ink-faint">{label}</span>
       <select
         value={value}
         onChange={(event) => onChange(event.target.value as T | "all")}
-        className="rounded-lg border border-line bg-card px-3 py-2 text-sm
-          text-ink outline-none focus:border-ink-faint"
+        className="h-11 min-w-0 rounded-xl border border-line bg-card px-3
+          text-sm text-ink"
       >
         <option value="all">{allLabel}</option>
         {options.map((option) => (
@@ -77,17 +82,17 @@ export default function FilterBar({
   onClear: () => void
 }) {
   return (
-    <div className="flex flex-col gap-3 px-5 py-4">
+    <div className="flex flex-col gap-4 px-5 py-5">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
-        <label className="flex flex-1 flex-col gap-1">
+        <label className="flex flex-1 flex-col gap-1.5">
           <span className="text-xs font-medium text-ink-faint">Search</span>
           <input
             type="search"
             value={search}
             onChange={(event) => onSearch(event.target.value)}
             placeholder="Search titles…"
-            className="rounded-lg border border-line bg-card px-3 py-2 text-sm
-              outline-none placeholder:text-ink-faint focus:border-ink-faint"
+            className="h-11 rounded-xl bg-subtle px-4 text-sm text-ink
+              placeholder:text-ink-faint"
           />
         </label>
 
@@ -97,9 +102,7 @@ export default function FilterBar({
           <button
             type="button"
             onClick={onClear}
-            className="shrink-0 rounded-full border border-line px-4 py-2
-              text-sm text-ink-soft transition-colors hover:bg-ink/5
-              hover:text-ink"
+            className={`${secondaryButton} shrink-0`}
           >
             Clear filters
           </button>

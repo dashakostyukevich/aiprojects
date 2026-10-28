@@ -1,7 +1,12 @@
 import { PILLAR_TYPES } from "../types"
 import type { Pillar, PillarType, Post } from "../types"
 import { PILLAR_GUIDE } from "../pillarTypes"
-import { quietChip } from "../styles"
+import {
+  deleteButton,
+  quietButton,
+  quietChip,
+  secondaryButton,
+} from "../styles"
 
 /*
   The Pillars page is the strategy page. The other three pages answer "what am I
@@ -156,9 +161,9 @@ function Mix({ pillars, posts }: { pillars: Pillar[]; posts: Post[] }) {
         : `${placed} of ${posts.length} posts filed`
 
   return (
-    <div className="rounded-2xl border border-line bg-card px-5 py-5">
+    <div className="rounded-2xl border border-line bg-card px-5 py-5 sm:px-6">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <h3 className="font-display text-xl">Your mix</h3>
+        <h3 className="text-xl text-ink">Your mix</h3>
         <p className="text-xs text-ink-faint">
           {pillars.length} {pillars.length === 1 ? "pillar" : "pillars"} across{" "}
           {typesUsed} of {PILLAR_TYPES.length} types
@@ -179,7 +184,7 @@ function Mix({ pillars, posts }: { pillars: Pillar[]; posts: Post[] }) {
 
             {/* The track is always drawn, so "planned but never posted"
                 looks like an empty bar rather than a missing row. */}
-            <span className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-ink/5">
+            <span className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-subtle">
               <span
                 className="block h-full rounded-full bg-ink-soft"
                 style={{ width: `${(row.posts / peak) * 100}%` }}
@@ -207,7 +212,7 @@ function Mix({ pillars, posts }: { pillars: Pillar[]; posts: Post[] }) {
             >
               <span
                 aria-hidden="true"
-                className="mt-2 h-1 w-1 shrink-0 rounded-full bg-clay"
+                className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-orange"
               />
               <span>{note}</span>
             </li>
@@ -231,12 +236,10 @@ function PillarCard({
   onDelete: (pillar: Pillar) => void
 }) {
   return (
-    <li className="flex flex-col gap-2 rounded-2xl border border-line bg-card px-5 py-4">
+    <li className="flex flex-col gap-2 rounded-2xl border border-line bg-card px-5 py-5 sm:px-6">
       <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <h3 className="font-display text-lg">{pillar.name}</h3>
-        <span
-          className={`rounded-full px-2.5 py-1 text-xs font-medium ${quietChip}`}
-        >
+        <h3 className="text-lg font-medium text-ink">{pillar.name}</h3>
+        <span className={`rounded-full px-3 py-1 text-xs ${quietChip}`}>
           {pillar.type}
         </span>
       </div>
@@ -263,8 +266,7 @@ function PillarCard({
             type="button"
             onClick={() => onEdit(pillar)}
             aria-label={`Edit ${pillar.name}`}
-            className="rounded-full px-3 py-1 text-sm text-ink-soft
-              transition-colors hover:bg-ink/5 hover:text-ink"
+            className={quietButton}
           >
             Edit
           </button>
@@ -272,8 +274,7 @@ function PillarCard({
             type="button"
             onClick={() => onDelete(pillar)}
             aria-label={`Delete ${pillar.name}`}
-            className="rounded-full px-3 py-1 text-sm text-ink-faint
-              transition-colors hover:bg-clay/10 hover:text-clay"
+            className={deleteButton}
           >
             Delete
           </button>
@@ -295,7 +296,7 @@ function Reference({ pillars }: { pillars: Pillar[] }) {
   return (
     <section className="flex flex-col gap-3">
       <div>
-        <h3 className="font-display text-xl">The nine types</h3>
+        <h3 className="text-xl text-ink">The nine types</h3>
         <p className="mt-1 max-w-2xl text-sm leading-relaxed text-ink-soft">
           A type describes what a post does for the reader, not what it is
           about. Two pillars can share a subject and still do completely
@@ -313,10 +314,10 @@ function Reference({ pillars }: { pillars: Pillar[] }) {
             <li
               key={type}
               className="flex flex-col gap-2 rounded-2xl border border-line
-                bg-card px-5 py-4"
+                bg-card px-5 py-5 sm:px-6"
             >
               <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-                <h4 className="font-display text-lg">{type}</h4>
+                <h4 className="text-lg font-medium text-ink">{type}</h4>
                 <span className="text-xs text-ink-faint">
                   {count === 0
                     ? "Not used"
@@ -334,7 +335,7 @@ function Reference({ pillars }: { pillars: Pillar[] }) {
               </p>
 
               <p className="text-sm leading-relaxed text-ink-soft">
-                <span className="text-clay">Usually goes wrong — </span>
+                <span className="text-danger">Usually goes wrong — </span>
                 {guide.watchOut}
               </p>
             </li>
@@ -366,9 +367,7 @@ export default function Pillars({
           sm:justify-between"
       >
         <div>
-          <h2 className="font-display text-2xl tracking-tight">
-            Content pillars
-          </h2>
+          <h2 className="text-2xl text-ink">Content pillars</h2>
           <p className="mt-1 text-sm text-ink-soft">
             The themes you post under, and what each one is for.
           </p>
@@ -380,8 +379,7 @@ export default function Pillars({
           <button
             type="button"
             onClick={onNew}
-            className="shrink-0 rounded-full bg-ink px-5 py-2.5 text-sm
-              font-medium text-paper transition-opacity hover:opacity-90"
+            className={`${secondaryButton} shrink-0`}
           >
             + New pillar
           </button>
@@ -389,8 +387,8 @@ export default function Pillars({
       </div>
 
       {pillars.length === 0 ? (
-        <div className="rounded-2xl border border-line bg-card px-5 py-14 text-center">
-          <p className="font-display text-xl">No pillars yet</p>
+        <div className="rounded-2xl border border-line bg-card px-5 py-16 text-center">
+          <p className="text-xl text-ink">No pillars yet</p>
           <p className="mx-auto mt-1 max-w-md text-sm leading-relaxed text-ink-soft">
             A pillar is a theme you keep coming back to — not one post, not a
             platform, not a content type. Name three or four, give each a type,
@@ -399,8 +397,7 @@ export default function Pillars({
           <button
             type="button"
             onClick={onNew}
-            className="mt-4 rounded-full bg-ink px-5 py-2 text-sm
-              font-medium text-paper transition-opacity hover:opacity-90"
+            className={`${secondaryButton} mt-5`}
           >
             + New pillar
           </button>

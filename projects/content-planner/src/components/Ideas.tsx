@@ -1,7 +1,14 @@
 import { useState } from "react"
 import type { Idea, IdeaTag, Post } from "../types"
 import { IDEA_TAGS } from "../types"
-import { quietChip } from "../styles"
+import {
+  deleteButton,
+  filterChip,
+  filterChipActive,
+  quietButton,
+  quietChip,
+  secondaryButton,
+} from "../styles"
 
 /*
   The Ideas page.
@@ -43,16 +50,16 @@ function IdeaCard({
   return (
     <li
       className="flex flex-col gap-3 rounded-2xl border border-line
-        bg-card p-5"
+        bg-card p-5 sm:p-6"
     >
       {/*
-        A tag is grey on purpose. Colour in this app already means status or
-        platform, so a coloured tag beside a status pill would read as the
-        same kind of information.
+        A tag is grey on purpose. Colour in this app already means a status, so
+        a coloured tag beside a status pill would read as the same kind of
+        information.
       */}
       {idea.tag ? (
         <span
-          className={`w-fit rounded-full px-2.5 py-1 text-xs font-medium ${quietChip}`}
+          className={`w-fit rounded-full px-3 py-1 text-xs ${quietChip}`}
         >
           {idea.tag}
         </span>
@@ -60,7 +67,9 @@ function IdeaCard({
         <span className="w-fit text-xs text-ink-faint">Uncategorised</span>
       )}
 
-      <h3 className="font-display text-lg leading-snug">{idea.title}</h3>
+      <h3 className="text-lg font-medium leading-snug text-ink">
+        {idea.title}
+      </h3>
 
       {idea.notes && <p className="text-sm text-ink-soft">{idea.notes}</p>}
 
@@ -78,8 +87,7 @@ function IdeaCard({
           <button
             type="button"
             onClick={() => onOpenPost(linkedPost)}
-            className="rounded-full bg-ink px-4 py-1.5 text-sm font-medium
-              text-paper transition-opacity hover:opacity-90"
+            className={secondaryButton}
           >
             View post
           </button>
@@ -87,8 +95,7 @@ function IdeaCard({
           <button
             type="button"
             onClick={() => onPromote(idea)}
-            className="rounded-full bg-ink px-4 py-1.5 text-sm font-medium
-              text-paper transition-opacity hover:opacity-90"
+            className={secondaryButton}
           >
             Turn into a post
           </button>
@@ -98,8 +105,7 @@ function IdeaCard({
           type="button"
           onClick={() => onEdit(idea)}
           aria-label={`Edit ${idea.title}`}
-          className="rounded-full px-3 py-1.5 text-sm text-ink-soft
-            transition-colors hover:bg-ink/5 hover:text-ink"
+          className={quietButton}
         >
           Edit
         </button>
@@ -107,8 +113,7 @@ function IdeaCard({
           type="button"
           onClick={() => onDelete(idea)}
           aria-label={`Delete ${idea.title}`}
-          className="rounded-full px-3 py-1.5 text-sm text-ink-faint
-            transition-colors hover:bg-clay/10 hover:text-clay"
+          className={deleteButton}
         >
           Delete
         </button>
@@ -176,7 +181,7 @@ export default function Ideas({
           sm:justify-between"
       >
         <div>
-          <h2 className="font-display text-2xl tracking-tight">Ideas</h2>
+          <h2 className="text-2xl text-ink">Ideas</h2>
           <p className="mt-1 text-sm text-ink-soft">
             Hooks, topics and visuals, kept before they become posts.
           </p>
@@ -188,8 +193,7 @@ export default function Ideas({
           <button
             type="button"
             onClick={onNew}
-            className="shrink-0 rounded-full bg-ink px-5 py-2.5 text-sm
-              font-medium text-paper transition-opacity hover:opacity-90"
+            className={`${secondaryButton} shrink-0`}
           >
             + New idea
           </button>
@@ -211,14 +215,10 @@ export default function Ideas({
               type="button"
               onClick={() => setFilter(chip.value)}
               aria-pressed={isActive}
-              className={`rounded-full px-3.5 py-1.5 text-sm transition-colors ${
-                isActive
-                  ? "bg-ink font-medium text-paper"
-                  : "text-ink-soft hover:bg-ink/5 hover:text-ink"
-              }`}
+              className={isActive ? filterChipActive : filterChip}
             >
               {chip.label}{" "}
-              <span className={isActive ? "text-paper/60" : "text-ink-faint"}>
+              <span className={isActive ? "text-white/70" : "text-ink-faint"}>
                 {chip.count}
               </span>
             </button>
@@ -227,8 +227,8 @@ export default function Ideas({
       </div>
 
       {ideas.length === 0 ? (
-        <div className="rounded-2xl border border-line bg-card px-5 py-14 text-center">
-          <p className="font-display text-xl">No ideas yet</p>
+        <div className="rounded-2xl border border-line bg-card px-5 py-16 text-center">
+          <p className="text-xl text-ink">No ideas yet</p>
           <p className="mx-auto mt-1 max-w-sm text-sm text-ink-soft">
             Write down the hook, the subject or the image while it is fresh.
             Tag it when you know what kind it is — it stays here until you turn
@@ -237,15 +237,14 @@ export default function Ideas({
           <button
             type="button"
             onClick={onNew}
-            className="mt-4 rounded-full bg-ink px-5 py-2 text-sm
-              font-medium text-paper transition-opacity hover:opacity-90"
+            className={`${secondaryButton} mt-5`}
           >
             + New idea
           </button>
         </div>
       ) : visible.length === 0 ? (
-        <div className="rounded-2xl border border-line bg-card px-5 py-14 text-center">
-          <p className="font-display text-xl">Nothing tagged {filterLabel}</p>
+        <div className="rounded-2xl border border-line bg-card px-5 py-16 text-center">
+          <p className="text-xl text-ink">Nothing tagged {filterLabel}</p>
           <p className="mx-auto mt-1 max-w-sm text-sm text-ink-soft">
             Tag an idea this way from the edit dialog, or add a new one.
           </p>

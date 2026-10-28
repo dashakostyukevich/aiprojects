@@ -3,6 +3,7 @@ import Dialog from "./Dialog"
 import { PILLAR_TYPES } from "../types"
 import type { Pillar, PillarType } from "../types"
 import { PILLAR_GUIDE } from "../pillarTypes"
+import { primaryButton, secondaryButton } from "../styles"
 
 /** What the pillar form hands back to App when Save is pressed. */
 export interface DraftPillar {
@@ -10,6 +11,11 @@ export interface DraftPillar {
   type: PillarType
   description: string
 }
+
+/* The shared look of every control in this form. */
+const fieldStyle =
+  "rounded-xl border bg-card px-3 py-2.5 text-sm text-ink " +
+  "placeholder:text-ink-faint"
 
 /*
   The pillar form — short, like the idea form, and for the same reason: a pillar
@@ -71,7 +77,7 @@ export default function PillarDialog({
       >
         <label className="flex flex-col gap-1.5">
           <span className="text-xs font-medium text-ink-soft">
-            Name <span className="text-clay">*</span>
+            Name <span className="text-danger">*</span>
           </span>
           <input
             value={draft.name}
@@ -81,13 +87,12 @@ export default function PillarDialog({
             }}
             placeholder="What you actually call it"
             autoFocus
-            className={`rounded-lg border bg-card px-3 py-2 text-sm
-              outline-none focus:border-ink-faint ${
-                nameError ? "border-clay" : "border-line"
-              }`}
+            className={`${fieldStyle} ${
+              nameError ? "border-danger" : "border-line"
+            }`}
           />
           {nameError && (
-            <span className="text-xs text-clay">
+            <span className="text-xs text-danger">
               A name is required before saving.
             </span>
           )}
@@ -101,8 +106,7 @@ export default function PillarDialog({
               onChange={(event) =>
                 update("type", event.target.value as PillarType)
               }
-              className="rounded-lg border border-line bg-card px-3 py-2 text-sm
-                text-ink outline-none focus:border-ink-faint"
+              className={`${fieldStyle} border-line`}
             >
               {PILLAR_TYPES.map((type) => (
                 <option key={type} value={type}>
@@ -132,26 +136,15 @@ export default function PillarDialog({
             onChange={(event) => update("description", event.target.value)}
             rows={3}
             placeholder="What belongs in this pillar — and what doesn't…"
-            className="resize-none rounded-lg border border-line bg-card
-              px-3 py-2 text-sm outline-none focus:border-ink-faint"
+            className={`${fieldStyle} resize-none border-line`}
           />
         </label>
 
         <div className="mt-1 flex justify-end gap-2">
-          <button
-            type="button"
-            onClick={onCancel}
-            className="rounded-full border border-line px-5 py-2 text-sm
-              font-medium text-ink-soft transition-colors
-              hover:bg-ink/5 hover:text-ink"
-          >
+          <button type="button" onClick={onCancel} className={secondaryButton}>
             Cancel
           </button>
-          <button
-            type="submit"
-            className="rounded-full bg-ink px-5 py-2 text-sm font-medium
-              text-paper transition-opacity hover:opacity-90"
-          >
+          <button type="submit" className={primaryButton}>
             {pillar ? "Save changes" : "Save pillar"}
           </button>
         </div>

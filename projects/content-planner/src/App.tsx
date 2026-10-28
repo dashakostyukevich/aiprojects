@@ -478,7 +478,8 @@ function App() {
         {saveFailed && (
           <p
             role="alert"
-            className="bg-clay/15 px-5 py-2.5 text-xs text-clay md:px-8"
+            className="border-b border-danger/20 bg-danger-tint px-5 py-3
+              text-xs text-danger md:px-8"
           >
             This change has not been saved — the browser's storage is full or
             unavailable. Remove a cover image or a post and it will write again

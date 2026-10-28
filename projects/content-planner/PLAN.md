@@ -12,7 +12,7 @@ Three commitments:
 
 1. **Mobile-first, not mobile-tolerant.** The primary surface is a phone. Desktop is the enlarged view, never the other way round.
 2. **Opinionated defaults.** A new user lands on a working plan, not an empty form. No setup wizard, no workspace creation, no pillar setup ritual.
-3. **Calm, editorial, fast.** Cream, serif, generous space, few decisions per screen. One tap to create a post, one to move it along.
+3. **Calm, quick, kind to look at.** Near-white canvas, white cards, one blue for actions, generous space, few decisions per screen. One tap to create a post, one to move it along.
 
 Concretely, this means we ship **less** than Workhorse, deliberately: no AI, no billing, no workspaces, no native app. We ship the concept *right* instead of the feature list *wide*.
 
